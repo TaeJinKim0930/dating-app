@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>부평 하루 데이트 초대장 💌</title>
+<title>데이트 초대장 💌</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -65,7 +65,6 @@
   /* ===== card ===== */
   .card{width:100%;max-width:460px;background:var(--paper);border-radius:30px;box-shadow:var(--shadow);border:1px solid #FBE7E7;overflow:hidden;align-self:flex-start}
 
-  /* invitation intro */
   .invite{position:relative;padding:30px 26px 24px;text-align:center;
     background:radial-gradient(95% 100% at 100% 0%,#FFDDE2 0%,transparent 72%),linear-gradient(180deg,#FFECEF,#FFFCFA);
     border-bottom:2px dashed var(--line)}
@@ -76,7 +75,6 @@
   .invite .when span{font-size:13px;color:#7A626A;background:#fff;border:1.5px solid var(--line);padding:5px 12px;border-radius:999px}
   .invite .from{font-family:var(--hand);font-size:19px;color:var(--sub);margin-top:14px}
 
-  /* map */
   .mapwrap{padding:18px 16px 4px}
   .maptitle{font-family:var(--hand);font-size:22px;color:var(--ink);text-align:center;margin:2px 0 8px}
   .maptitle b{color:var(--grape)}
@@ -90,7 +88,6 @@
   .divider::before,.divider::after{content:"";flex:1;border-top:2px dashed var(--line)}
   .divider span{font-family:var(--hand);font-size:20px;color:var(--tangerine)}
 
-  /* timeline */
   .stops{padding:6px 22px 4px}
   .stop{position:relative;display:grid;grid-template-columns:54px 1fr;gap:13px;padding:16px 0}
   .stop:not(:last-child)::before{content:"";position:absolute;left:26px;top:46px;bottom:-8px;border-left:2.5px dashed #ECD4D8}
@@ -107,9 +104,20 @@
   .go{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;text-decoration:none;color:#fff;padding:7px 14px;border-radius:999px;transition:transform .15s,filter .15s}
   .go:hover{transform:translateY(-1px);filter:brightness(1.06)}
   .go.ghost{background:#fff;color:var(--ink);border:1.6px solid var(--line)}
-  .walk{grid-column:1 / -1;font-family:var(--hand);font-size:16px;color:var(--sub);margin:-2px 0 -6px;display:flex;align-items:center;gap:6px;padding-left:6px}
+  .walk{grid-column:1 / -1;font-family:var(--hand);font-size:16px;color:var(--sub);margin:-2px 0 -6px;display:flex;flex-direction:column;gap:8px;padding-left:6px}
+  .walk .wline{display:flex;align-items:center;gap:6px}
   .start .bead{background:var(--cherry);color:#fff;border-color:#fff}
   .start .body h2{color:var(--cherry)}
+
+  /* navi bubble */
+  .navi{
+    font-family:var(--body);font-size:12.5px;color:#4E3D6B;line-height:1.5;
+    background:#F3EFFC;border:1.6px solid #DCD2F2;border-radius:4px 14px 14px 14px;
+    padding:8px 12px;max-width:320px;display:none;position:relative;
+  }
+  .navi b{color:var(--grape)}
+  .navi.show{display:block;animation:naviIn .5s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes naviIn{0%{opacity:0;transform:translateY(6px) scale(.92)}100%{opacity:1;transform:none}}
 
   /* rsvp */
   .rsvp{margin:16px 18px 6px;padding:20px;border-radius:20px;text-align:center;background:linear-gradient(120deg,#FFECF0,#F0EAFB);border:2px dashed var(--line);position:relative;overflow:hidden;min-height:120px}
@@ -125,8 +133,10 @@
   footer .ft{font-family:var(--hand);font-size:20px;color:var(--grape)}
   footer p{margin:6px 0 0;font-size:13px;line-height:1.65;color:#6E5860}
   .sign{font-family:var(--hand);margin-top:12px;font-size:19px;color:var(--cherry)}
+  .makemine{display:block;text-align:center;font-family:var(--hand);font-size:17px;color:var(--grape);text-decoration:none;margin:0 18px 22px}
+  .makemine:hover{text-decoration:underline}
 
-  /* send-invite FAB + modal (plain view only) */
+  /* send-invite FAB + modal */
   .send-fab{position:fixed;right:18px;bottom:18px;z-index:40;font-family:var(--disp);font-size:15px;color:#fff;background:var(--grape);border:none;border-radius:999px;padding:13px 20px;cursor:pointer;box-shadow:0 12px 24px -10px var(--grape);transition:transform .15s}
   .send-fab:hover{transform:translateY(-2px) scale(1.03)}
   .modal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(70,48,57,.42);backdrop-filter:blur(3px)}
@@ -152,9 +162,12 @@
   /* motion */
   @keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @keyframes drop{0%{opacity:0;transform:translateY(-24px)}60%{transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
+  @keyframes hop{0%{transform:translateY(0)}40%{transform:translateY(-9px) scale(1.12)}100%{transform:translateY(0)}}
   .revealed .stop,.revealed .walk,.revealed .legend,.revealed .rsvp,.revealed footer{animation:pop .5s ease both}
   .pin{transform-box:fill-box;transform-origin:center bottom}
   .revealed .pin{animation:drop .6s cubic-bezier(.34,1.56,.64,1) both}
+  .pinwrap{transform-box:fill-box;transform-origin:center bottom}
+  .pinwrap.hop{animation:hop .5s ease both}
   .go:focus-visible,.btn-yes:focus-visible,.mk:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -177,15 +190,15 @@
   <main class="card" id="card">
     <section class="invite">
       <div class="to" id="uTo">To. 너에게</div>
-      <h1 id="uTitle">부평에서 보내는<br>하루 <span class="pk">데이트</span> <span class="gp">초대장</span></h1>
+      <h1 id="uTitle"></h1>
       <div class="when" id="uWhen"></div>
-      <div class="from" id="uFrom">from. 나로부터 ♡</div>
+      <div class="from" id="uFrom">from. 나 ♡</div>
     </section>
 
     <section class="mapwrap">
       <div class="maptitle">오늘의 <b>이동 동선</b> 🧭</div>
-      <svg class="map" id="map" viewBox="0 0 460 510" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부평역에서 출발하는 데이트 코스 도보 동선 지도"></svg>
-      <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 방향은 나침반(N)·축척(100m)으로 잡고, <b>정확한 길찾기는 각 장소의 “🧭 길찾기”</b>(네이버 도보)를 눌러주세요!</p>
+      <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이트 코스 이동 동선 지도"></svg>
+      <p class="mapcap" id="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
       <div class="legend" id="legend"></div>
     </section>
 
@@ -198,14 +211,15 @@
         <button class="btn-yes" id="yes">네, 좋아요 ♡</button>
         <button class="btn-no" id="no">음...</button>
       </div>
-      <div class="yay">야호! 그럼 그날 부평에서 만나요 ♡</div>
+      <div class="yay" id="yay">야호! 그럼 그날 만나요 ♡</div>
     </section>
 
     <footer>
       <div class="ft">✎ 코스 한 줄 요약</div>
-      <p>부평역에서 만나 → 이색 철판 일식 → 카페 달달 충전 → 네컷으로 오늘 박제 → 양꼬치로 마무리. 전부 부평역 도보권이라 이동 스트레스 없이 즐기기 좋아요!</p>
+      <p id="uSummary"></p>
       <div class="sign">Have a lovely day together ♡</div>
     </footer>
+    <a class="makemine" id="makeMine" href="" hidden>✨ 나도 이런 초대장 만들어 보내기</a>
   </main>
 
   <button class="send-fab" id="sendFab" hidden>💌 초대장으로 보내기</button>
@@ -217,7 +231,7 @@
       <div class="field"><label>받는 사람</label><input id="fTo" placeholder="예: 지수"></div>
       <div class="field"><label>보내는 사람</label><input id="fFrom" placeholder="예: 민준"></div>
       <div class="field"><label>날짜</label><input id="fDate" placeholder="예: 7월 19일 토요일"></div>
-      <div class="field"><label>만날 곳</label><input id="fSpot" placeholder="예: 부평역 3번 출구"></div>
+      <div class="field"><label>만날 곳</label><input id="fSpot" placeholder=""></div>
       <button class="mk" id="mk">링크 만들기 & 복사 🔗</button>
       <div class="linkout" hidden id="linkout"><input id="linkField" readonly><button id="copyBtn">복사</button></div>
     </div>
@@ -226,132 +240,279 @@
 
 <script>
 /* =======================================================================
-   장소 데이터 (single source of truth)
-   👉 나중에 위시리스트/다른 동네 코스로 확장할 때 이 배열만 갈아끼우면 됩니다.
-   각 장소: geo(lat,lng)만 정확하면 지도·타임라인·길찾기가 자동 생성됨.
+   코스 데이터 (single source of truth)
+   👉 코스 추가 = COURSES에 항목 추가 + ?course=키 로 열기.
+   leg = "이 장소까지 오는 구간": {mode:'walk'|'car'|'transit', km?, min?, note?, chip?:false}
+   km/min을 생략하면 좌표로 자동 계산(도보 기준). navi = 내비 안내 멘트(선택).
    ======================================================================= */
-const START = { name:'부평역', emoji:'🚇', geo:{lat:37.4896, lng:126.7234} };
+const COURSES = {
 
-const PLACES = [
-  { n:1, name:'우와', emoji:'🍳', kind:'점심', color:'var(--cherry)', time:'12:30',
-    geo:{lat:37.4926, lng:126.7208},
-    desc:'밀가루 대신 <b>안동산 마</b>로 부치는 이색 오코노미야끼·야끼소바. 눈앞 철판에서 직접 볶아줘 보는 재미까지 두 배! 조도 낮아 분위기도 좋아요.',
-    tags:['🥢 철판 일식','💰 1.5~2만원','🕯 분위기 맛집'],
-    naver:'https://naver.me/5imJAeRK', label:{dx:0,dy:20} },
-  { n:2, name:'브라운캣', emoji:'☕', kind:'카페', color:'var(--caramel)', time:'13:30',
-    geo:{lat:37.4939, lng:126.7244},
-    desc:'밥 먹고 나른할 때 커피 한 잔과 달달한 디저트로 쉬어가는 코스. 마주 앉아 도란도란 이야기하기 좋은 두 번째 정거장이에요.',
-    tags:['☕ 커피 & 디저트','💬 수다 타임','🧭 부평문화의거리'],
-    naver:'https://naver.me/5yhtKeB0', label:{dx:0,dy:-34} },
-  { n:3, name:'포토이즘', emoji:'📸', kind:'인증샷', color:'var(--grape)', time:'18:00',
-    geo:{lat:37.4933, lng:126.7237},
-    desc:'부평역 근처 포토이즘 3곳 중 <b>무인 셀프 네컷 ‘박스 부평점’</b>을 골랐어요. 예약 없이 바로 들어가 커플 사진 남기기 딱! (스튜디오점은 예약제라 오늘 코스엔 X)',
-    tags:['📷 셀프 네컷','✅ 예약 불필요','🎞 오늘의 기념'],
-    naver:'https://map.naver.com/p/search/포토이즘박스 부평점', label:{dx:0,dy:20} },
-  { n:4, name:'용용선생', emoji:'🍢', kind:'저녁', color:'var(--tangerine)', time:'18:15',
-    geo:{lat:37.4922, lng:126.7253},
-    desc:'하루 마무리는 부평역점에서 양꼬치와 마라 요리로! 시원한 한 잔 곁들이며 오늘 찍은 네컷 사진 돌려보는 걸로 데이트 완성 🍻',
-    tags:['🍢 양꼬치 & 마라','🍻 한 잔 곁들이기','🧭 부평역 근처'],
-    naver:'https://naver.me/xcgLPLXs', label:{dx:0,dy:20} },
-];
+  bupyeong: {
+    docTitle: '부평 하루 데이트 초대장 💌',
+    titleHtml: '부평에서 보내는<br>하루 <span class="pk">데이트</span> <span class="gp">초대장</span>',
+    metaChip: '🚶 전부 도보권', defaultSpot: '부평역', meetShort: '부평',
+    mover: null,
+    start: { name:'부평역', emoji:'🚇', bead:'🚩', time:'12:00', geo:{lat:37.4896, lng:126.7234},
+      desc:'오늘의 시작! <b>{SPOT}</b>에서 만나요. 여기서부터 전부 도보로 이동해요 🚶‍♀️🚶' },
+    places: [
+      { n:1, name:'우와', emoji:'🍳', kind:'점심', color:'var(--cherry)', time:'12:30',
+        geo:{lat:37.4926, lng:126.7208}, leg:{mode:'walk', chipOff:{dx:-6,dy:-2}},
+        desc:'밀가루 대신 <b>안동산 마</b>로 부치는 이색 오코노미야끼·야끼소바. 눈앞 철판에서 직접 볶아줘 보는 재미까지 두 배! 조도 낮아 분위기도 좋아요.',
+        tags:['🥢 철판 일식','💰 1.5~2만원','🕯 분위기 맛집'],
+        naver:'https://naver.me/5imJAeRK', label:{dx:0,dy:20} },
+      { n:2, name:'브라운캣', emoji:'☕', kind:'카페', color:'var(--caramel)', time:'13:30',
+        geo:{lat:37.4939, lng:126.7244}, leg:{mode:'walk', chipOff:{dx:0,dy:-10}},
+        desc:'밥 먹고 나른할 때 커피 한 잔과 달달한 디저트로 쉬어가는 코스. 마주 앉아 도란도란 이야기하기 좋은 두 번째 정거장이에요.',
+        tags:['☕ 커피 & 디저트','💬 수다 타임','🧭 부평문화의거리'],
+        naver:'https://naver.me/5yhtKeB0', label:{dx:0,dy:-34} },
+      { n:3, name:'포토이즘', emoji:'📸', kind:'인증샷', color:'var(--grape)', time:'18:00',
+        geo:{lat:37.4933, lng:126.7237}, leg:{mode:'walk', chipOff:{dx:38,dy:-4}},
+        desc:'부평역 근처 포토이즘 3곳 중 <b>무인 셀프 네컷 ‘박스 부평점’</b>을 골랐어요. 예약 없이 바로 들어가 커플 사진 남기기 딱! (스튜디오점은 예약제라 오늘 코스엔 X)',
+        tags:['📷 셀프 네컷','✅ 예약 불필요','🎞 오늘의 기념'],
+        naver:'https://map.naver.com/p/search/포토이즘박스 부평점', label:{dx:0,dy:20} },
+      { n:4, name:'용용선생', emoji:'🍢', kind:'저녁', color:'var(--tangerine)', time:'18:15',
+        geo:{lat:37.4922, lng:126.7253}, leg:{mode:'walk', chipOff:{dx:-40,dy:14}},
+        desc:'하루 마무리는 부평역점에서 양꼬치와 마라 요리로! 시원한 한 잔 곁들이며 오늘 찍은 네컷 사진 돌려보는 걸로 데이트 완성 🍻',
+        tags:['🍢 양꼬치 & 마라','🍻 한 잔 곁들이기','🧭 부평역 근처'],
+        naver:'https://naver.me/xcgLPLXs', label:{dx:0,dy:20} },
+    ],
+    ret: null,
+    deco: 'bupyeong',
+    summary: '부평역에서 만나 → 이색 철판 일식 → 카페 달달 충전 → 네컷으로 오늘 박제 → 양꼬치로 마무리. 전부 부평역 도보권이라 이동 스트레스 없이 즐기기 좋아요!'
+  },
 
-/* ===== geo → svg 좌표 투영 ===== */
-const REF = START.geo, ORIGIN = {x:212, y:446}, K = 0.72, MLAT = 111320, MLNG = 88320;
-const proj = g => ({ x: ORIGIN.x + (g.lng-REF.lng)*MLNG*K, y: ORIGIN.y - (g.lat-REF.lat)*MLAT*K });
-const metersDelta = (a,b) => ({ e:(b.lng-a.lng)*MLNG, n:(b.lat-a.lat)*MLAT });
-function dist(a,b){ const d=metersDelta(a,b); return Math.round(Math.hypot(d.e,d.n)); }
+  eulwangri: {
+    docTitle: '을왕리 드라이브 데이트 초대장 💌',
+    titleHtml: '바다 보러 가는<br><span class="pk">드라이브</span> 데이트 <span class="gp">초대장</span>',
+    metaChip: '🚗 드라이브 코스', defaultSpot: '신연수역', meetShort: '신연수역',
+    mover: 'car',
+    start: { name:'신연수역', emoji:'🚇', bead:'🚗', time:'12:00', geo:{lat:37.4180, lng:126.6939},
+      desc:'오늘의 시작! <b>{SPOT}</b> 출구 앞에서 픽업할게요. 오늘은 바다 끼고 도는 드라이브 코스 🚗💨' },
+    places: [
+      { n:1, name:'브런치빈', emoji:'🥞', kind:'브런치', color:'var(--cherry)', time:'12:20',
+        geo:{lat:37.3975, lng:126.6415},
+        leg:{mode:'car', min:14, note:'시내 드라이브', chipOff:{dx:14,dy:-22}},
+        navi:'경로 안내를 시작합니다. 오늘의 동승자: <b>세상에서 제일 소중한 사람</b> 💗',
+        desc:'송도 인피니티타워 <b>8층</b>에서 여는 브런치! 시그니처 <b>미트 러버 플래터</b>에 빌딩숲 전망은 덤. 건물 지하주차 가능(키오스크 등록 시 2시간 무료)이라 편해요.',
+        tags:['🥞 브런치 플래터','🏙 8층 전망','🅿️ 주차 2시간 무료'],
+        naver:'https://map.naver.com/p/search/브런치빈 송도점', label:{dx:0,dy:20} },
+      { n:2, name:'카페 림', emoji:'🥐', kind:'카페', color:'var(--caramel)', time:'13:30',
+        geo:{lat:37.4393, lng:126.4159},
+        leg:{mode:'car', km:33, min:35, note:'인천대교 건너', chipOff:{dx:0,dy:-20}},
+        navi:'잠시 후 <b>인천대교</b>입니다. 경로에 바다가 포함되어 있어요 — 설렘 주의 🌊',
+        desc:'영종도 <b>마시안해변</b> 앞 유럽풍 빈티지 카페. 프랑스산 버터로 굽는 <b>플레인 스콘</b>이 시그니처예요. 카페 앞 해변 산책까지 세트로! (월·화 휴무예요)',
+        tags:['🧈 버터 스콘 맛집','🏖 마시안해변 바로 앞','🅿️ 무료주차'],
+        naver:'https://map.naver.com/p/search/카페 림 영종도', label:{dx:18,dy:24} },
+      { n:3, name:'품장', emoji:'🐟', kind:'저녁', color:'var(--tangerine)', time:'18:15',
+        geo:{lat:37.4495, lng:126.3745},
+        leg:{mode:'car', km:7.7, min:12, note:'해안도로 따라', chip:false},
+        navi:'해안도로를 따라 주행합니다. 창문을 살짝 열면 바다 냄새가 나요 🌅',
+        desc:'저녁은 을왕리 <b>장어구이</b>로 든든하게! 나주 직영 양식장 장어라 가성비도 좋아요. 을왕리 해변이 도보권이고, <b>7월 일몰이 19:50쯤</b>이라 저녁 먹으며 노을까지 완성 🌅',
+        tags:['🐟 장어구이','🌅 일몰 19:50 노을 뷰','🅿️ 주차 2시간 무료'],
+        naver:'https://map.naver.com/p/search/품장 을왕리점', label:{dx:0,dy:-58} },
+    ],
+    ret: { name:'신연수역', emoji:'🏁', time:'20:40',
+      leg:{mode:'car', km:38, min:41, note:'집으로'},
+      navi:'목적지는 <b>당신의 마음</b>입니다. 경로 안내를 종료합니다 ♡',
+      desc:'넉넉히 20:00에 출발해서 안전운전으로 귀가! (주말 저녁엔 인천대교가 살짝 막힐 수 있으니 여유 있게 🚗)' },
+    deco: 'eulwangri',
+    summary: '신연수역에서 픽업 → 송도 8층 브런치 → 인천대교 건너 마시안해변 카페 & 산책 → 을왕리 장어에 서해 노을까지. 바다 끼고 도는 하루 드라이브 코스예요!'
+  }
+};
+
+/* ===== 코스 선택 (URL) ===== */
+const Q = new URLSearchParams(location.search);
+const COURSE_KEY = COURSES[Q.get('course')] ? Q.get('course') : 'bupyeong';
+const C = COURSES[COURSE_KEY];
+
+/* ===== 개인화 ===== */
+const TO   = Q.get('to')   || '너';
+const FROM = Q.get('from') || '나';
+const DATE = Q.get('date') || '이번 주말';
+const SPOT = Q.get('spot') || C.defaultSpot;
+const isInvite = Q.has('invite') || Q.has('to') || Q.has('from');
+
+/* ===== geo 유틸 ===== */
+const MLAT = 111320, MLNG = 88320;
+const mDelta = (a,b) => ({ e:(b.lng-a.lng)*MLNG, n:(b.lat-a.lat)*MLAT });
+function dist(a,b){ const d=mDelta(a,b); return Math.round(Math.hypot(d.e,d.n)); }
 function walkMin(m){ return Math.max(1, Math.round(m/70)); }
 const DIRS = ['북','북동','동','남동','남','남서','서','북서'];
-function dir8(a,b){ const d=metersDelta(a,b); let deg=Math.atan2(d.e,d.n)*180/Math.PI; if(deg<0)deg+=360; return DIRS[Math.round(deg/45)%8]; }
-function naverWalk(a,b){ const seg=p=>`${p.geo.lng},${p.geo.lat},${encodeURIComponent(p.name)},,`; return `https://map.naver.com/p/directions/${seg(a)}/${seg(b)}/-/walk`; }
+function dir8(a,b){ const d=mDelta(a,b); let deg=Math.atan2(d.e,d.n)*180/Math.PI; if(deg<0)deg+=360; return DIRS[Math.round(deg/45)%8]; }
+const MODE = { walk:{emoji:'🚶‍♀️',word:'도보',nav:'walk',btn:'걸어서 길찾기'},
+               car:{emoji:'🚗',word:'차로',nav:'car',btn:'차로 길찾기'},
+               transit:{emoji:'🚌',word:'대중교통',nav:'transit',btn:'대중교통 길찾기'} };
+function naverRoute(a,b,mode){ const seg=p=>`${p.geo.lng},${p.geo.lat},${encodeURIComponent(p.name)},,`; return `https://map.naver.com/p/directions/${seg(a)}/${seg(b)}/-/${MODE[mode].nav}`; }
+function legText(prev,p,leg){
+  const M=MODE[leg.mode];
+  if(leg.mode==='walk'){
+    const m=leg.km?Math.round(leg.km*1000):dist(prev.geo,p.geo), t=leg.min||walkMin(m), dr=dir8(prev.geo,p.geo);
+    return `${M.emoji} ${dr}쪽으로 ${m}m · 도보 ${t}분${m<120?' (바로 근처!)':''}`;
+  }
+  const parts=[leg.note, leg.km?`${leg.km}km`:null, `${M.word} ${leg.min}분`].filter(Boolean);
+  return `${M.emoji} ${parts.join(' · ')}`;
+}
+function chipText(prev,p,leg){
+  if(leg.mode==='walk'){
+    const m=dist(prev.geo,p.geo); return `${dir8(prev.geo,p.geo)} ${m}m·${walkMin(m)}분`;
+  }
+  return `${leg.km?leg.km+'km·':''}${leg.min}분`;
+}
 
-/* ===== 지도 SVG 생성 ===== */
+/* ===== 지도 (autofit) ===== */
+const W = 460, PAD = {l:60, r:60, t:105, b:95};
+let MAP = {}; // proj, H, route path data, fracs
+
 function buildMap(){
-  const s = proj(START.geo);
-  const P = PLACES.map(p => ({ ...p, ...proj(p.geo) }));
-  const chain = [{...START, x:s.x, y:s.y}, ...P];
+  const chain=[C.start, ...C.places];
+  const R=chain[0].geo;
+  const ms=chain.map(p=>mDelta(R,p.geo));
+  const minE=Math.min(...ms.map(m=>m.e)), maxE=Math.max(...ms.map(m=>m.e));
+  const minN=Math.min(...ms.map(m=>m.n)), maxN=Math.max(...ms.map(m=>m.n));
+  const spanE=Math.max(maxE-minE,1), spanN=Math.max(maxN-minN,1);
+  const availW=W-PAD.l-PAD.r;
+  let k=availW/spanE, H=Math.round(spanN*k+PAD.t+PAD.b);
+  if(H>510){ H=510; k=Math.min(k,(H-PAD.t-PAD.b)/spanN); }
+  if(H<300){ H=300; }
+  const availH=H-PAD.t-PAD.b;
+  const ox=PAD.l+(availW-spanE*k)/2, oy=PAD.t+(availH-spanN*k)/2;
+  const proj=g=>{const m=mDelta(R,g); return {x:ox+(m.e-minE)*k, y:oy+(maxN-m.n)*k};};
+  MAP={proj,H,k};
 
-  // route (부평역 → 1 → 2 → 3 → 4)
-  const routeD = 'M' + chain.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+  const pts=chain.map(p=>proj(p.geo));
+  const routeD='M'+pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
 
-  // segment distance chips
+  // cumulative fractions of each place along polyline (SVG space)
+  let cum=[0];
+  for(let i=1;i<pts.length;i++) cum.push(cum[i-1]+Math.hypot(pts[i].x-pts[i-1].x, pts[i].y-pts[i-1].y));
+  const total=cum[cum.length-1]||1;
+  MAP.fracs=cum.map(v=>v/total);
+
+  // distance chips
   let chips='';
-  const chipOff=[{dx:-6,dy:-2},{dx:0,dy:-10},{dx:18,dy:-2},{dx:-40,dy:14}]; // hand-tuned per leg
   for(let i=0;i<chain.length-1;i++){
-    const a=chain[i], b=chain[i+1];
-    const m=dist(a.geo||START.geo, b.geo);
-    const t=walkMin(m); const dr=dir8(a.geo||START.geo, b.geo);
-    const off=chipOff[i]||{dx:0,dy:0};
+    const p=chain[i+1], leg=p.leg||{mode:'walk'};
+    if(leg.chip===false) continue;
+    const a=pts[i], b=pts[i+1], off=leg.chipOff||{dx:0,dy:-14};
     const mx=(a.x+b.x)/2+off.dx, my=(a.y+b.y)/2+off.dy;
-    const txt=`${dr} ${m}m·${t}분`; const w=txt.length*6.6+16;
+    const txt=chipText(chain[i],p,leg); const w=txt.length*6.6+16;
     chips+=`<g><rect x="${(mx-w/2).toFixed(1)}" y="${(my-10).toFixed(1)}" width="${w.toFixed(1)}" height="20" rx="10" fill="#fff" stroke="var(--line)" stroke-width="1"/>`
          +`<text x="${mx.toFixed(1)}" y="${(my+4).toFixed(1)}" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#7A626A">${txt}</text></g>`;
   }
 
   // pins + labels
   let pins='';
-  P.forEach((p,i)=>{
-    const dx=p.label.dx, dy=p.label.dy, lx=p.x+dx, ly=p.y+dy;
-    const w=p.name.length*17+22;
-    pins+=`<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})"><g class="pin" style="animation-delay:${(0.35+i*0.18).toFixed(2)}s">`
+  C.places.forEach((p,i)=>{
+    const pt=pts[i+1], dx=(p.label||{}).dx||0, dy=(p.label||{}).dy||20, lx=pt.x+dx, ly=pt.y+dy;
+    const w=p.name.length*15+24;
+    pins+=`<g transform="translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)})"><g class="pinwrap" id="pinw-${i}"><g class="pin" style="animation-delay:${(0.35+i*0.18).toFixed(2)}s">`
         +`<path d="M0,0 C-16,-22 -16,-26 -16,-34 A16,16 0 1 1 16,-34 C16,-26 16,-22 0,0 Z" fill="${p.color}" stroke="#fff" stroke-width="3"/>`
         +`<circle cx="0" cy="-35" r="11" fill="#fff"/>`
-        +`<text x="0" y="-30" text-anchor="middle" font-family="Jua,sans-serif" font-size="14" fill="${p.color}">${p.n}</text></g></g>`
+        +`<text x="0" y="-30" text-anchor="middle" font-family="Jua,sans-serif" font-size="14" fill="${p.color}">${p.n}</text></g></g></g>`
         +`<g><rect x="${(lx-w/2).toFixed(1)}" y="${(ly-12).toFixed(1)}" width="${w}" height="24" rx="12" fill="#fff" stroke="${p.color}" stroke-width="1.6"/>`
-        +`<text x="${lx.toFixed(1)}" y="${(ly+5).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="17" fill="#5C4750">${p.name}</text></g>`;
+        +`<text x="${lx.toFixed(1)}" y="${(ly+5).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="16" fill="#5C4750">${p.name}</text></g>`;
   });
 
-  // 부평역 START 마커 (깃발)
+  // start flag + label
+  const s=pts[0];
   const startG=`<g transform="translate(${s.x.toFixed(1)},${s.y.toFixed(1)})">
       <circle cx="0" cy="0" r="6" fill="#5C4750"/>
       <rect x="-1.5" y="-42" width="3" height="42" fill="#5C4750"/>
       <path d="M1.5,-42 L34,-34 L1.5,-26 Z" fill="var(--cherry)"/>
       <text x="17" y="-31" text-anchor="middle" font-family="Jua,sans-serif" font-size="9" fill="#fff">출발</text>
     </g>
-    <g><rect x="${(s.x-58).toFixed(1)}" y="${(s.y+12).toFixed(1)}" width="116" height="26" rx="13" fill="#fff" stroke="#E7C9CE" stroke-width="2"/>
-    <text x="${s.x.toFixed(1)}" y="${(s.y+30).toFixed(1)}" text-anchor="middle" font-family="Jua,sans-serif" font-size="14" fill="#5C4750">🚇 부평역</text></g>`;
+    <g><rect x="${(s.x-56).toFixed(1)}" y="${(s.y+12).toFixed(1)}" width="112" height="26" rx="13" fill="#fff" stroke="#E7C9CE" stroke-width="2"/>
+    <text x="${s.x.toFixed(1)}" y="${(s.y+30).toFixed(1)}" text-anchor="middle" font-family="Jua,sans-serif" font-size="13" fill="#5C4750">${C.start.emoji} ${C.start.name}</text></g>`;
 
-  // 문화의거리 존
-  const bc=proj(PLACES[1].geo), pi=proj(PLACES[2].geo);
-  const zx=(bc.x+pi.x)/2, zy=(bc.y+pi.y)/2;
-  const zone=`<ellipse cx="${zx.toFixed(1)}" cy="${zy.toFixed(1)}" rx="62" ry="72" fill="#EDE6FB" opacity=".5"/>
-    <text x="${(zx+96).toFixed(1)}" y="${(zy-40).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#9784CE" transform="rotate(8 ${(zx+96).toFixed(1)} ${(zy-40).toFixed(1)})">부평 문화의거리</text>`;
+  // deco (per course)
+  let deco='';
+  if(C.deco==='bupyeong'){
+    const bc=pts[2], pi=pts[3];
+    const zx=(bc.x+pi.x)/2, zy=(bc.y+pi.y)/2;
+    deco=`<ellipse cx="${zx.toFixed(1)}" cy="${zy.toFixed(1)}" rx="62" ry="72" fill="#EDE6FB" opacity=".5"/>
+      <text x="${(zx+104).toFixed(1)}" y="${(zy+18).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#9784CE" transform="rotate(8 ${(zx+104).toFixed(1)} ${(zy+18).toFixed(1)})">부평 문화의거리</text>`;
+  }else if(C.deco==='eulwangri'){
+    const isl={x:(pts[2].x+pts[3].x)/2, y:(pts[2].y+pts[3].y)/2};
+    const brg={x:(pts[2].x+pts[1].x)/2, y:(pts[2].y+pts[1].y)/2};
+    deco=`
+      <path d="M0,0 H178 Q150,${(H/2).toFixed(0)} 178,${H} H0 Z" fill="#DCEFF7" opacity=".65"/>
+      <g stroke="#A8D4E6" stroke-width="1.6" fill="none" opacity=".8">
+        <path d="M26,${H-62} q6,-5 12,0 q6,5 12,0"/><path d="M58,${H-40} q6,-5 12,0 q6,5 12,0"/><path d="M20,${H-22} q6,-5 12,0 q6,5 12,0"/>
+      </g>
+      <circle cx="42" cy="44" r="15" fill="#FFD9A0"/><circle cx="42" cy="44" r="22" fill="#FFD9A0" opacity=".3"/>
+      <g stroke="#8FB6C9" stroke-width="1.6" fill="none"><path d="M140,52 q5,-6 10,0 M150,52 q5,-6 10,0"/><path d="M182,70 q4,-5 8,0 M190,70 q4,-5 8,0"/></g>
+      <ellipse cx="${isl.x.toFixed(1)}" cy="${(isl.y+4).toFixed(1)}" rx="96" ry="52" fill="#F4EBDA" opacity=".85"/>
+      <text x="${(isl.x-34).toFixed(1)}" y="${(isl.y+58).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#C0A876">영종도</text>
+      <text x="52" y="${H-78}" font-family="Gamja Flower,cursive" font-size="15" fill="#7FB4CC" transform="rotate(-6 52 ${H-78})">서해 바다 🌊</text>
+      <text x="${brg.x.toFixed(1)}" y="${(brg.y+26).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="13" fill="#B79AA0">～ 인천대교 ～</text>`;
+  }
+
+  // road center dashes for car courses
+  const overlay = C.mover==='car'
+    ? `<path id="routeDash" d="${routeD}" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="7 9" stroke-linecap="round" opacity="0"/>` : '';
+
+  // mini car
+  const car = C.mover==='car' ? `
+    <g id="miniCar" opacity="0">
+      <g transform="translate(0,-8)">
+        <path d="M-6,-9 L-3,-15 L7,-15 L10,-9 Z" fill="var(--cherry-deep)"/>
+        <rect x="-13" y="-9" width="26" height="10" rx="4.5" fill="var(--cherry)"/>
+        <rect x="-2" y="-13.5" width="7" height="5" rx="1.5" fill="#FFF3F1"/>
+        <circle cx="-7" cy="2" r="3.6" fill="#463039"/><circle cx="7" cy="2" r="3.6" fill="#463039"/>
+        <circle cx="-7" cy="2" r="1.4" fill="#fff"/><circle cx="7" cy="2" r="1.4" fill="#fff"/>
+        <text x="0" y="-17" text-anchor="middle" font-size="9" fill="var(--cherry)">♥</text>
+      </g>
+    </g>` : '';
+
+  // scale bar (nice round length)
+  const NICE=[100,200,500,1000,2000,5000,10000,20000];
+  let L=NICE[0]; for(const n of NICE){ if(n*k>=52 && n*k<=118){L=n;break;} if(n*k<52)L=n; }
+  const Lpx=L*k, Ltxt=L>=1000?`${L/1000}km`:`${L}m`;
 
   const svg=`
     <defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#F1DACF"/></pattern></defs>
-    <rect x="0" y="0" width="460" height="510" fill="url(#dots)"/>
-    ${zone}
+    <rect x="0" y="0" width="${W}" height="${H}" fill="url(#dots)"/>
+    ${deco}
     <path id="route" d="${routeD}" fill="none" stroke="var(--cherry)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${overlay}
     <g>${chips}</g>
     ${startG}
     ${pins}
-    <g><circle cx="422" cy="50" r="19" fill="#fff" stroke="#E7C9CE" stroke-width="1.5"/>
-       <path d="M422,35 L428,52 L422,47 L416,52 Z" fill="var(--cherry)"/>
-       <text x="422" y="64" text-anchor="middle" font-family="Jua,sans-serif" font-size="10" fill="#5C4750">N</text></g>
-    <g stroke="#B79AA0" stroke-width="2"><line x1="34" y1="488" x2="${(34+100*K).toFixed(0)}" y2="488"/>
-       <line x1="34" y1="483" x2="34" y2="493"/><line x1="${(34+100*K).toFixed(0)}" y1="483" x2="${(34+100*K).toFixed(0)}" y2="493"/></g>
-    <text x="${(34+50*K).toFixed(0)}" y="479" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#8C737A">100m</text>`;
-  document.getElementById('map').innerHTML=svg;
+    ${car}
+    <g><circle cx="${W-38}" cy="44" r="19" fill="#fff" stroke="#E7C9CE" stroke-width="1.5"/>
+       <path d="M${W-38},29 L${W-32},46 L${W-38},41 L${W-44},46 Z" fill="var(--cherry)"/>
+       <text x="${W-38}" y="58" text-anchor="middle" font-family="Jua,sans-serif" font-size="10" fill="#5C4750">N</text></g>
+    <g stroke="#B79AA0" stroke-width="2"><line x1="34" y1="${H-20}" x2="${(34+Lpx).toFixed(1)}" y2="${H-20}"/>
+       <line x1="34" y1="${H-25}" x2="34" y2="${H-15}"/><line x1="${(34+Lpx).toFixed(1)}" y1="${H-25}" x2="${(34+Lpx).toFixed(1)}" y2="${H-15}"/></g>
+    <text x="${(34+Lpx/2).toFixed(1)}" y="${H-29}" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#8C737A">${Ltxt}</text>`;
 
-  // legend
-  document.getElementById('legend').innerHTML = PLACES.map(p=>
+  const mapEl=document.getElementById('map');
+  mapEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  mapEl.innerHTML=svg;
+
+  document.getElementById('legend').innerHTML = C.places.map(p=>
     `<span class="lg"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</span>`).join('');
 }
 
-/* ===== 타임라인 생성 ===== */
+/* ===== 타임라인 ===== */
+function legRow(prev,p){
+  const leg=p.leg||{mode:'walk'};
+  const navi=p.navi?`<div class="navi">🔊 ${p.navi}</div>`:'';
+  return `<div class="walk"><div class="wline">${legText(prev,p,leg)}</div>${navi}</div>`;
+}
 function buildTimeline(){
+  const st=C.start;
   let html = `
     <div class="stop start">
-      <div class="rail"><div class="time">12:00</div><div class="bead">🚩</div></div>
-      <div class="body"><h2>부평역 <span class="kind" style="background:var(--cherry)">출발</span></h2>
-        <p class="desc">오늘의 시작! <b>${SPOT}</b>에서 만나요. 여기서부터 전부 도보로 이동해요 🚶‍♀️🚶</p>
+      <div class="rail"><div class="time">${st.time}</div><div class="bead">${st.bead}</div></div>
+      <div class="body"><h2>${st.name} <span class="kind" style="background:var(--cherry)">출발</span></h2>
+        <p class="desc">${st.desc.replace('{SPOT}', SPOT)}</p>
       </div>
     </div>`;
-  const chain=[START,...PLACES];
-  PLACES.forEach((p,i)=>{
-    const prev=chain[i], m=dist(prev.geo,p.geo), t=walkMin(m), dr=dir8(prev.geo,p.geo);
-    const near = m<120 ? ' (바로 근처!)' : '';
-    html += `<div class="walk">🚶‍♀️ ${dr}쪽으로 ${m}m · 도보 ${t}분${near}</div>`;
+  const chain=[st,...C.places];
+  C.places.forEach((p,i)=>{
+    const prev=chain[i], leg=p.leg||{mode:'walk'};
+    html += legRow(prev,p);
     html += `
       <div class="stop">
         <div class="rail"><div class="time">${p.time}</div><div class="bead">${p.emoji}</div></div>
@@ -361,28 +522,38 @@ function buildTimeline(){
           <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
           <div class="btns">
             <a class="go" style="background:${p.color}" href="${p.naver}" target="_blank" rel="noopener">📍 네이버 지도</a>
-            <a class="go ghost" href="${naverWalk(prev,p)}" target="_blank" rel="noopener">🧭 여기까지 길찾기 ›</a>
+            <a class="go ghost" href="${naverRoute(prev,p,leg.mode)}" target="_blank" rel="noopener">🧭 ${MODE[leg.mode].btn} ›</a>
           </div>
         </div>
       </div>`;
   });
+  if(C.ret){
+    const last=chain[chain.length-1];
+    const r={...C.ret, geo:st.geo};
+    html += legRow(last,r);
+    html += `
+      <div class="stop start">
+        <div class="rail"><div class="time">${r.time}</div><div class="bead">${r.emoji}</div></div>
+        <div class="body"><h2>${r.name} <span class="kind" style="background:var(--grape)">도착</span></h2>
+          <p class="desc">${r.desc}</p>
+        </div>
+      </div>`;
+  }
   document.getElementById('timeline').innerHTML = html;
 }
 
-/* ===== 개인화 (URL 파라미터) ===== */
-const Q = new URLSearchParams(location.search);
-const TO   = Q.get('to')   || '너';
-const FROM = Q.get('from') || '나';
-const DATE = Q.get('date') || '이번 주말';
-const SPOT = Q.get('spot') || '부평역';
-const isInvite = Q.has('invite') || Q.has('to') || Q.has('from');
-
+/* ===== 개인화 채우기 ===== */
 function fillInvite(){
+  document.title = C.docTitle;
+  document.getElementById('uTitle').innerHTML = C.titleHtml;
   document.getElementById('uTo').textContent = `To. ${TO}에게`;
   document.getElementById('uFrom').textContent = `from. ${FROM} ♡`;
-  document.getElementById('uWhen').innerHTML = `<span>📅 ${DATE}</span><span>📍 ${SPOT}</span><span>⏰ 낮 → 밤</span>`;
+  document.getElementById('uWhen').innerHTML = `<span>📅 ${DATE}</span><span>📍 ${SPOT}</span><span>${C.metaChip}</span>`;
   document.getElementById('envHi').innerHTML = `💌 <b>${TO}</b>에게 도착한 초대장`;
   document.getElementById('envLetter').innerHTML = `${FROM}(이)가<br>보냈어요 ♡`;
+  document.getElementById('uSummary').textContent = C.summary;
+  document.getElementById('yay').textContent = `야호! 그럼 그날 ${C.meetShort}에서 만나요 ♡`;
+  document.getElementById('fSpot').placeholder = `예: ${C.defaultSpot} 2번 출구`;
 }
 
 /* ===== confetti (하트) ===== */
@@ -408,27 +579,87 @@ function tick(){
   if(alive) raf=requestAnimationFrame(tick); else raf=null;
 }
 
-/* ===== reveal ===== */
+/* ===== reveal + route draw ===== */
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 function drawRoute(){
   const r=document.getElementById('route'); if(!r||reduce) return;
   const len=r.getTotalLength(); r.style.strokeDasharray=len; r.style.strokeDashoffset=len;
-  r.getBoundingClientRect(); // reflow
+  r.getBoundingClientRect();
   r.style.transition='stroke-dashoffset 2.2s ease-out .2s'; r.style.strokeDashoffset='0';
+  const d=document.getElementById('routeDash');
+  if(d){ d.style.transition='opacity .8s ease 2.2s'; d.style.opacity='0.9'; }
 }
-function reveal(){ document.body.classList.add('revealed'); drawRoute(); }
+function reveal(){ document.body.classList.add('revealed'); drawRoute(); if(C.mover==='car') setTimeout(()=>driveCar(),600); }
+
+/* ===== 미니카 주행 ===== */
+let carRaf=null, lastDrive=0;
+function placeCar(f){
+  const route=document.getElementById('route'), car=document.getElementById('miniCar');
+  if(!route||!car) return;
+  const len=route.getTotalLength();
+  const P=route.getPointAtLength(f*len);
+  const P2=route.getPointAtLength(Math.min(f*len+2,len));
+  let ang=Math.atan2(P2.y-P.y,P2.x-P.x)*180/Math.PI;
+  const flip=(ang>90||ang<-90)?' scale(1,-1)':'';
+  if(flip) ang+=180;
+  car.setAttribute('opacity','1');
+  car.setAttribute('transform',`translate(${P.x.toFixed(1)},${P.y.toFixed(1)}) rotate(${(flip?ang-180:ang).toFixed(1)})${flip}`);
+}
+function markArrivals(f){
+  (MAP.fracs||[]).slice(1).forEach((fr,i)=>{
+    const el=document.getElementById('pinw-'+i); if(!el) return;
+    if(f>=fr-0.005) el.classList.add('hop'); else el.classList.remove('hop');
+  });
+}
+function driveCar(dur=2800){
+  if(C.mover!=='car') return;
+  const now=performance.now();
+  if(now-lastDrive<1200) return; lastDrive=now;
+  if(reduce){ placeCar(1); markArrivals(1); return; }
+  if(carRaf) cancelAnimationFrame(carRaf);
+  markArrivals(-1);
+  const t0=performance.now();
+  const step=t=>{
+    const f=Math.min((t-t0)/dur,1);
+    const e=f<.5 ? 2*f*f : 1-Math.pow(-2*f+2,2)/2;
+    placeCar(e); markArrivals(e);
+    if(f<1) carRaf=requestAnimationFrame(step);
+    else { carRaf=null; const m=document.getElementById('map').getBoundingClientRect();
+           if(m.top<innerHeight&&m.bottom>0) burst(m.left+m.width*0.16, m.top+m.height*0.42, 14); }
+  };
+  carRaf=requestAnimationFrame(step);
+}
+// 지도가 다시 보이면 재주행
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting && document.body.classList.contains('revealed')) driveCar(); });
+  },{threshold:0.45});
+  io.observe(document.getElementById('map'));
+}
+
+/* ===== 내비 멘트 (스크롤 등장) ===== */
+function watchNavi(){
+  const rows=[...document.querySelectorAll('.walk')].filter(r=>r.querySelector('.navi'));
+  if(!rows.length) return;
+  const showAll=()=>rows.forEach(r=>r.querySelector('.navi').classList.add('show'));
+  if(!('IntersectionObserver' in window)||reduce){ showAll(); return; }
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.querySelector('.navi').classList.add('show'); io.unobserve(e.target); } });
+  },{threshold:0.5});
+  rows.forEach(r=>io.observe(r));
+}
 
 /* ===== envelope ===== */
 function openEnvelope(){
   const env=document.getElementById('env');
   env.classList.add('opening');
-  const c=cv.getBoundingClientRect(); burst(innerWidth/2, innerHeight*0.42, 60);
+  burst(innerWidth/2, innerHeight*0.42, 60);
   setTimeout(()=>{ env.classList.add('gone'); setTimeout(()=>env.setAttribute('hidden',''),700); reveal();
     burst(innerWidth/2, innerHeight*0.35, 40); }, reduce?0:1350);
 }
 
 /* ===== boot ===== */
-buildMap(); buildTimeline(); fillInvite();
+buildMap(); buildTimeline(); fillInvite(); watchNavi();
 
 if(isInvite && !reduce){
   const env=document.getElementById('env');
@@ -437,6 +668,9 @@ if(isInvite && !reduce){
   const go=()=>{ w.removeEventListener('click',go); openEnvelope(); };
   w.addEventListener('click',go);
   w.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} });
+  const mm=document.getElementById('makeMine');
+  mm.href=location.pathname+(COURSE_KEY!=='bupyeong'?`?course=${COURSE_KEY}`:'');
+  mm.removeAttribute('hidden');
 }else{
   reveal();
   if(!isInvite){ document.getElementById('sendFab').removeAttribute('hidden'); }
@@ -457,8 +691,9 @@ document.getElementById('sendFab').addEventListener('click',()=>modal.removeAttr
 document.getElementById('mx').addEventListener('click',()=>modal.setAttribute('hidden',''));
 modal.addEventListener('click',e=>{ if(e.target===modal) modal.setAttribute('hidden',''); });
 document.getElementById('mk').addEventListener('click',()=>{
-  const to=val('fTo','지수'), from=val('fFrom','민준'), date=val('fDate','이번 주말'), spot=val('fSpot','부평역');
+  const to=val('fTo','지수'), from=val('fFrom','민준'), date=val('fDate','이번 주말'), spot=val('fSpot',C.defaultSpot);
   const q=new URLSearchParams({to,from,date,spot,invite:'1'});
+  if(COURSE_KEY!=='bupyeong') q.set('course',COURSE_KEY);
   const link=location.origin+location.pathname+'?'+q.toString();
   const lo=document.getElementById('linkout'); lo.removeAttribute('hidden');
   document.getElementById('linkField').value=link;
