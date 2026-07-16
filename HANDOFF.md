@@ -5,7 +5,20 @@
 
 ---
 
-## ★ v2 업데이트 (2026-07-15) — 멀티 코스 + 드라이브 코스
+## ★★ v3 업데이트 (2026-07-16) — 을왕리 전용 · 모바일 퍼스트 · 이슈 전면수정
+- **부평 코스 제거**: `COURSES`에 `eulwangri`만 남김. `DEFAULT='eulwangri'` → URL에 `?course` 없어도 을왕리가 뜸. (멀티코스 엔진 구조는 유지)
+- **모바일 퍼스트(엣지투엣지)**: CSS를 폰 기준으로 재작성. 기본=폰(카드가 화면 꽉 참, border-radius 0), `@media(min-width:480px)`에서만 데스크톱 카드룩. `100dvh`, `env(safe-area-inset)`, 터치타깃 ≥44px, 링크생성기=바텀시트, `theme-color`/`viewport-fit=cover`
+- **이슈 4건 수정**:
+  - 🔴 **XSS 차단**: `esc()` HTML 이스케이프를 `to/from/date/spot` innerHTML 삽입부(uWhen/envHi/envLetter/출발 desc)에 적용. uTo/uFrom은 textContent라 원래 안전. (라이브 재현 테스트로 확인)
+  - 🟠 reduced-motion+초대 조합에서도 '나도 만들기' 항상 노출(`showMakeMine()` 분리)
+  - 🟡 **귀가 구간 지도 반영**: `#route`(실선 가는 길)+`#routeBack`(보라 점선 오는 길)+`#carpath`(전체 루프, 미니카가 왕복 후 출발지 복귀). 도착 깃발="출발"로 통일
+  - 🟢 봉투 리스너 `{once}`+`opened` 가드(중복 개봉 방지), `leg.min ?? '?'` 폴백
+- **'음...' 도망버튼 터치 대응**: `touchstart`에서 preventDefault+도망 → 폰에서도 손가락이 빗나감
+- 검증: 폰 뷰포트(390) Playwright E2E 전부 통과(XSS 미발생·가로스크롤0·봉투개봉·미니카 왕복·도망 이동·reduced-motion), JS 에러 0
+
+---
+
+## v2 (2026-07-15) — 멀티 코스 + 드라이브 코스 (아래는 v2 시점 기록, 일부는 v3에서 대체됨)
 - **배포 저장소 확정: `github.com/TaeJinKim0930/dating-app`** → https://taejinkim0930.github.io/dating-app/ (index.html + HANDOFF.md)
 - **멀티 코스 구조**: `COURSES` 객체에 코스 여러 개. `?course=키`로 선택. **기본값 bupyeong(하위호환)**, 새 코스는 `?course=eulwangri`
 - **이동수단(leg.mode)**: `walk | car | transit` — 구간 문구·지도 칩·네이버 길찾기 딥링크(`/-/car` 등)가 모드를 따름. leg에 실측 `km/min/note` 명시 가능(생략 시 좌표로 도보 계산)

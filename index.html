@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EF5069">
 <title>데이트 초대장 💌</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,153 +14,165 @@
     --cherry:#EF5069; --cherry-deep:#D53A54; --caramel:#C08552; --grape:#8E7CE0; --tangerine:#F29441; --matcha:#9CCB9A;
     --road:#FBE7D7; --shadow:0 14px 30px -16px rgba(120,60,70,.4);
     --disp:'Jua',system-ui,sans-serif; --hand:'Gamja Flower',cursive; --body:'Gowun Dodum',system-ui,sans-serif;
+    --safe-b:env(safe-area-inset-bottom); --safe-t:env(safe-area-inset-top);
   }
   *{box-sizing:border-box}
   html,body{margin:0}
+  /* ===== MOBILE FIRST: edge-to-edge app ===== */
   body{
-    font-family:var(--body); color:var(--ink);
-    background:
-      radial-gradient(120% 55% at 12% 0%, #FFE4DC 0%, transparent 58%),
-      radial-gradient(130% 60% at 92% 12%, #ECE6FB 0%, transparent 55%),
-      var(--milk);
-    min-height:100vh; padding:26px 15px 46px; display:flex; justify-content:center;
-    -webkit-font-smoothing:antialiased;
+    font-family:var(--body); color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%;
+    overflow-x:hidden;
+  }
+  .card{ width:100%; background:var(--paper); min-height:100dvh; overflow:hidden; }
+
+  /* ===== DESKTOP enhance ===== */
+  @media (min-width:480px){
+    body{
+      background:
+        radial-gradient(120% 55% at 12% 0%, #FFE4DC 0%, transparent 58%),
+        radial-gradient(130% 60% at 92% 12%, #ECE6FB 0%, transparent 55%),
+        var(--milk);
+      min-height:100vh; padding:26px 15px 46px; display:flex; justify-content:center;
+    }
+    .card{ max-width:460px; min-height:auto; border-radius:30px; box-shadow:var(--shadow); border:1px solid #FBE7E7; align-self:flex-start; }
   }
 
-  /* ===== confetti canvas ===== */
+  /* ===== confetti ===== */
   #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
 
-  /* ===== envelope opening scene ===== */
+  /* ===== envelope ===== */
   .env-scene{
-    position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    position:fixed;inset:0;height:100dvh;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    padding:24px;
     background:radial-gradient(130% 90% at 50% 30%,#FFE6EA 0%,#F5EDFB 60%,#EFE7F7 100%);
     transition:opacity .7s ease;
   }
   .env-scene.gone{opacity:0;pointer-events:none}
   .env-eyebrow{font-family:var(--hand);font-size:22px;color:var(--cherry);text-align:center;line-height:1.4}
   .env-eyebrow b{color:var(--grape)}
-  .env-wrap{position:relative;width:300px;height:196px;cursor:pointer;filter:drop-shadow(0 18px 26px rgba(180,70,90,.32));transition:transform .3s}
-  .env-wrap:hover{transform:translateY(-4px) scale(1.02)}
+  .env-wrap{position:relative;width:min(300px,82vw);height:calc(min(300px,82vw)*0.653);cursor:pointer;filter:drop-shadow(0 18px 26px rgba(180,70,90,.32));transition:transform .3s;-webkit-tap-highlight-color:transparent}
+  .env-wrap:active{transform:scale(.98)}
   .env-letter{
-    position:absolute;left:16px;right:16px;top:12px;height:158px;background:#fff;border-radius:12px;z-index:2;
+    position:absolute;left:5.3%;right:5.3%;top:6%;height:80%;background:#fff;border-radius:12px;z-index:2;
     box-shadow:0 6px 14px -8px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
     padding:14px;text-align:center;transition:transform .8s cubic-bezier(.2,.8,.25,1) .25s;
   }
   .env-letter .lt-hi{font-family:var(--hand);font-size:26px;color:var(--cherry)}
   .env-letter .lt-sub{font-size:12.5px;color:#7A626A;line-height:1.5}
-  .env-pocket{position:absolute;inset:0;top:38px;background:linear-gradient(180deg,#FF7488,#EF5069);border-radius:12px;z-index:3;
+  .env-pocket{position:absolute;inset:0;top:19%;background:linear-gradient(180deg,#FF7488,#EF5069);border-radius:12px;z-index:3;
     -webkit-clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%)}
-  .env-flap{position:absolute;top:0;left:0;width:100%;height:0;z-index:4;transform-origin:top center;
-    border-left:150px solid transparent;border-right:150px solid transparent;border-top:104px solid #E7415B;
+  .env-flap{position:absolute;top:0;left:0;width:100%;height:53%;z-index:4;transform-origin:top center;
+    -webkit-clip-path:polygon(0 0,100% 0,50% 100%);clip-path:polygon(0 0,100% 0,50% 100%);background:#E7415B;
     transition:transform .6s ease, z-index 0s .3s;}
-  .seal{position:absolute;top:66px;left:50%;z-index:5;transition:opacity .35s, transform .45s}
+  .seal{position:absolute;top:34%;left:50%;z-index:5;transition:opacity .35s, transform .45s}
   .seal-c{width:46px;height:46px;margin-left:-23px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8FA0,#D53A54);
     display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 4px 8px rgba(150,30,50,.4)}
   .env-hint{font-family:var(--hand);font-size:20px;color:#8A6E76;animation:bob 1.6s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   .env-scene.opening .env-flap{transform:rotateX(180deg);z-index:1;transition:transform .6s ease}
   .env-scene.opening .seal{opacity:0;transform:translate(-50%,-14px) scale(.5)}
-  .env-scene.opening .env-letter{transform:translateY(-176px) scale(1.04)}
+  .env-scene.opening .env-letter{transform:translateY(-92%) scale(1.04)}
   .env-scene.opening .env-hint{opacity:0}
 
-  /* ===== card ===== */
-  .card{width:100%;max-width:460px;background:var(--paper);border-radius:30px;box-shadow:var(--shadow);border:1px solid #FBE7E7;overflow:hidden;align-self:flex-start}
-
-  .invite{position:relative;padding:30px 26px 24px;text-align:center;
+  /* ===== invite intro ===== */
+  .invite{position:relative;padding:calc(30px + var(--safe-t)) 24px 24px;text-align:center;
     background:radial-gradient(95% 100% at 100% 0%,#FFDDE2 0%,transparent 72%),linear-gradient(180deg,#FFECEF,#FFFCFA);
     border-bottom:2px dashed var(--line)}
+  @media (min-width:480px){ .invite{padding-top:30px} }
   .invite .to{font-family:var(--hand);font-size:24px;color:var(--cherry)}
   .invite h1{font-family:var(--disp);font-weight:400;margin:8px 0 6px;font-size:29px;line-height:1.28;letter-spacing:-.01em;text-wrap:balance}
   .invite h1 .gp{color:var(--grape)} .invite h1 .pk{color:var(--cherry)}
-  .invite .when{display:inline-flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
-  .invite .when span{font-size:13px;color:#7A626A;background:#fff;border:1.5px solid var(--line);padding:5px 12px;border-radius:999px}
+  .invite .when{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
+  .invite .when span{font-size:13px;color:#7A626A;background:#fff;border:1.5px solid var(--line);padding:6px 12px;border-radius:999px}
   .invite .from{font-family:var(--hand);font-size:19px;color:var(--sub);margin-top:14px}
 
-  .mapwrap{padding:18px 16px 4px}
+  /* ===== map ===== */
+  .mapwrap{padding:18px 14px 4px}
   .maptitle{font-family:var(--hand);font-size:22px;color:var(--ink);text-align:center;margin:2px 0 8px}
   .maptitle b{color:var(--grape)}
   .map{display:block;width:100%;height:auto;border-radius:22px;border:2px solid #F6E1D6;background:linear-gradient(180deg,#FFF9F4,#FFF1E9)}
   .mapcap{font-size:11.5px;color:var(--sub);text-align:center;margin:9px 6px 2px;line-height:1.5}
   .legend{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 4px 4px}
-  .lg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 11px 4px 5px}
-  .lgnum{width:19px;height:19px;border-radius:50%;color:#fff;display:grid;place-items:center;font-family:var(--disp);font-size:12px}
+  .lg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px}
+  .lgnum{width:20px;height:20px;border-radius:50%;color:#fff;display:grid;place-items:center;font-family:var(--disp);font-size:12px}
 
-  .divider{display:flex;align-items:center;gap:10px;padding:0 26px;margin:20px 0 4px}
+  .divider{display:flex;align-items:center;gap:10px;padding:0 24px;margin:20px 0 4px}
   .divider::before,.divider::after{content:"";flex:1;border-top:2px dashed var(--line)}
   .divider span{font-family:var(--hand);font-size:20px;color:var(--tangerine)}
 
-  .stops{padding:6px 22px 4px}
-  .stop{position:relative;display:grid;grid-template-columns:54px 1fr;gap:13px;padding:16px 0}
-  .stop:not(:last-child)::before{content:"";position:absolute;left:26px;top:46px;bottom:-8px;border-left:2.5px dashed #ECD4D8}
+  /* ===== timeline ===== */
+  .stops{padding:6px 20px 4px}
+  .stop{position:relative;display:grid;grid-template-columns:52px 1fr;gap:12px;padding:16px 0}
+  .stop:not(:last-child)::before{content:"";position:absolute;left:25px;top:46px;bottom:-8px;border-left:2.5px dashed #ECD4D8}
   .rail{display:flex;flex-direction:column;align-items:center;gap:8px;z-index:1}
   .time{font-family:var(--disp);font-size:13px;color:var(--ink)}
-  .bead{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;font-size:18px;background:#fff;box-shadow:0 6px 14px -6px rgba(120,60,70,.55);border:2px solid #fff}
-  .body h2{font-family:var(--disp);font-weight:400;margin:2px 0 0;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .bead{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-size:19px;background:#fff;box-shadow:0 6px 14px -6px rgba(120,60,70,.55);border:2px solid #fff}
+  .body h2{font-family:var(--disp);font-weight:400;margin:4px 0 0;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .kind{font-family:var(--body);font-size:11px;font-weight:700;color:#fff;padding:3px 9px;border-radius:999px}
-  .desc{margin:7px 0 0;font-size:13.5px;line-height:1.62;color:#6E5860}
+  .desc{margin:7px 0 0;font-size:14px;line-height:1.64;color:#6E5860}
   .desc b{color:var(--ink)}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .tag{font-size:11.5px;color:#83686F;background:#FBEEF0;border-radius:9px;padding:4px 9px}
+  .tag{font-size:12px;color:#83686F;background:#FBEEF0;border-radius:9px;padding:5px 10px}
   .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .go{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;text-decoration:none;color:#fff;padding:7px 14px;border-radius:999px;transition:transform .15s,filter .15s}
-  .go:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  .go{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;font-size:13px;font-weight:700;text-decoration:none;color:#fff;padding:0 16px;border-radius:999px;transition:transform .15s,filter .15s;-webkit-tap-highlight-color:transparent}
+  .go:active{transform:scale(.96)} .go:hover{filter:brightness(1.06)}
   .go.ghost{background:#fff;color:var(--ink);border:1.6px solid var(--line)}
   .walk{grid-column:1 / -1;font-family:var(--hand);font-size:16px;color:var(--sub);margin:-2px 0 -6px;display:flex;flex-direction:column;gap:8px;padding-left:6px}
   .walk .wline{display:flex;align-items:center;gap:6px}
   .start .bead{background:var(--cherry);color:#fff;border-color:#fff}
   .start .body h2{color:var(--cherry)}
 
-  /* navi bubble */
-  .navi{
-    font-family:var(--body);font-size:12.5px;color:#4E3D6B;line-height:1.5;
+  .navi{font-family:var(--body);font-size:12.5px;color:#4E3D6B;line-height:1.5;
     background:#F3EFFC;border:1.6px solid #DCD2F2;border-radius:4px 14px 14px 14px;
-    padding:8px 12px;max-width:320px;display:none;position:relative;
-  }
+    padding:9px 12px;max-width:340px;display:none;}
   .navi b{color:var(--grape)}
   .navi.show{display:block;animation:naviIn .5s cubic-bezier(.34,1.56,.64,1) both}
   @keyframes naviIn{0%{opacity:0;transform:translateY(6px) scale(.92)}100%{opacity:1;transform:none}}
 
-  /* rsvp */
-  .rsvp{margin:16px 18px 6px;padding:20px;border-radius:20px;text-align:center;background:linear-gradient(120deg,#FFECF0,#F0EAFB);border:2px dashed var(--line);position:relative;overflow:hidden;min-height:120px}
+  /* ===== rsvp ===== */
+  .rsvp{margin:16px 16px 6px;padding:22px 18px;border-radius:20px;text-align:center;background:linear-gradient(120deg,#FFECF0,#F0EAFB);border:2px dashed var(--line);position:relative;overflow:hidden;min-height:128px}
   .rsvp .q{font-family:var(--disp);font-size:19px;color:var(--ink)}
-  .rsvp .row{display:flex;gap:12px;justify-content:center;margin-top:14px;position:relative;height:52px;align-items:center}
-  .btn-yes{font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:999px;padding:12px 22px;cursor:pointer;box-shadow:0 8px 16px -8px var(--cherry);transition:transform .15s}
-  .btn-yes:hover{transform:scale(1.05)}
-  .btn-no{font-family:var(--body);font-size:14px;color:#9A8189;background:#fff;border:1.6px solid var(--line);border-radius:999px;padding:11px 18px;cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
-  .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:8px;opacity:0;transform:translateY(6px);transition:.4s}
+  .rsvp .row{display:flex;gap:12px;justify-content:center;margin-top:16px;position:relative;height:54px;align-items:center}
+  .btn-yes{font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:999px;padding:13px 24px;min-height:48px;cursor:pointer;box-shadow:0 8px 16px -8px var(--cherry);transition:transform .15s;-webkit-tap-highlight-color:transparent}
+  .btn-yes:active{transform:scale(1.06)}
+  .btn-no{font-family:var(--body);font-size:14px;color:#9A8189;background:#fff;border:1.6px solid var(--line);border-radius:999px;padding:12px 20px;min-height:48px;cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:10px;opacity:0;transform:translateY(6px);transition:.4s}
   .rsvp.done .yay{opacity:1;transform:none}
 
-  footer{margin:10px 18px 20px;padding:18px 20px;border-radius:20px;background:linear-gradient(120deg,#FFEEF1,#F1ECFC);border:2px dashed var(--line)}
+  footer{margin:10px 16px 18px;padding:18px 20px;border-radius:20px;background:linear-gradient(120deg,#FFEEF1,#F1ECFC);border:2px dashed var(--line)}
   footer .ft{font-family:var(--hand);font-size:20px;color:var(--grape)}
   footer p{margin:6px 0 0;font-size:13px;line-height:1.65;color:#6E5860}
   .sign{font-family:var(--hand);margin-top:12px;font-size:19px;color:var(--cherry)}
-  .makemine{display:block;text-align:center;font-family:var(--hand);font-size:17px;color:var(--grape);text-decoration:none;margin:0 18px 22px}
-  .makemine:hover{text-decoration:underline}
+  .makemine{display:flex;align-items:center;justify-content:center;min-height:48px;text-align:center;font-family:var(--hand);font-size:18px;color:var(--grape);text-decoration:none;margin:0 16px calc(24px + var(--safe-b))}
+  .makemine:active{opacity:.6}
 
-  /* send-invite FAB + modal */
-  .send-fab{position:fixed;right:18px;bottom:18px;z-index:40;font-family:var(--disp);font-size:15px;color:#fff;background:var(--grape);border:none;border-radius:999px;padding:13px 20px;cursor:pointer;box-shadow:0 12px 24px -10px var(--grape);transition:transform .15s}
-  .send-fab:hover{transform:translateY(-2px) scale(1.03)}
-  .modal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(70,48,57,.42);backdrop-filter:blur(3px)}
+  /* ===== FAB + sheet ===== */
+  .send-fab{position:fixed;right:16px;bottom:calc(16px + var(--safe-b));z-index:40;font-family:var(--disp);font-size:15px;color:#fff;background:var(--grape);border:none;border-radius:999px;padding:14px 20px;min-height:48px;cursor:pointer;box-shadow:0 12px 24px -10px var(--grape);transition:transform .15s;-webkit-tap-highlight-color:transparent}
+  .send-fab:active{transform:scale(.96)}
+  .modal{position:fixed;inset:0;z-index:45;display:flex;align-items:flex-end;justify-content:center;background:rgba(70,48,57,.42);backdrop-filter:blur(3px)}
   .modal[hidden]{display:none}
-  .sheet{width:100%;max-width:380px;background:var(--paper);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+  .sheet{width:100%;max-width:460px;background:var(--paper);border-radius:24px 24px 0 0;padding:24px 22px calc(26px + var(--safe-b));box-shadow:var(--shadow);position:relative;animation:sheetUp .35s cubic-bezier(.2,.8,.25,1) both}
+  @media (min-width:480px){ .modal{align-items:center} .sheet{border-radius:24px;max-width:380px} }
+  @keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
   .sheet h3{font-family:var(--disp);font-weight:400;font-size:21px;margin:0 0 4px;color:var(--ink)}
   .sheet p.hint{font-size:12.5px;color:var(--sub);margin:0 0 16px;line-height:1.5}
   .field{margin-bottom:12px}
   .field label{display:block;font-size:12.5px;font-weight:700;color:#7A626A;margin-bottom:5px}
-  .field input{width:100%;font-family:var(--body);font-size:14px;color:var(--ink);padding:11px 13px;border:1.6px solid var(--line);border-radius:12px;background:#fff}
+  .field input{width:100%;font-family:var(--body);font-size:16px;color:var(--ink);padding:13px;border:1.6px solid var(--line);border-radius:12px;background:#fff}
   .field input:focus{outline:2.5px solid var(--grape);outline-offset:1px;border-color:transparent}
-  .mk{width:100%;font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:14px;padding:14px;cursor:pointer;margin-top:6px;transition:filter .15s}
-  .mk:hover{filter:brightness(1.06)}
+  .mk{width:100%;font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:14px;padding:15px;min-height:50px;cursor:pointer;margin-top:6px;transition:filter .15s}
+  .mk:active{filter:brightness(1.08)}
   .linkout{display:flex;gap:8px;margin-top:12px}
-  .linkout input{flex:1;font-size:12px;color:#6E5860;padding:10px 12px;border:1.6px solid var(--line);border-radius:12px;background:#FBF3F4}
-  .linkout button{font-family:var(--disp);color:#fff;background:var(--grape);border:none;border-radius:12px;padding:0 16px;cursor:pointer;font-size:14px}
-  .x{position:absolute;top:14px;right:16px;font-size:22px;color:var(--sub);background:none;border:none;cursor:pointer}
+  .linkout input{flex:1;font-size:12px;color:#6E5860;padding:12px;border:1.6px solid var(--line);border-radius:12px;background:#FBF3F4}
+  .linkout button{font-family:var(--disp);color:#fff;background:var(--grape);border:none;border-radius:12px;padding:0 18px;min-height:44px;cursor:pointer;font-size:14px}
+  .x{position:absolute;top:12px;right:14px;font-size:26px;line-height:1;color:var(--sub);background:none;border:none;cursor:pointer;width:40px;height:40px}
 
-  .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);z-index:70;
-    background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:999px;opacity:0;transition:.35s;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:calc(80px + var(--safe-b));transform:translateX(-50%) translateY(20px);z-index:70;
+    background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:999px;opacity:0;transition:.35s;pointer-events:none;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* motion */
+  /* ===== motion ===== */
   @keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @keyframes drop{0%{opacity:0;transform:translateY(-24px)}60%{transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
   @keyframes hop{0%{transform:translateY(0)}40%{transform:translateY(-9px) scale(1.12)}100%{transform:translateY(0)}}
@@ -168,14 +181,13 @@
   .revealed .pin{animation:drop .6s cubic-bezier(.34,1.56,.64,1) both}
   .pinwrap{transform-box:fill-box;transform-origin:center bottom}
   .pinwrap.hop{animation:hop .5s ease both}
-  .go:focus-visible,.btn-yes:focus-visible,.mk:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+  .go:focus-visible,.btn-yes:focus-visible,.mk:focus-visible,.env-wrap:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
   <canvas id="fx"></canvas>
 
-  <!-- envelope opening scene (invite links only) -->
   <div class="env-scene gone" id="env" hidden>
     <div class="env-eyebrow" id="envHi">💌 도착한 <b>초대장</b></div>
     <div class="env-wrap" id="envWrap" role="button" tabindex="0" aria-label="초대장 열기">
@@ -198,7 +210,7 @@
     <section class="mapwrap">
       <div class="maptitle">오늘의 <b>이동 동선</b> 🧭</div>
       <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이트 코스 이동 동선 지도"></svg>
-      <p class="mapcap" id="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
+      <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
       <div class="legend" id="legend"></div>
     </section>
 
@@ -224,7 +236,7 @@
 
   <button class="send-fab" id="sendFab" hidden>💌 초대장으로 보내기</button>
   <div class="modal" id="modal" hidden>
-    <div class="sheet" style="position:relative">
+    <div class="sheet">
       <button class="x" id="mx" aria-label="닫기">×</button>
       <h3>💌 초대장 링크 만들기</h3>
       <p class="hint">받는 사람 정보를 넣으면, 그 사람이 링크를 열 때 <b>봉투 개봉 연출</b>이 떠요!</p>
@@ -241,46 +253,12 @@
 <script>
 /* =======================================================================
    코스 데이터 (single source of truth)
-   👉 코스 추가 = COURSES에 항목 추가 + ?course=키 로 열기.
-   leg = "이 장소까지 오는 구간": {mode:'walk'|'car'|'transit', km?, min?, note?, chip?:false}
-   km/min을 생략하면 좌표로 자동 계산(도보 기준). navi = 내비 안내 멘트(선택).
+   👉 코스 추가 = COURSES에 항목 추가 + ?course=키 로 열기. (엔진은 멀티코스 유지)
+   leg = "이 장소까지 오는 구간": {mode:'walk'|'car'|'transit', km?, min?, note?, chip?:false, chipOff?}
+   ret = 마지막 복귀 지점(선택). navi = 내비 안내 멘트(선택).
    ======================================================================= */
+const DEFAULT = 'eulwangri';
 const COURSES = {
-
-  bupyeong: {
-    docTitle: '부평 하루 데이트 초대장 💌',
-    titleHtml: '부평에서 보내는<br>하루 <span class="pk">데이트</span> <span class="gp">초대장</span>',
-    metaChip: '🚶 전부 도보권', defaultSpot: '부평역', meetShort: '부평',
-    mover: null,
-    start: { name:'부평역', emoji:'🚇', bead:'🚩', time:'12:00', geo:{lat:37.4896, lng:126.7234},
-      desc:'오늘의 시작! <b>{SPOT}</b>에서 만나요. 여기서부터 전부 도보로 이동해요 🚶‍♀️🚶' },
-    places: [
-      { n:1, name:'우와', emoji:'🍳', kind:'점심', color:'var(--cherry)', time:'12:30',
-        geo:{lat:37.4926, lng:126.7208}, leg:{mode:'walk', chipOff:{dx:-6,dy:-2}},
-        desc:'밀가루 대신 <b>안동산 마</b>로 부치는 이색 오코노미야끼·야끼소바. 눈앞 철판에서 직접 볶아줘 보는 재미까지 두 배! 조도 낮아 분위기도 좋아요.',
-        tags:['🥢 철판 일식','💰 1.5~2만원','🕯 분위기 맛집'],
-        naver:'https://naver.me/5imJAeRK', label:{dx:0,dy:20} },
-      { n:2, name:'브라운캣', emoji:'☕', kind:'카페', color:'var(--caramel)', time:'13:30',
-        geo:{lat:37.4939, lng:126.7244}, leg:{mode:'walk', chipOff:{dx:0,dy:-10}},
-        desc:'밥 먹고 나른할 때 커피 한 잔과 달달한 디저트로 쉬어가는 코스. 마주 앉아 도란도란 이야기하기 좋은 두 번째 정거장이에요.',
-        tags:['☕ 커피 & 디저트','💬 수다 타임','🧭 부평문화의거리'],
-        naver:'https://naver.me/5yhtKeB0', label:{dx:0,dy:-34} },
-      { n:3, name:'포토이즘', emoji:'📸', kind:'인증샷', color:'var(--grape)', time:'18:00',
-        geo:{lat:37.4933, lng:126.7237}, leg:{mode:'walk', chipOff:{dx:38,dy:-4}},
-        desc:'부평역 근처 포토이즘 3곳 중 <b>무인 셀프 네컷 ‘박스 부평점’</b>을 골랐어요. 예약 없이 바로 들어가 커플 사진 남기기 딱! (스튜디오점은 예약제라 오늘 코스엔 X)',
-        tags:['📷 셀프 네컷','✅ 예약 불필요','🎞 오늘의 기념'],
-        naver:'https://map.naver.com/p/search/포토이즘박스 부평점', label:{dx:0,dy:20} },
-      { n:4, name:'용용선생', emoji:'🍢', kind:'저녁', color:'var(--tangerine)', time:'18:15',
-        geo:{lat:37.4922, lng:126.7253}, leg:{mode:'walk', chipOff:{dx:-40,dy:14}},
-        desc:'하루 마무리는 부평역점에서 양꼬치와 마라 요리로! 시원한 한 잔 곁들이며 오늘 찍은 네컷 사진 돌려보는 걸로 데이트 완성 🍻',
-        tags:['🍢 양꼬치 & 마라','🍻 한 잔 곁들이기','🧭 부평역 근처'],
-        naver:'https://naver.me/xcgLPLXs', label:{dx:0,dy:20} },
-    ],
-    ret: null,
-    deco: 'bupyeong',
-    summary: '부평역에서 만나 → 이색 철판 일식 → 카페 달달 충전 → 네컷으로 오늘 박제 → 양꼬치로 마무리. 전부 부평역 도보권이라 이동 스트레스 없이 즐기기 좋아요!'
-  },
-
   eulwangri: {
     docTitle: '을왕리 드라이브 데이트 초대장 💌',
     titleHtml: '바다 보러 가는<br><span class="pk">드라이브</span> 데이트 <span class="gp">초대장</span>',
@@ -291,7 +269,7 @@ const COURSES = {
     places: [
       { n:1, name:'브런치빈', emoji:'🥞', kind:'브런치', color:'var(--cherry)', time:'12:20',
         geo:{lat:37.3975, lng:126.6415},
-        leg:{mode:'car', min:14, note:'시내 드라이브', chipOff:{dx:14,dy:-22}},
+        leg:{mode:'car', min:14, note:'시내 드라이브', chip:false},
         navi:'경로 안내를 시작합니다. 오늘의 동승자: <b>세상에서 제일 소중한 사람</b> 💗',
         desc:'송도 인피니티타워 <b>8층</b>에서 여는 브런치! 시그니처 <b>미트 러버 플래터</b>에 빌딩숲 전망은 덤. 건물 지하주차 가능(키오스크 등록 시 2시간 무료)이라 편해요.',
         tags:['🥞 브런치 플래터','🏙 8층 전망','🅿️ 주차 2시간 무료'],
@@ -302,7 +280,7 @@ const COURSES = {
         navi:'잠시 후 <b>인천대교</b>입니다. 경로에 바다가 포함되어 있어요 — 설렘 주의 🌊',
         desc:'영종도 <b>마시안해변</b> 앞 유럽풍 빈티지 카페. 프랑스산 버터로 굽는 <b>플레인 스콘</b>이 시그니처예요. 카페 앞 해변 산책까지 세트로! (월·화 휴무예요)',
         tags:['🧈 버터 스콘 맛집','🏖 마시안해변 바로 앞','🅿️ 무료주차'],
-        naver:'https://map.naver.com/p/search/카페 림 영종도', label:{dx:18,dy:24} },
+        naver:'https://map.naver.com/p/search/카페 림 영종도', label:{dx:16,dy:24} },
       { n:3, name:'품장', emoji:'🐟', kind:'저녁', color:'var(--tangerine)', time:'18:15',
         geo:{lat:37.4495, lng:126.3745},
         leg:{mode:'car', km:7.7, min:12, note:'해안도로 따라', chip:false},
@@ -312,7 +290,7 @@ const COURSES = {
         naver:'https://map.naver.com/p/search/품장 을왕리점', label:{dx:0,dy:-58} },
     ],
     ret: { name:'신연수역', emoji:'🏁', time:'20:40',
-      leg:{mode:'car', km:38, min:41, note:'집으로'},
+      leg:{mode:'car', km:38, min:41, note:'집으로', chipOff:{dx:22,dy:42}},
       navi:'목적지는 <b>당신의 마음</b>입니다. 경로 안내를 종료합니다 ♡',
       desc:'넉넉히 20:00에 출발해서 안전운전으로 귀가! (주말 저녁엔 인천대교가 살짝 막힐 수 있으니 여유 있게 🚗)' },
     deco: 'eulwangri',
@@ -320,17 +298,19 @@ const COURSES = {
   }
 };
 
-/* ===== 코스 선택 (URL) ===== */
+/* ===== 코스 선택 + 개인화 ===== */
 const Q = new URLSearchParams(location.search);
-const COURSE_KEY = COURSES[Q.get('course')] ? Q.get('course') : 'bupyeong';
+const COURSE_KEY = COURSES[Q.get('course')] ? Q.get('course') : DEFAULT;
 const C = COURSES[COURSE_KEY];
-
-/* ===== 개인화 ===== */
 const TO   = Q.get('to')   || '너';
 const FROM = Q.get('from') || '나';
 const DATE = Q.get('date') || '이번 주말';
 const SPOT = Q.get('spot') || C.defaultSpot;
 const isInvite = Q.has('invite') || Q.has('to') || Q.has('from');
+
+/* ===== XSS 방지: 사용자 입력 HTML 이스케이프 ===== */
+const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+const esc = s => String(s).replace(/[&<>"']/g, c=>ESC[c]);
 
 /* ===== geo 유틸 ===== */
 const MLAT = 111320, MLNG = 88320;
@@ -344,29 +324,27 @@ const MODE = { walk:{emoji:'🚶‍♀️',word:'도보',nav:'walk',btn:'걸어�
                transit:{emoji:'🚌',word:'대중교통',nav:'transit',btn:'대중교통 길찾기'} };
 function naverRoute(a,b,mode){ const seg=p=>`${p.geo.lng},${p.geo.lat},${encodeURIComponent(p.name)},,`; return `https://map.naver.com/p/directions/${seg(a)}/${seg(b)}/-/${MODE[mode].nav}`; }
 function legText(prev,p,leg){
-  const M=MODE[leg.mode];
+  const M=MODE[leg.mode]||MODE.walk;
   if(leg.mode==='walk'){
     const m=leg.km?Math.round(leg.km*1000):dist(prev.geo,p.geo), t=leg.min||walkMin(m), dr=dir8(prev.geo,p.geo);
     return `${M.emoji} ${dr}쪽으로 ${m}m · 도보 ${t}분${m<120?' (바로 근처!)':''}`;
   }
-  const parts=[leg.note, leg.km?`${leg.km}km`:null, `${M.word} ${leg.min}분`].filter(Boolean);
+  const parts=[leg.note, leg.km?`${leg.km}km`:null, `${M.word} ${leg.min??'?'}분`].filter(Boolean);
   return `${M.emoji} ${parts.join(' · ')}`;
 }
 function chipText(prev,p,leg){
-  if(leg.mode==='walk'){
-    const m=dist(prev.geo,p.geo); return `${dir8(prev.geo,p.geo)} ${m}m·${walkMin(m)}분`;
-  }
-  return `${leg.km?leg.km+'km·':''}${leg.min}분`;
+  if(leg.mode==='walk'){ const m=dist(prev.geo,p.geo); return `${dir8(prev.geo,p.geo)} ${m}m·${walkMin(m)}분`; }
+  return `${leg.km?leg.km+'km·':''}${leg.min??'?'}분`;
 }
 
-/* ===== 지도 (autofit) ===== */
+/* ===== 지도 (autofit + 왕복 루프) ===== */
 const W = 460, PAD = {l:60, r:60, t:105, b:95};
-let MAP = {}; // proj, H, route path data, fracs
-
+let MAP = {};
 function buildMap(){
-  const chain=[C.start, ...C.places];
-  const R=chain[0].geo;
-  const ms=chain.map(p=>mDelta(R,p.geo));
+  const outChain=[C.start, ...C.places];
+  const loopChain = C.ret ? [...outChain, {name:C.ret.name, geo:C.start.geo, _ret:true}] : outChain;
+  const R=C.start.geo;
+  const ms=outChain.map(p=>mDelta(R,p.geo));
   const minE=Math.min(...ms.map(m=>m.e)), maxE=Math.max(...ms.map(m=>m.e));
   const minN=Math.min(...ms.map(m=>m.n)), maxN=Math.max(...ms.map(m=>m.n));
   const spanE=Math.max(maxE-minE,1), spanN=Math.max(maxN-minN,1);
@@ -379,31 +357,33 @@ function buildMap(){
   const proj=g=>{const m=mDelta(R,g); return {x:ox+(m.e-minE)*k, y:oy+(maxN-m.n)*k};};
   MAP={proj,H,k};
 
-  const pts=chain.map(p=>proj(p.geo));
-  const routeD='M'+pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+  const outPts=outChain.map(p=>proj(p.geo));
+  const loopPts=loopChain.map(p=>proj(p.geo));
+  const routeD='M'+outPts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+  const carLoopD='M'+loopPts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+  const backD = C.ret ? `M${outPts[outPts.length-1].x.toFixed(1)},${outPts[outPts.length-1].y.toFixed(1)} L${outPts[0].x.toFixed(1)},${outPts[0].y.toFixed(1)}` : '';
 
-  // cumulative fractions of each place along polyline (SVG space)
   let cum=[0];
-  for(let i=1;i<pts.length;i++) cum.push(cum[i-1]+Math.hypot(pts[i].x-pts[i-1].x, pts[i].y-pts[i-1].y));
+  for(let i=1;i<loopPts.length;i++) cum.push(cum[i-1]+Math.hypot(loopPts[i].x-loopPts[i-1].x, loopPts[i].y-loopPts[i-1].y));
   const total=cum[cum.length-1]||1;
   MAP.fracs=cum.map(v=>v/total);
 
-  // distance chips
+  // chips
   let chips='';
-  for(let i=0;i<chain.length-1;i++){
-    const p=chain[i+1], leg=p.leg||{mode:'walk'};
+  for(let i=0;i<loopChain.length-1;i++){
+    const p=loopChain[i+1], leg=p._ret?C.ret.leg:(p.leg||{mode:'walk'});
     if(leg.chip===false) continue;
-    const a=pts[i], b=pts[i+1], off=leg.chipOff||{dx:0,dy:-14};
+    const a=loopPts[i], b=loopPts[i+1], off=leg.chipOff||{dx:0,dy:-14};
     const mx=(a.x+b.x)/2+off.dx, my=(a.y+b.y)/2+off.dy;
-    const txt=chipText(chain[i],p,leg); const w=txt.length*6.6+16;
+    const txt=chipText(loopChain[i],p,leg); const w=txt.length*6.6+16;
     chips+=`<g><rect x="${(mx-w/2).toFixed(1)}" y="${(my-10).toFixed(1)}" width="${w.toFixed(1)}" height="20" rx="10" fill="#fff" stroke="var(--line)" stroke-width="1"/>`
          +`<text x="${mx.toFixed(1)}" y="${(my+4).toFixed(1)}" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#7A626A">${txt}</text></g>`;
   }
 
-  // pins + labels
+  // pins
   let pins='';
   C.places.forEach((p,i)=>{
-    const pt=pts[i+1], dx=(p.label||{}).dx||0, dy=(p.label||{}).dy||20, lx=pt.x+dx, ly=pt.y+dy;
+    const pt=outPts[i+1], dx=(p.label||{}).dx||0, dy=(p.label||{}).dy||20, lx=pt.x+dx, ly=pt.y+dy;
     const w=p.name.length*15+24;
     pins+=`<g transform="translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)})"><g class="pinwrap" id="pinw-${i}"><g class="pin" style="animation-delay:${(0.35+i*0.18).toFixed(2)}s">`
         +`<path d="M0,0 C-16,-22 -16,-26 -16,-34 A16,16 0 1 1 16,-34 C16,-26 16,-22 0,0 Z" fill="${p.color}" stroke="#fff" stroke-width="3"/>`
@@ -413,8 +393,7 @@ function buildMap(){
         +`<text x="${lx.toFixed(1)}" y="${(ly+5).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="16" fill="#5C4750">${p.name}</text></g>`;
   });
 
-  // start flag + label
-  const s=pts[0];
+  const s=outPts[0];
   const startG=`<g transform="translate(${s.x.toFixed(1)},${s.y.toFixed(1)})">
       <circle cx="0" cy="0" r="6" fill="#5C4750"/>
       <rect x="-1.5" y="-42" width="3" height="42" fill="#5C4750"/>
@@ -424,16 +403,10 @@ function buildMap(){
     <g><rect x="${(s.x-56).toFixed(1)}" y="${(s.y+12).toFixed(1)}" width="112" height="26" rx="13" fill="#fff" stroke="#E7C9CE" stroke-width="2"/>
     <text x="${s.x.toFixed(1)}" y="${(s.y+30).toFixed(1)}" text-anchor="middle" font-family="Jua,sans-serif" font-size="13" fill="#5C4750">${C.start.emoji} ${C.start.name}</text></g>`;
 
-  // deco (per course)
   let deco='';
-  if(C.deco==='bupyeong'){
-    const bc=pts[2], pi=pts[3];
-    const zx=(bc.x+pi.x)/2, zy=(bc.y+pi.y)/2;
-    deco=`<ellipse cx="${zx.toFixed(1)}" cy="${zy.toFixed(1)}" rx="62" ry="72" fill="#EDE6FB" opacity=".5"/>
-      <text x="${(zx+104).toFixed(1)}" y="${(zy+18).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#9784CE" transform="rotate(8 ${(zx+104).toFixed(1)} ${(zy+18).toFixed(1)})">부평 문화의거리</text>`;
-  }else if(C.deco==='eulwangri'){
-    const isl={x:(pts[2].x+pts[3].x)/2, y:(pts[2].y+pts[3].y)/2};
-    const brg={x:(pts[2].x+pts[1].x)/2, y:(pts[2].y+pts[1].y)/2};
+  if(C.deco==='eulwangri'){
+    const isl={x:(outPts[2].x+outPts[3].x)/2, y:(outPts[2].y+outPts[3].y)/2};
+    const brg={x:(outPts[2].x+outPts[1].x)/2, y:(outPts[2].y+outPts[1].y)/2};
     deco=`
       <path d="M0,0 H178 Q150,${(H/2).toFixed(0)} 178,${H} H0 Z" fill="#DCEFF7" opacity=".65"/>
       <g stroke="#A8D4E6" stroke-width="1.6" fill="none" opacity=".8">
@@ -444,14 +417,11 @@ function buildMap(){
       <ellipse cx="${isl.x.toFixed(1)}" cy="${(isl.y+4).toFixed(1)}" rx="96" ry="52" fill="#F4EBDA" opacity=".85"/>
       <text x="${(isl.x-34).toFixed(1)}" y="${(isl.y+58).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#C0A876">영종도</text>
       <text x="52" y="${H-78}" font-family="Gamja Flower,cursive" font-size="15" fill="#7FB4CC" transform="rotate(-6 52 ${H-78})">서해 바다 🌊</text>
-      <text x="${brg.x.toFixed(1)}" y="${(brg.y+26).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="13" fill="#B79AA0">～ 인천대교 ～</text>`;
+      <text x="${(brg.x-44).toFixed(1)}" y="${(brg.y+30).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="13" fill="#B79AA0">～ 인천대교 ～</text>`;
   }
 
-  // road center dashes for car courses
-  const overlay = C.mover==='car'
-    ? `<path id="routeDash" d="${routeD}" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="7 9" stroke-linecap="round" opacity="0"/>` : '';
-
-  // mini car
+  const back = backD ? `<path id="routeBack" d="${backD}" fill="none" stroke="var(--grape)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9" opacity="0"/>` : '';
+  const carpath = C.ret ? `<path id="carpath" d="${carLoopD}" fill="none" stroke="none"/>` : '';
   const car = C.mover==='car' ? `
     <g id="miniCar" opacity="0">
       <g transform="translate(0,-8)">
@@ -464,7 +434,6 @@ function buildMap(){
       </g>
     </g>` : '';
 
-  // scale bar (nice round length)
   const NICE=[100,200,500,1000,2000,5000,10000,20000];
   let L=NICE[0]; for(const n of NICE){ if(n*k>=52 && n*k<=118){L=n;break;} if(n*k<52)L=n; }
   const Lpx=L*k, Ltxt=L>=1000?`${L/1000}km`:`${L}m`;
@@ -473,8 +442,9 @@ function buildMap(){
     <defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#F1DACF"/></pattern></defs>
     <rect x="0" y="0" width="${W}" height="${H}" fill="url(#dots)"/>
     ${deco}
+    ${carpath}
     <path id="route" d="${routeD}" fill="none" stroke="var(--cherry)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${overlay}
+    ${back}
     <g>${chips}</g>
     ${startG}
     ${pins}
@@ -489,7 +459,6 @@ function buildMap(){
   const mapEl=document.getElementById('map');
   mapEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
   mapEl.innerHTML=svg;
-
   document.getElementById('legend').innerHTML = C.places.map(p=>
     `<span class="lg"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</span>`).join('');
 }
@@ -506,7 +475,7 @@ function buildTimeline(){
     <div class="stop start">
       <div class="rail"><div class="time">${st.time}</div><div class="bead">${st.bead}</div></div>
       <div class="body"><h2>${st.name} <span class="kind" style="background:var(--cherry)">출발</span></h2>
-        <p class="desc">${st.desc.replace('{SPOT}', SPOT)}</p>
+        <p class="desc">${st.desc.replace('{SPOT}', esc(SPOT))}</p>
       </div>
     </div>`;
   const chain=[st,...C.places];
@@ -522,7 +491,7 @@ function buildTimeline(){
           <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
           <div class="btns">
             <a class="go" style="background:${p.color}" href="${p.naver}" target="_blank" rel="noopener">📍 네이버 지도</a>
-            <a class="go ghost" href="${naverRoute(prev,p,leg.mode)}" target="_blank" rel="noopener">🧭 ${MODE[leg.mode].btn} ›</a>
+            <a class="go ghost" href="${naverRoute(prev,p,leg.mode)}" target="_blank" rel="noopener">🧭 ${(MODE[leg.mode]||MODE.walk).btn} ›</a>
           </div>
         </div>
       </div>`;
@@ -542,21 +511,21 @@ function buildTimeline(){
   document.getElementById('timeline').innerHTML = html;
 }
 
-/* ===== 개인화 채우기 ===== */
+/* ===== 개인화 채우기 (사용자 입력은 esc 처리) ===== */
 function fillInvite(){
   document.title = C.docTitle;
-  document.getElementById('uTitle').innerHTML = C.titleHtml;
-  document.getElementById('uTo').textContent = `To. ${TO}에게`;
-  document.getElementById('uFrom').textContent = `from. ${FROM} ♡`;
-  document.getElementById('uWhen').innerHTML = `<span>📅 ${DATE}</span><span>📍 ${SPOT}</span><span>${C.metaChip}</span>`;
-  document.getElementById('envHi').innerHTML = `💌 <b>${TO}</b>에게 도착한 초대장`;
-  document.getElementById('envLetter').innerHTML = `${FROM}(이)가<br>보냈어요 ♡`;
+  document.getElementById('uTitle').innerHTML = C.titleHtml;              // 신뢰 데이터(고정)
+  document.getElementById('uTo').textContent = `To. ${TO}에게`;           // textContent = 안전
+  document.getElementById('uFrom').textContent = `from. ${FROM} ♡`;      // textContent = 안전
+  document.getElementById('uWhen').innerHTML = `<span>📅 ${esc(DATE)}</span><span>📍 ${esc(SPOT)}</span><span>${C.metaChip}</span>`;
+  document.getElementById('envHi').innerHTML = `💌 <b>${esc(TO)}</b>에게 도착한 초대장`;
+  document.getElementById('envLetter').innerHTML = `${esc(FROM)}(이)가<br>보냈어요 ♡`;
   document.getElementById('uSummary').textContent = C.summary;
   document.getElementById('yay').textContent = `야호! 그럼 그날 ${C.meetShort}에서 만나요 ♡`;
   document.getElementById('fSpot').placeholder = `예: ${C.defaultSpot} 2번 출구`;
 }
 
-/* ===== confetti (하트) ===== */
+/* ===== confetti ===== */
 const cv=document.getElementById('fx'), cx=cv.getContext('2d'); let parts=[], raf=null;
 function size(){ const d=window.devicePixelRatio||1; cv.width=innerWidth*d; cv.height=innerHeight*d; cx.setTransform(d,0,0,d,0,0); }
 size(); addEventListener('resize',size);
@@ -579,42 +548,39 @@ function tick(){
   if(alive) raf=requestAnimationFrame(tick); else raf=null;
 }
 
-/* ===== reveal + route draw ===== */
+/* ===== reveal ===== */
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 function drawRoute(){
   const r=document.getElementById('route'); if(!r||reduce) return;
   const len=r.getTotalLength(); r.style.strokeDasharray=len; r.style.strokeDashoffset=len;
   r.getBoundingClientRect();
   r.style.transition='stroke-dashoffset 2.2s ease-out .2s'; r.style.strokeDashoffset='0';
-  const d=document.getElementById('routeDash');
-  if(d){ d.style.transition='opacity .8s ease 2.2s'; d.style.opacity='0.9'; }
+  const rb=document.getElementById('routeBack'); if(rb){ rb.style.transition='opacity .6s ease 1.9s'; rb.style.opacity='0.6'; }
 }
 function reveal(){ document.body.classList.add('revealed'); drawRoute(); if(C.mover==='car') setTimeout(()=>driveCar(),600); }
 
-/* ===== 미니카 주행 ===== */
+/* ===== 미니카 (왕복) ===== */
 let carRaf=null, lastDrive=0;
+function carTrack(){ return document.getElementById('carpath')||document.getElementById('route'); }
 function placeCar(f){
-  const route=document.getElementById('route'), car=document.getElementById('miniCar');
-  if(!route||!car) return;
+  const route=carTrack(), car=document.getElementById('miniCar'); if(!route||!car) return;
   const len=route.getTotalLength();
-  const P=route.getPointAtLength(f*len);
-  const P2=route.getPointAtLength(Math.min(f*len+2,len));
+  const P=route.getPointAtLength(f*len), P2=route.getPointAtLength(Math.min(f*len+2,len));
   let ang=Math.atan2(P2.y-P.y,P2.x-P.x)*180/Math.PI;
-  const flip=(ang>90||ang<-90)?' scale(1,-1)':'';
-  if(flip) ang+=180;
+  const flip=(ang>90||ang<-90);
+  const drawAng=flip?ang+180:ang;
   car.setAttribute('opacity','1');
-  car.setAttribute('transform',`translate(${P.x.toFixed(1)},${P.y.toFixed(1)}) rotate(${(flip?ang-180:ang).toFixed(1)})${flip}`);
+  car.setAttribute('transform',`translate(${P.x.toFixed(1)},${P.y.toFixed(1)}) rotate(${drawAng.toFixed(1)})${flip?' scale(1,-1)':''}`);
 }
 function markArrivals(f){
   (MAP.fracs||[]).slice(1).forEach((fr,i)=>{
     const el=document.getElementById('pinw-'+i); if(!el) return;
-    if(f>=fr-0.005) el.classList.add('hop'); else el.classList.remove('hop');
+    if(f>=fr-0.004) el.classList.add('hop'); else el.classList.remove('hop');
   });
 }
-function driveCar(dur=2800){
+function driveCar(dur=3400){
   if(C.mover!=='car') return;
-  const now=performance.now();
-  if(now-lastDrive<1200) return; lastDrive=now;
+  const now=performance.now(); if(now-lastDrive<1200) return; lastDrive=now;
   if(reduce){ placeCar(1); markArrivals(1); return; }
   if(carRaf) cancelAnimationFrame(carRaf);
   markArrivals(-1);
@@ -625,11 +591,10 @@ function driveCar(dur=2800){
     placeCar(e); markArrivals(e);
     if(f<1) carRaf=requestAnimationFrame(step);
     else { carRaf=null; const m=document.getElementById('map').getBoundingClientRect();
-           if(m.top<innerHeight&&m.bottom>0) burst(m.left+m.width*0.16, m.top+m.height*0.42, 14); }
+           if(m.top<innerHeight&&m.bottom>0){ const s=MAP.proj(C.start.geo); burst(m.left+m.width*(s.x/W), m.top+m.height*(s.y/MAP.H), 16); } }
   };
   carRaf=requestAnimationFrame(step);
 }
-// 지도가 다시 보이면 재주행
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>{
     es.forEach(e=>{ if(e.isIntersecting && document.body.classList.contains('revealed')) driveCar(); });
@@ -637,7 +602,7 @@ if('IntersectionObserver' in window){
   io.observe(document.getElementById('map'));
 }
 
-/* ===== 내비 멘트 (스크롤 등장) ===== */
+/* ===== 내비 멘트 ===== */
 function watchNavi(){
   const rows=[...document.querySelectorAll('.walk')].filter(r=>r.querySelector('.navi'));
   if(!rows.length) return;
@@ -650,7 +615,9 @@ function watchNavi(){
 }
 
 /* ===== envelope ===== */
+let opened=false;
 function openEnvelope(){
+  if(opened) return; opened=true;
   const env=document.getElementById('env');
   env.classList.add('opening');
   burst(innerWidth/2, innerHeight*0.42, 60);
@@ -660,30 +627,35 @@ function openEnvelope(){
 
 /* ===== boot ===== */
 buildMap(); buildTimeline(); fillInvite(); watchNavi();
+const mm=document.getElementById('makeMine');
+function showMakeMine(){ mm.href=location.pathname+(COURSE_KEY!==DEFAULT?('?course='+COURSE_KEY):''); mm.removeAttribute('hidden'); }
 
-if(isInvite && !reduce){
-  const env=document.getElementById('env');
-  env.removeAttribute('hidden'); env.classList.remove('gone');
-  const w=document.getElementById('envWrap');
-  const go=()=>{ w.removeEventListener('click',go); openEnvelope(); };
-  w.addEventListener('click',go);
-  w.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} });
-  const mm=document.getElementById('makeMine');
-  mm.href=location.pathname+(COURSE_KEY!=='bupyeong'?`?course=${COURSE_KEY}`:'');
-  mm.removeAttribute('hidden');
+if(isInvite){
+  showMakeMine();                       // reduced-motion 여부와 무관하게 항상 노출
+  if(reduce){
+    reveal();
+  }else{
+    const env=document.getElementById('env');
+    env.removeAttribute('hidden'); env.classList.remove('gone');
+    const w=document.getElementById('envWrap');
+    w.addEventListener('click', openEnvelope, {once:true});
+    w.addEventListener('keydown', function kd(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); w.removeEventListener('keydown',kd); openEnvelope(); } });
+  }
 }else{
   reveal();
-  if(!isInvite){ document.getElementById('sendFab').removeAttribute('hidden'); }
+  document.getElementById('sendFab').removeAttribute('hidden');
 }
 
-/* ===== RSVP ===== */
+/* ===== RSVP (도망 버튼: 터치 대응) ===== */
 document.getElementById('yes').addEventListener('click',e=>{
-  const r=e.target.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
+  const r=e.currentTarget.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
   document.getElementById('rsvp').classList.add('done'); toast('답장 완료! 두근두근 💗');
 });
 const no=document.getElementById('no');
 function dodge(){ const dx=(Math.random()*2-1)*90, dy=(Math.random()*2-1)*30; no.style.transform=`translate(${dx}px,${dy}px)`; }
-no.addEventListener('mouseenter',dodge); no.addEventListener('click',e=>{e.preventDefault();dodge();});
+no.addEventListener('mouseenter',dodge);
+no.addEventListener('touchstart',e=>{ e.preventDefault(); dodge(); },{passive:false});
+no.addEventListener('click',e=>{ e.preventDefault(); dodge(); });
 
 /* ===== 링크 생성기 ===== */
 const modal=document.getElementById('modal');
@@ -693,7 +665,7 @@ modal.addEventListener('click',e=>{ if(e.target===modal) modal.setAttribute('hid
 document.getElementById('mk').addEventListener('click',()=>{
   const to=val('fTo','지수'), from=val('fFrom','민준'), date=val('fDate','이번 주말'), spot=val('fSpot',C.defaultSpot);
   const q=new URLSearchParams({to,from,date,spot,invite:'1'});
-  if(COURSE_KEY!=='bupyeong') q.set('course',COURSE_KEY);
+  if(COURSE_KEY!==DEFAULT) q.set('course',COURSE_KEY);
   const link=location.origin+location.pathname+'?'+q.toString();
   const lo=document.getElementById('linkout'); lo.removeAttribute('hidden');
   document.getElementById('linkField').value=link;
@@ -701,7 +673,7 @@ document.getElementById('mk').addEventListener('click',()=>{
 });
 document.getElementById('copyBtn').addEventListener('click',()=>copy(document.getElementById('linkField').value));
 function val(id,def){ const v=document.getElementById(id).value.trim(); return v||def; }
-function copy(t){ if(navigator.clipboard){ navigator.clipboard.writeText(t).then(()=>toast('초대 링크 복사됨! 💌'),()=>toast('링크 생성됨! 아래에서 복사하세요')); } else toast('링크 생성됨! 아래에서 복사하세요'); }
+function copy(t){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>toast('초대 링크 복사됨! 💌'),()=>toast('링크 생성됨! 아래에서 복사하세요')); } else toast('링크 생성됨! 아래에서 복사하세요'); }
 
 /* ===== toast ===== */
 let tT=null;
