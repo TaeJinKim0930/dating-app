@@ -395,6 +395,7 @@
   </div>
   <div class="modal" id="certModal" hidden>
     <div class="sheet cert">
+      <button class="x" id="certX" aria-label="닫기">×</button>
       <div class="cert-badge">🏆</div>
       <h3>상 장</h3>
       <p class="cert-name">— 귀여운 고집상 —</p>
@@ -850,7 +851,7 @@ function lockedR(){
     if(rLockCount===3||rLockCount===7){ const r=gearTrack.getBoundingClientRect(); burst(r.left+r.width*0.12, r.top+r.height/2, 18); }
     if(rLockCount===RMSGS.length){
       burst(innerWidth/2, innerHeight*0.4, 60);
-      setTimeout(()=>document.getElementById('certModal').removeAttribute('hidden'), 450);
+      setTimeout(openCert, 450);
     }
   }else{
     showGearAlert('상장은 이미 수여되었습니다. 데이트에서 만나요 ♡');
@@ -901,8 +902,12 @@ gearKnob.addEventListener('keydown',e=>{
   else if(e.key==='ArrowLeft'){ e.preventDefault(); gearReject(); }
 });
 const certModal=document.getElementById('certModal');
-document.getElementById('certOk').addEventListener('click',()=>{ certModal.setAttribute('hidden',''); toast('그럼 데이트에서 만나요 ♡'); });
-certModal.addEventListener('click',e=>{ if(e.target===certModal) certModal.setAttribute('hidden',''); });
+let certArmed=false;
+function openCert(){ if(!certModal.hasAttribute('hidden')) return; certModal.removeAttribute('hidden'); certArmed=false; setTimeout(()=>{certArmed=true;},500); }
+function closeCert(){ if(!certArmed) return; certModal.setAttribute('hidden',''); toast('상장 수령 완료! 데이트에서 만나요 ♡'); }
+document.getElementById('certOk').addEventListener('click',closeCert);
+document.getElementById('certX').addEventListener('click',closeCert);
+/* 배경 탭으로는 닫히지 않음 — R 연타 중 실수로 닫히는 것 방지. X 또는 '상 받으러 가기'로만 닫힘 */
 
 /* ===== 링크 생성기 ===== */
 const modal=document.getElementById('modal');
