@@ -41,30 +41,35 @@
   /* ===== confetti ===== */
   #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
 
-  /* ===== envelope scene v2: 노을 지는 서해 위 초대장 ===== */
+  /* ===== envelope scene v3: 한여름 바다 ===== */
   .env-scene{
     position:fixed;inset:0;height:100dvh;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
     padding:24px;overflow:hidden;
-    background:linear-gradient(180deg,#FFE7C7 0%,#FFC9CB 36%,#F2A9C0 58%,#B79ED9 82%,#8E7CC9 100%);
+    background:linear-gradient(180deg,#E5F8FF 0%,#BFECFB 26%,#93DDF6 48%,#57C2E6 58%,#2E9EC9 84%,#1F86B0 100%);
     transition:opacity .8s ease, transform .8s ease;
   }
   .env-scene.gone{opacity:0;transform:scale(1.05);pointer-events:none}
-  .env-sun{position:absolute;left:50%;top:31%;width:170px;height:170px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
-    background:radial-gradient(circle,#FFF6DC 0%,#FFD9A0 42%,rgba(255,217,160,0) 72%);animation:sunpulse 5s ease-in-out infinite}
+  .env-sun{position:absolute;left:79%;top:13%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,#FFFBE2 0%,#FFEC9E 38%,rgba(255,236,158,0) 70%);animation:sunpulse 5s ease-in-out infinite}
   @keyframes sunpulse{0%,100%{opacity:.85}50%{opacity:1}}
-  .env-sea{position:absolute;left:0;right:0;bottom:0;height:26%;pointer-events:none;background:linear-gradient(180deg,rgba(142,124,201,0),rgba(96,82,168,.45))}
-  .wave{position:absolute;left:50%;bottom:-216vw;width:230vw;height:230vw;margin-left:-115vw;border-radius:42%;pointer-events:none;
-    background:rgba(255,255,255,.14);animation:waveroll 12s linear infinite}
-  .wave.w2{bottom:-219vw;border-radius:45%;background:rgba(255,255,255,.09);animation-duration:19s;animation-direction:reverse}
+  .cl{position:absolute;font-size:30px;opacity:.9;pointer-events:none;animation:clDrift 9s ease-in-out infinite}
+  @keyframes clDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(16px)}}
+  .wave{position:absolute;left:50%;bottom:calc(-230vw + 102px);width:230vw;height:230vw;margin-left:-115vw;border-radius:42%;pointer-events:none;
+    background:rgba(255,255,255,.25);animation:waveroll 12s linear infinite}
+  .wave.w2{bottom:calc(-230vw + 84px);border-radius:45%;background:rgba(255,255,255,.15);animation-duration:19s;animation-direction:reverse}
   @keyframes waveroll{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .env-sand{position:absolute;left:0;right:0;bottom:0;height:calc(64px + var(--safe-b));pointer-events:none;
+    background:linear-gradient(180deg,#FCEFCB,#F5DFA6);border-radius:48% 52% 0 0/16px 14px 0 0}
+  .env-boat{position:absolute;left:15%;bottom:calc(116px + var(--safe-b));font-size:23px;pointer-events:none;animation:boatbob 3.4s ease-in-out infinite}
+  @keyframes boatbob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2.5deg)}}
   .tw{position:absolute;color:#fff;font-size:13px;text-shadow:0 0 8px #fff;animation:twk 2.8s ease-in-out infinite;pointer-events:none}
   @keyframes twk{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.95;transform:scale(1.2)}}
   .fh{position:absolute;bottom:-34px;font-size:17px;opacity:0;animation:floatup 8s linear infinite;pointer-events:none}
   @keyframes floatup{0%{opacity:0;transform:translateY(0) rotate(-8deg)}10%{opacity:.9}80%{opacity:.45}100%{opacity:0;transform:translateY(-80vh) rotate(12deg)}}
-  .env-eyebrow{position:relative;font-family:var(--hand);font-size:23px;color:#fff;text-align:center;line-height:1.4;text-shadow:0 2px 12px rgba(150,60,90,.5)}
-  .env-eyebrow b{color:#FFE9A8}
+  .env-eyebrow{position:relative;font-family:var(--hand);font-size:23px;color:#0B6B8F;text-align:center;line-height:1.4;text-shadow:0 2px 10px rgba(255,255,255,.75)}
+  .env-eyebrow b{color:#F0654F}
   .env-wrap{position:relative;width:min(310px,84vw);height:calc(min(310px,84vw)*0.66);cursor:pointer;-webkit-tap-highlight-color:transparent;
-    filter:drop-shadow(0 22px 30px rgba(110,40,80,.4));animation:envfloat 3.6s ease-in-out infinite}
+    filter:drop-shadow(0 22px 30px rgba(15,90,125,.42));animation:envfloat 3.6s ease-in-out infinite}
   @keyframes envfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
   .env-wrap::after{content:"";position:absolute;inset:0;border-radius:14px;z-index:6;pointer-events:none;
     background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.14) 53%,transparent 64%) no-repeat;
@@ -72,34 +77,34 @@
   @keyframes shine{0%,50%{background-position:130% 0}88%,100%{background-position:-60% 0}}
   .env-letter{
     position:absolute;left:5%;right:5%;top:5%;height:82%;border-radius:12px;z-index:2;
-    background:radial-gradient(circle at 10px 10px,#FFE4E9 1.5px,transparent 1.6px) 0 0/24px 24px,#FFFDF8;
-    border-top:3px solid #F0C489;
+    background:radial-gradient(circle at 10px 10px,#D5F0F8 1.5px,transparent 1.6px) 0 0/24px 24px,#FDFFFE;
+    border-top:3px solid #FFB39F;
     box-shadow:0 6px 14px -8px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     padding:14px;text-align:center;transition:transform .8s cubic-bezier(.2,.8,.25,1) .25s;
   }
-  .lt-to{font-family:var(--hand);font-size:25px;color:var(--cherry)}
-  .lt-line{width:56px;border-top:2px solid #F0C489}
-  .lt-title{font-family:var(--disp);font-size:14px;color:#6E5860}
-  .lt-from{font-family:var(--hand);font-size:17px;color:var(--sub)}
+  .lt-to{font-family:var(--hand);font-size:25px;color:#FF7A63}
+  .lt-line{width:56px;border-top:2px solid #FFB39F}
+  .lt-title{font-family:var(--disp);font-size:14px;color:#2E7C99}
+  .lt-from{font-family:var(--hand);font-size:17px;color:#6FA7BC}
   .env-pocket{position:absolute;inset:0;top:19%;border-radius:14px;z-index:3;
-    background:linear-gradient(160deg,#FF8DA0 0%,#EF5069 55%,#E04560 100%);
+    background:linear-gradient(160deg,#7EDCEF 0%,#41B4DC 55%,#2E9EC9 100%);
     -webkit-clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);
-    box-shadow:inset 0 -4px 10px rgba(150,30,50,.25)}
+    box-shadow:inset 0 -4px 10px rgba(20,90,130,.3)}
   .env-flap{position:absolute;top:0;left:0;width:100%;height:53%;z-index:4;transform-origin:top center;
     -webkit-clip-path:polygon(0 0,100% 0,50% 100%);clip-path:polygon(0 0,100% 0,50% 100%);
-    background:linear-gradient(180deg,#F26079,#DE3B57);
+    background:linear-gradient(180deg,#5BC9E5,#2E9EC9);
     transition:transform .6s ease, z-index 0s .3s;}
   .seal{position:absolute;top:34%;left:50%;z-index:5;transition:opacity .35s, transform .45s}
   .seal-c{width:48px;height:48px;margin-left:-24px;border-radius:50%;position:relative;
-    background:radial-gradient(circle at 35% 30%,#FF9FAE,#C93A52);
+    background:radial-gradient(circle at 35% 30%,#FFB2A0,#F0654F);
     display:grid;place-items:center;color:#fff;font-size:20px;
-    box-shadow:inset 0 0 0 2px rgba(255,255,255,.4),inset 0 -4px 6px rgba(140,20,45,.5),0 5px 10px rgba(140,25,50,.45)}
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.45),inset 0 -4px 6px rgba(180,55,35,.45),0 5px 10px rgba(180,60,40,.4)}
   .seal-c::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.55);animation:sealring 2.2s ease-out infinite}
   @keyframes sealring{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.35);opacity:0}}
-  .env-hint{position:relative;font-family:var(--hand);font-size:21px;color:#fff;text-shadow:0 2px 10px rgba(150,60,90,.5);animation:bob 1.6s ease-in-out infinite}
+  .env-hint{position:relative;font-family:var(--hand);font-size:21px;color:#fff;text-shadow:0 2px 10px rgba(20,100,140,.55);animation:bob 1.6s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-  .env-road{position:absolute;left:0;right:0;bottom:calc(26px + var(--safe-b));border-top:3px dashed rgba(255,255,255,.55);pointer-events:none}
-  .env-car{position:absolute;bottom:calc(32px + var(--safe-b));left:12%;font-size:26px;pointer-events:none;
+  .env-road{position:absolute;left:0;right:0;bottom:calc(24px + var(--safe-b));border-top:3px dashed rgba(255,255,255,.8);pointer-events:none}
+  .env-car{position:absolute;bottom:calc(30px + var(--safe-b));left:12%;font-size:26px;pointer-events:none;
     animation:caridle .55s ease-in-out infinite;transition:left 1.1s cubic-bezier(.55,0,.9,.4)}
   @keyframes caridle{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-2.5px)}}
   .env-scene.opening .env-flap{transform:rotateX(180deg);z-index:1;transition:transform .6s ease}
@@ -248,16 +253,19 @@
 
   <div class="env-scene gone" id="env" hidden>
     <div class="env-sun"></div>
-    <div class="env-sea"></div>
+    <span class="cl" style="left:8%;top:8%">☁️</span>
+    <span class="cl" style="left:55%;top:5%;font-size:22px;animation-delay:2.5s">☁️</span>
+    <span class="cl" style="left:28%;top:16%;font-size:18px;animation-delay:5s;opacity:.75">☁️</span>
     <div class="wave"></div><div class="wave w2"></div>
-    <span class="tw" style="left:14%;top:12%">✦</span>
-    <span class="tw" style="left:80%;top:9%;animation-delay:.9s">✧</span>
-    <span class="tw" style="left:66%;top:21%;animation-delay:1.7s">✦</span>
-    <span class="tw" style="left:26%;top:24%;animation-delay:.5s">✧</span>
-    <span class="fh" style="left:10%">💗</span>
-    <span class="fh" style="left:32%;animation-delay:2.6s">🌸</span>
-    <span class="fh" style="left:68%;animation-delay:1.2s">💕</span>
-    <span class="fh" style="left:86%;animation-delay:4s">🫧</span>
+    <div class="env-sand"></div>
+    <span class="env-boat" aria-hidden="true">⛵</span>
+    <span class="tw" style="left:20%;top:60%">✦</span>
+    <span class="tw" style="left:74%;top:64%;animation-delay:.9s">✧</span>
+    <span class="tw" style="left:50%;top:71%;animation-delay:1.7s">✦</span>
+    <span class="fh" style="left:12%">🫧</span>
+    <span class="fh" style="left:34%;animation-delay:2.6s;font-size:13px">🫧</span>
+    <span class="fh" style="left:68%;animation-delay:1.2s">💙</span>
+    <span class="fh" style="left:86%;animation-delay:4s;font-size:14px">🫧</span>
     <div class="env-eyebrow" id="envHi">💌 도착한 <b>초대장</b></div>
     <div class="env-wrap" id="envWrap" role="button" tabindex="0" aria-label="초대장 열기">
       <div class="env-letter" id="envLetter"></div>
