@@ -111,7 +111,7 @@
     <h1>상 장</h1>
     <p class="award-name">귀여운 고집상</p>
 
-    <div class="who"><span>수상자 &nbsp;<b>김 지 예</b></span></div>
+    <div class="who"><span>수상자 &nbsp;<b id="cAwardee">김 지 예</b></span></div>
 
     <p class="body-text">
       위 사람은 데이트 초대장의 기어를 후진(R)에 넣기 위해<br>
@@ -138,12 +138,17 @@
     <div class="footer">
       <div class="date">2026년 7월, 바다 보러 가는 날</div>
       <div class="committee">드라이브 초대장 위원회</div>
-      <div class="chair">위원장&nbsp; 김 태 진
-        <span class="stamp">태진<br>之印</span>
+      <div class="chair">위원장&nbsp; <span id="cChair">김 태 진</span>
+        <span class="stamp"><span id="cStampName">태진</span><br>之印</span>
       </div>
     </div>
 
     <div class="seafoot"></div>
   </div>
+  <script>
+    var q=new URLSearchParams(location.search), to=q.get('to'), from=q.get('from');
+    if(to){ document.getElementById('cAwardee').textContent=to; document.title='상장 — 귀여운 고집상 ('+to+')'; }
+    if(from){ document.getElementById('cChair').textContent=from; document.getElementById('cStampName').textContent=from.slice(0,3); }
+  </script>
 </body>
 </html>

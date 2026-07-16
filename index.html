@@ -233,12 +233,54 @@
   @keyframes alertIn{0%{opacity:0;transform:translateY(8px) scale(.9)}100%{opacity:1;transform:none}}
   .gear-knob.nono{animation:nono .4s ease}
   @keyframes nono{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(-50%,-50%) rotate(-16deg)}75%{transform:translate(-50%,-50%) rotate(16deg)}}
-  .cert{text-align:center}
-  .cert-badge{font-size:44px;margin-bottom:2px}
-  .cert h3{margin:4px 0 2px;letter-spacing:.5em;text-indent:.5em;text-align:center}
-  .cert-name{font-family:var(--hand);font-size:23px;color:var(--tangerine);margin:2px 0 10px}
-  .cert-body{font-size:13px;color:#6E5860;line-height:1.75;margin:0 0 10px}
-  .cert-sign{font-size:12px;color:var(--sub);margin:0 0 14px}
+  /* ===== A4 상장 (앱 내 전체 표시) ===== */
+  .cert-modal{align-items:stretch}
+  .cert-scroll{position:relative;width:100%;max-height:100dvh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:14px;
+    padding:calc(18px + var(--safe-t)) 12px calc(20px + var(--safe-b))}
+  .cert-x{position:fixed;top:calc(12px + var(--safe-t));right:14px;z-index:3;width:42px;height:42px;font-size:24px;line-height:1;
+    color:#5C4750;background:#fff;border:none;border-radius:50%;box-shadow:0 4px 10px -3px rgba(0,0,0,.3);cursor:pointer}
+  .cert-print{font-family:var(--disp);font-size:15px;color:#fff;background:#2E9EC9;border:none;border-radius:999px;padding:13px 26px;min-height:48px;
+    cursor:pointer;box-shadow:0 10px 22px -10px #2E9EC9}
+  .cert-print:active{filter:brightness(1.08)}
+  .cert-holder{container-type:inline-size;width:min(94vw,430px);max-width:430px;flex:0 0 auto}
+  .cert-sheet{position:relative;width:100%;background:#FFFDF7;overflow:hidden;
+    box-shadow:0 20px 44px -18px rgba(40,70,90,.55);padding:7cqw 7cqw 8cqw;display:flex;flex-direction:column;gap:0.4cqw;
+    color:#3C4A54;font-family:var(--body)}
+  .cs-frame{position:absolute;inset:3.6cqw;border:0.55cqw solid #F0654F;border-radius:1.5cqw;pointer-events:none}
+  .cs-frame::after{content:"";position:absolute;inset:1cqw;border:0.24cqw solid #41B4DC;border-radius:1cqw}
+  .cs-cn{position:absolute;font-size:5cqw;z-index:1}
+  .cs-cn.tl{top:4.9cqw;left:5.3cqw}.cs-cn.tr{top:4.9cqw;right:5.3cqw}
+  .cs-cn.bl{bottom:4.9cqw;left:5.3cqw}.cs-cn.br{bottom:4.9cqw;right:5.3cqw}
+  .cs-wm{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-size:62cqw;opacity:.05;pointer-events:none;line-height:1}
+  .cs-no{position:relative;font-size:2.6cqw;color:#B09A9E;z-index:1}
+  .cs-trophy{text-align:center;font-size:15cqw;line-height:1;margin-top:1cqw}
+  .cs-title{position:relative;z-index:1;font-family:var(--disp);font-weight:400;text-align:center;font-size:13cqw;letter-spacing:.34em;text-indent:.34em;color:#3C4A54;margin:.5cqw 0}
+  .cs-award{position:relative;z-index:1;font-family:var(--hand);text-align:center;font-size:8cqw;color:#F0654F;margin:0 0 3cqw}
+  .cs-award::before,.cs-award::after{content:"—";color:#FFB39F;margin:0 2.4cqw}
+  .cs-who{position:relative;z-index:1;text-align:center;font-size:4cqw;margin-bottom:3cqw}
+  .cs-who b{font-family:var(--disp);font-weight:400;font-size:5.6cqw;color:#2E7C99}
+  .cs-body{position:relative;z-index:1;font-size:3.45cqw;line-height:1.95;text-align:center;margin:0 1cqw;word-break:keep-all}
+  .cs-body b{color:#F0654F}
+  .cs-body .u{text-decoration:underline;text-underline-offset:.35cqw;text-decoration-color:#FFC9BE}
+  .cs-ev{position:relative;z-index:1;margin-top:3cqw;text-align:center}
+  .cs-ev-cap{font-size:2.55cqw;color:#B09A9E;margin-bottom:1.6cqw}
+  .cs-gear{position:relative;width:52cqw;height:9cqw;margin:0 auto;border:0.42cqw solid #E8D5CE;border-radius:99cqw;background:linear-gradient(180deg,#F8ECEF,#FDF6F4)}
+  .cs-gear span{position:absolute;top:50%;transform:translate(-50%,-50%);font-family:var(--disp);font-size:3.3cqw;color:#C7B0A9}
+  .cs-gear .r{left:14%}.cs-gear .p{left:50%}
+  .cs-gear .k{left:86%;width:7cqw;height:7cqw;border-radius:50%;transform:translate(-50%,-50%);color:#fff;display:grid;place-items:center;font-size:3cqw;
+    background:radial-gradient(circle at 35% 30%,#FFB2A0,#F0654F);box-shadow:inset 0 0 0 .4cqw rgba(255,255,255,.45)}
+  .cs-rlog{margin-top:2.4cqw;font-family:var(--disp);font-size:2.55cqw;color:#B09A9E;letter-spacing:.28em}
+  .cs-rlog b{color:#F0654F;font-weight:400}
+  .cs-fine{position:relative;z-index:1;margin-top:3cqw;font-size:2.45cqw;color:#93A5AE;line-height:1.85;text-align:center}
+  .cs-foot{position:relative;z-index:1;margin-top:4cqw;text-align:center}
+  .cs-date{font-family:var(--hand);font-size:4.6cqw;color:#2E7C99;margin-bottom:2.4cqw}
+  .cs-comm{font-size:3.5cqw;letter-spacing:.16em;margin-bottom:.6cqw}
+  .cs-chair{position:relative;display:inline-block;font-family:var(--disp);font-size:5.4cqw;letter-spacing:.28em;color:#3C4A54}
+  .cs-stamp{position:absolute;right:-9.5cqw;top:50%;transform:translateY(-54%) rotate(-11deg);width:9cqw;height:9cqw;border-radius:50%;overflow:hidden;
+    border:0.5cqw solid rgba(214,58,50,.75);color:rgba(214,58,50,.85);display:grid;place-items:center;
+    font-family:var(--disp);font-size:2.5cqw;line-height:1.12;text-align:center}
+  .cs-foam{position:relative;z-index:1;margin-top:2.6cqw;height:3cqw;opacity:.55;pointer-events:none;
+    background:radial-gradient(2cqw 2cqw at 2cqw 3cqw,transparent 1.4cqw,#BFE6F2 1.5cqw,#BFE6F2 1.9cqw,transparent 2cqw) repeat-x;background-size:4cqw 3cqw}
   .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:10px;opacity:0;transform:translateY(6px);transition:.4s}
   .rsvp.done .yay{opacity:1;transform:none}
 
@@ -393,15 +435,49 @@
       <div class="linkout" hidden id="linkout"><input id="linkField" readonly><button id="copyBtn">복사</button></div>
     </div>
   </div>
-  <div class="modal" id="certModal" hidden>
-    <div class="sheet cert">
-      <button class="x" id="certX" aria-label="닫기">×</button>
-      <div class="cert-badge">🏆</div>
-      <h3>상 장</h3>
-      <p class="cert-name">— 귀여운 고집상 —</p>
-      <p class="cert-body">위 사람은 후진(R) 시도 10회를 달성하였으나<br>기어는 끝내 <b>D</b>에서 움직이지 않았으므로<br>이에 <b>데이트 1회</b>를 부상으로 수여함.</p>
-      <p class="cert-sign">— 드라이브 초대장 위원회 —</p>
-      <button class="mk" id="certOk">상 받으러 가기 💗</button>
+  <div class="modal cert-modal" id="certModal" hidden>
+    <div class="cert-scroll">
+      <button class="cert-x" id="certX" aria-label="닫기">×</button>
+      <div class="cert-holder">
+        <div class="cert-sheet" id="certSheet">
+          <div class="cs-frame"></div>
+          <span class="cs-cn tl">🌊</span><span class="cs-cn tr">☀️</span>
+          <span class="cs-cn bl">🚗</span><span class="cs-cn br">⛵</span>
+          <div class="cs-wm">🏆</div>
+          <div class="cs-no">제 2026-R10 호</div>
+          <div class="cs-trophy">🏆</div>
+          <div class="cs-title">상 장</div>
+          <div class="cs-award">귀여운 고집상</div>
+          <div class="cs-who">수상자 &nbsp;<b id="certAwardee">지예</b></div>
+          <div class="cs-body">
+            위 사람은 데이트 초대장의 기어를 후진(R)에 넣기 위해<br>
+            무려 <b>10회</b>에 걸친 시도를 감행하는 남다른 끈기와<br>
+            과도한 귀여움을 보여주었으나, 기어는 끝내 <b>D(데이트)</b>에서<br>
+            단 1mm도 움직이지 않았기에 이 상장을 수여하고,<br>
+            부상으로 <span class="u"><b>데이트 1회</b> — 신연수역 픽업 → 송도 브런치<br>
+            → 인천대교 → 마시안 카페 → 을왕리 장어 &amp; 노을 풀코스</span> — 를<br>
+            함께 수여함.
+          </div>
+          <div class="cs-ev">
+            <div class="cs-ev-cap">［ 증거자료 1호 — 사건 당시 기어 위치 ］</div>
+            <div class="cs-gear"><span class="r">R</span><span class="p">P</span><span class="k">♥</span></div>
+            <div class="cs-rlog">후진 시도 기록&nbsp; <b>R·R·R·R·R·R·R·R·R·R</b>&nbsp; …이상 10건, 전량 기각</div>
+          </div>
+          <div class="cs-fine">
+            ※ 본 상장의 부상(데이트)은 환불·교환 불가하나, 무제한 리필 가능함.<br>
+            ※ 수상자는 데이트 당일 조수석 탑승 및 노을 감상의 의무를 가짐.
+          </div>
+          <div class="cs-foot">
+            <div class="cs-date">2026년 7월, 바다 보러 가는 날</div>
+            <div class="cs-comm">드라이브 초대장 위원회</div>
+            <div class="cs-chair">위원장&nbsp; <span id="certChair">태진</span>
+              <span class="cs-stamp" id="certStamp">태진<br>之印</span>
+            </div>
+          </div>
+          <div class="cs-foam"></div>
+        </div>
+      </div>
+      <button class="cert-print" id="certPrint">🖨️ A4로 저장 / 인쇄</button>
     </div>
   </div>
   <div class="toast" id="toast"></div>
@@ -694,6 +770,9 @@ function fillInvite(){
   document.getElementById('uSummary').textContent = C.summary;
   document.getElementById('yay').textContent = `야호! 그럼 그날 ${C.meetShort}에서 만나요 ♡`;
   document.getElementById('fSpot').placeholder = `예: ${C.defaultSpot} 2번 출구`;
+  document.getElementById('certAwardee').textContent = TO;
+  document.getElementById('certChair').textContent = FROM;
+  document.getElementById('certStamp').innerHTML = `${esc(FROM.slice(0,3))}<br>之印`;
 }
 
 /* ===== confetti ===== */
@@ -905,9 +984,12 @@ const certModal=document.getElementById('certModal');
 let certArmed=false;
 function openCert(){ if(!certModal.hasAttribute('hidden')) return; certModal.removeAttribute('hidden'); certArmed=false; setTimeout(()=>{certArmed=true;},500); }
 function closeCert(){ if(!certArmed) return; certModal.setAttribute('hidden',''); toast('상장 수령 완료! 데이트에서 만나요 ♡'); }
-document.getElementById('certOk').addEventListener('click',closeCert);
 document.getElementById('certX').addEventListener('click',closeCert);
-/* 배경 탭으로는 닫히지 않음 — R 연타 중 실수로 닫히는 것 방지. X 또는 '상 받으러 가기'로만 닫힘 */
+document.getElementById('certPrint').addEventListener('click',()=>{
+  const q=new URLSearchParams({to:TO,from:FROM});
+  window.open('cert.html?'+q.toString(),'_blank','noopener');
+});
+/* 배경 탭으로는 닫히지 않음 — R 연타 중 실수로 닫히는 것 방지. X 버튼으로만 닫힘 */
 
 /* ===== 링크 생성기 ===== */
 const modal=document.getElementById('modal');
