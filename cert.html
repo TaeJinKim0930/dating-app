@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상장 — 귀여운 고집상 (김지예)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#F0654F; --coral-soft:#FFB39F; --aqua:#41B4DC; --aqua-deep:#2E7C99;
+    --ink:#3C4A54; --sub:#8FA5B0; --paper:#FFFDF7; --gold:#E8B84B;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:#E9EEF2;font-family:'Gowun Dodum',system-ui,sans-serif;color:var(--ink);
+    display:flex;flex-direction:column;align-items:center;gap:18px;padding:24px 10px;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .no-print{display:flex;gap:10px;align-items:center}
+  .pbtn{font-family:'Jua',sans-serif;font-size:16px;color:#fff;background:var(--coral);border:none;border-radius:999px;
+    padding:13px 26px;cursor:pointer;box-shadow:0 8px 18px -8px var(--coral)}
+  .pbtn:hover{filter:brightness(1.07)}
+  .phint{font-size:12.5px;color:#7A8A94}
+
+  /* ===== A4 sheet ===== */
+  .sheet{
+    width:210mm;height:296mm;background:var(--paper);position:relative;overflow:hidden;
+    box-shadow:0 18px 40px -18px rgba(40,70,90,.4);
+    padding:14mm 16mm;display:flex;flex-direction:column;
+  }
+  /* double frame */
+  .frame{position:absolute;inset:8mm;border:1.2mm solid var(--coral);border-radius:3mm;pointer-events:none}
+  .frame::after{content:"";position:absolute;inset:2.2mm;border:0.5mm solid var(--aqua);border-radius:2mm}
+  /* corners */
+  .cn{position:absolute;font-size:22px;z-index:2}
+  .cn.tl{top:11mm;left:12mm} .cn.tr{top:11mm;right:12mm}
+  .cn.bl{bottom:11mm;left:12mm} .cn.br{bottom:11mm;right:12mm}
+  /* watermark */
+  .wm{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-size:130mm;opacity:.05;pointer-events:none;line-height:1}
+
+  .doc-no{font-size:11px;color:var(--sub);margin:6mm 0 0 2mm}
+  .trophy{text-align:center;font-size:52px;margin-top:2mm}
+  h1{font-family:'Jua',sans-serif;font-weight:400;text-align:center;font-size:46px;margin:2mm 0 1mm;
+     letter-spacing:1.2em;text-indent:1.2em;color:var(--ink)}
+  .award-name{font-family:'Gamja Flower',cursive;text-align:center;font-size:30px;color:var(--coral);margin:0 0 6mm}
+  .award-name::before,.award-name::after{content:"—";color:var(--coral-soft);margin:0 10px}
+
+  .who{display:flex;justify-content:center;gap:10mm;font-size:16px;margin-bottom:7mm}
+  .who b{font-family:'Jua',sans-serif;font-weight:400;font-size:21px;color:var(--aqua-deep)}
+
+  .body-text{font-size:15.5px;line-height:2.05;text-align:center;margin:0 6mm;word-break:keep-all}
+  .body-text b{color:var(--coral)}
+  .body-text .u{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--coral-soft)}
+
+  /* 증거자료: 기어 일러스트 */
+  .evidence{margin:8mm auto 0;text-align:center}
+  .ev-cap{font-size:11.5px;color:var(--sub);margin-bottom:3mm}
+  .gear{position:relative;width:70mm;height:13mm;margin:0 auto;border:0.6mm solid #E8D5CE;border-radius:99mm;
+    background:linear-gradient(180deg,#F8ECEF,#FDF6F4);box-shadow:inset 0 1.5mm 2.5mm rgba(120,60,70,.1)}
+  .gear span{position:absolute;top:50%;transform:translate(-50%,-50%);font-family:'Jua',sans-serif;font-size:14px;color:#C7B0A9}
+  .gear .r{left:14%} .gear .p{left:50%}
+  .gear .knob{left:86%;width:9.5mm;height:9.5mm;border-radius:50%;transform:translate(-50%,-50%);
+    background:radial-gradient(circle at 35% 30%,#FFB2A0,#F0654F);display:grid;place-items:center;color:#fff;font-size:13px;
+    box-shadow:inset 0 0 0 0.5mm rgba(255,255,255,.45), 0 1mm 2mm rgba(180,60,40,.4)}
+  /* 후진 시도 기록 바코드 */
+  .rlog{margin-top:4mm;font-family:'Jua',sans-serif;font-size:11px;color:var(--sub);letter-spacing:.35em}
+  .rlog b{color:var(--coral);font-weight:400}
+
+  .fineprint{margin:7mm 8mm 0;font-size:10.5px;color:#93A5AE;line-height:1.8;text-align:center}
+
+  .footer{margin-top:auto;text-align:center;padding-bottom:4mm}
+  .date{font-family:'Gamja Flower',cursive;font-size:19px;color:var(--aqua-deep);margin-bottom:4mm}
+  .committee{font-size:15px;letter-spacing:.2em;margin-bottom:1.5mm}
+  .chair{position:relative;display:inline-block;font-family:'Jua',sans-serif;font-size:23px;letter-spacing:.35em;color:var(--ink)}
+  /* 직인 */
+  .stamp{position:absolute;right:-16mm;top:50%;transform:translateY(-54%) rotate(-11deg);width:15mm;height:15mm;border-radius:50%;
+    border:0.8mm solid rgba(220,60,50,.75);color:rgba(220,60,50,.8);display:grid;place-items:center;
+    font-family:'Jua',sans-serif;font-size:10.5px;line-height:1.15;text-align:center;
+    box-shadow:inset 0 0 0 0.4mm rgba(220,60,50,.35)}
+
+  /* 바다 물결 푸터 장식 */
+  .seafoot{position:absolute;left:10mm;right:10mm;bottom:10.5mm;height:5mm;pointer-events:none;opacity:.6;
+    background:
+      radial-gradient(4mm 4mm at 4mm 5mm, transparent 2.7mm, #BFE6F2 2.8mm, #BFE6F2 3.6mm, transparent 3.7mm) repeat-x;
+    background-size:8mm 5mm}
+
+  @media print{
+    body{background:#fff;padding:0;gap:0}
+    .no-print{display:none!important}
+    .sheet{box-shadow:none;width:210mm;height:296mm}
+  }
+  @page{size:A4 portrait;margin:0}
+</style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="pbtn" onclick="window.print()">🖨️ A4로 프린트하기</button>
+    <span class="phint">인쇄 설정에서 ‘배경 그래픽’을 켜면 더 예뻐요!</span>
+  </div>
+
+  <div class="sheet">
+    <div class="frame"></div>
+    <span class="cn tl">🌊</span><span class="cn tr">☀️</span>
+    <span class="cn bl">🚗</span><span class="cn br">⛵</span>
+    <div class="wm">🏆</div>
+
+    <div class="doc-no">제 2026-R10 호</div>
+    <div class="trophy">🏆</div>
+    <h1>상 장</h1>
+    <p class="award-name">귀여운 고집상</p>
+
+    <div class="who"><span>수상자 &nbsp;<b>김 지 예</b></span></div>
+
+    <p class="body-text">
+      위 사람은 데이트 초대장의 기어를 후진(R)에 넣기 위해<br>
+      무려 <b>10회</b>에 걸친 시도를 감행하는 남다른 끈기와<br>
+      과도한 귀여움을 보여주었으나, 기어는 끝내 <b>D(데이트)</b>에서<br>
+      단 1mm도 움직이지 않았음이 확인되었기에 이 상장을 수여하고,<br>
+      부상으로 <span class="u"><b>데이트 1회</b> — 신연수역 픽업 → 송도 브런치 →<br>
+      인천대교 → 마시안해변 카페 → 을왕리 장어 &amp; 노을 풀코스</span> — 를<br>
+      함께 수여함.
+    </p>
+
+    <div class="evidence">
+      <div class="ev-cap">［ 증거자료 1호 — 사건 당시 기어 위치 ］</div>
+      <div class="gear"><span class="r">R</span><span class="p">P</span><span class="knob">♥</span></div>
+      <div class="rlog">후진 시도 기록&nbsp; <b>R·R·R·R·R·R·R·R·R·R</b>&nbsp; …이상 10건, 전량 기각</div>
+    </div>
+
+    <p class="fineprint">
+      ※ 본 상장의 부상(데이트)은 환불·교환이 불가하나, 무제한 리필이 가능함.<br>
+      ※ 후진(R) 시도 이력은 드라이브 초대장 위원회에 영구 보존됨.<br>
+      ※ 수상자는 데이트 당일 조수석 탑승 및 노을 감상의 의무를 가짐.
+    </p>
+
+    <div class="footer">
+      <div class="date">2026년 7월, 바다 보러 가는 날</div>
+      <div class="committee">드라이브 초대장 위원회</div>
+      <div class="chair">위원장&nbsp; 김 태 진
+        <span class="stamp">태진<br>之印</span>
+      </div>
+    </div>
+
+    <div class="seafoot"></div>
+  </div>
+</body>
+</html>
