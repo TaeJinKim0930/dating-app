@@ -144,6 +144,14 @@
   .honk-wheel{position:absolute;top:20px;right:18px;z-index:4;width:44px;height:44px;padding:0;border:none;background:#fff;border-radius:50%;
     box-shadow:0 4px 10px -4px rgba(20,90,130,.4);display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s}
   .honk-wheel:active{transform:scale(.86) rotate(-16deg)}
+  .honk-wheel::before{content:"";position:absolute;inset:-3px;border-radius:50%;border:2.5px solid var(--cherry);opacity:.5;pointer-events:none;animation:wheelRing 2s ease-out infinite}
+  @keyframes wheelRing{0%{transform:scale(1);opacity:.5}70%,100%{transform:scale(1.7);opacity:0}}
+  .honk-wheel.used::before{display:none}
+  .honk-hint{position:absolute;top:50px;right:22px;z-index:4;font-family:var(--hand);font-size:15px;color:#0B6B8F;background:#fff;
+    border:1.5px solid #CFE7F0;border-radius:4px 12px 12px 12px;padding:3px 10px;box-shadow:0 4px 9px -4px rgba(20,90,130,.4);
+    white-space:nowrap;animation:hintBob 1.7s ease-in-out infinite}
+  @keyframes hintBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .honk-hint.gone{display:none}
   .card.honk{animation:screenShake .42s ease}
   @keyframes screenShake{0%,100%{transform:translate(0,0)}16%{transform:translate(-5px,2px) rotate(-.4deg)}38%{transform:translate(6px,-2px) rotate(.5deg)}58%{transform:translate(-5px,2px) rotate(-.3deg)}80%{transform:translate(4px,-1px)}}
   .gull{position:fixed;z-index:62;font-size:24px;pointer-events:none;will-change:transform,opacity}
@@ -327,6 +335,7 @@
           <line x1="20" y1="20" x2="32.8" y2="27" stroke="#2E7C99" stroke-width="3.2"/>
         </svg>
       </button>
+      <span class="honk-hint" id="honkHint">빵! 눌러봐요 📢</span>
       <div class="maptitle">오늘의 <b>이동 동선</b> 🧭</div>
       <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이트 코스 이동 동선 지도"></svg>
       <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
@@ -567,8 +576,6 @@ function buildMap(){
       <text x="${(brg.x-44).toFixed(1)}" y="${(brg.y+30).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="13" fill="#B79AA0">～ 인천대교 ～</text>`;
   }
 
-  const back = backD ? `<path id="routeBack" d="${backD}" fill="none" stroke="var(--grape)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9" opacity="0"/>` : '';
-  const carpath = C.ret ? `<path id="carpath" d="${carLoopD}" fill="none" stroke="none"/>` : '';
   const car = C.mover==='car' ? `
     <g id="miniCar" opacity="0">
       <g transform="translate(0,-8)">
@@ -589,9 +596,8 @@ function buildMap(){
     <defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#F1DACF"/></pattern></defs>
     <rect x="0" y="0" width="${W}" height="${H}" fill="url(#dots)"/>
     ${deco}
-    ${carpath}
-    <path id="route" d="${routeD}" fill="none" stroke="var(--cherry)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${back}
+    <path id="routeBase" d="${carLoopD}" fill="none" stroke="#F4BDC6" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 8" opacity="0"/>
+    <path id="routeFill" d="${carLoopD}" fill="none" stroke="var(--cherry)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
     <g>${chips}</g>
     ${startG}
     ${pins}
@@ -606,6 +612,8 @@ function buildMap(){
   const mapEl=document.getElementById('map');
   mapEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
   mapEl.innerHTML=svg;
+  const rf=document.getElementById('routeFill');
+  if(rf){ const L=rf.getTotalLength(); MAP.loopLen=L; rf.style.strokeDasharray=L; rf.style.strokeDashoffset=L; }
   const lg=document.getElementById('legend');
   lg.innerHTML = C.places.map((p,i)=>
     `<button type="button" class="lg" data-i="${i}"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</button>`).join('')
@@ -713,22 +721,22 @@ function tick(){
 /* ===== reveal ===== */
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 function drawRoute(){
-  const r=document.getElementById('route'); if(!r||reduce) return;
-  const len=r.getTotalLength(); r.style.strokeDasharray=len; r.style.strokeDashoffset=len;
-  r.getBoundingClientRect();
-  r.style.transition='stroke-dashoffset 2.2s ease-out .2s'; r.style.strokeDashoffset='0';
-  const rb=document.getElementById('routeBack'); if(rb){ rb.style.transition='opacity .6s ease 1.9s'; rb.style.opacity='0.6'; }
+  const base=document.getElementById('routeBase'); if(!base) return;
+  if(reduce){ base.style.opacity='0.85'; return; }
+  base.style.transition='opacity .8s ease .15s'; base.style.opacity='0.85';
 }
 function reveal(){ document.body.classList.add('revealed'); drawRoute(); if(C.mover==='car') placeCar(0); }
 
 /* ===== 미니카: 버튼 탭해서 드라이브 ===== */
 let carRaf=null, carFrac=0;
 const CAR_SPEED=0.08; /* px/ms — 이전 자동주행(≈0.2)의 40% */
-function carTrack(){ return document.getElementById('carpath')||document.getElementById('route'); }
+function carTrack(){ return document.getElementById('routeFill'); }
 function placeCar(f){
   const route=carTrack(), car=document.getElementById('miniCar'); if(!route||!car) return;
-  const len=route.getTotalLength();
-  const P=route.getPointAtLength(f*len), P2=route.getPointAtLength(Math.min(f*len+2,len));
+  const len=MAP.loopLen||route.getTotalLength();
+  const cf=Math.max(0,Math.min(1,f));
+  route.style.strokeDashoffset=(len*(1-cf)).toFixed(1);   /* 진행분까지 빨간 선이 채워짐 */
+  const P=route.getPointAtLength(cf*len), P2=route.getPointAtLength(Math.min(cf*len+2,len));
   let ang=Math.atan2(P2.y-P.y,P2.x-P.x)*180/Math.PI;
   const flip=(ang>90||ang<-90); /* 왼쪽 주행 시 세로 미러 — rotate는 진행각 그대로 (미러+회전 조합이 바퀴를 아래로 유지) */
   car.setAttribute('opacity','1');
@@ -943,8 +951,10 @@ function flyGulls(x,y){
   }
 }
 const honkWheel=document.getElementById('honkWheel');
+function calmWheel(){ honkWheel.classList.add('used'); const h=document.getElementById('honkHint'); if(h) h.classList.add('gone'); }
+setTimeout(()=>{ if(honkCount===0){ const h=document.getElementById('honkHint'); if(h) h.classList.add('gone'); } }, 9000);
 honkWheel.addEventListener('click',e=>{
-  honkCount++;
+  honkCount++; calmWheel();
   const card=document.getElementById('card');
   card.classList.remove('honk'); card.getBoundingClientRect(); card.classList.add('honk');
   const r=e.currentTarget.getBoundingClientRect();
