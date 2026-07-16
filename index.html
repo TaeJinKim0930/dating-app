@@ -96,6 +96,10 @@
   .legend{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 4px 4px}
   .lg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px}
   .lgnum{width:20px;height:20px;border-radius:50%;color:#fff;display:grid;place-items:center;font-family:var(--disp);font-size:12px}
+  button.lg{cursor:pointer;font-family:var(--body);color:var(--ink);min-height:34px;-webkit-tap-highlight-color:transparent;transition:transform .15s,border-color .15s,box-shadow .15s}
+  button.lg:active{transform:scale(.93)}
+  button.lg.driving{border-color:var(--cherry);box-shadow:0 4px 10px -6px var(--cherry)}
+  .drivehint{font-family:var(--hand);font-size:17px;color:var(--tangerine);text-align:center;margin:8px 0 0}
 
   .divider{display:flex;align-items:center;gap:10px;padding:0 24px;margin:20px 0 4px}
   .divider::before,.divider::after{content:"";flex:1;border-top:2px dashed var(--line)}
@@ -133,10 +137,18 @@
   /* ===== rsvp ===== */
   .rsvp{margin:16px 16px 6px;padding:22px 18px;border-radius:20px;text-align:center;background:linear-gradient(120deg,#FFECF0,#F0EAFB);border:2px dashed var(--line);position:relative;overflow:hidden;min-height:128px}
   .rsvp .q{font-family:var(--disp);font-size:19px;color:var(--ink)}
-  .rsvp .row{display:flex;gap:12px;justify-content:center;margin-top:16px;position:relative;height:54px;align-items:center}
-  .btn-yes{font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:999px;padding:13px 24px;min-height:48px;cursor:pointer;box-shadow:0 8px 16px -8px var(--cherry);transition:transform .15s;-webkit-tap-highlight-color:transparent}
-  .btn-yes:active{transform:scale(1.06)}
-  .btn-no{font-family:var(--body);font-size:14px;color:#9A8189;background:#fff;border:1.6px solid var(--line);border-radius:999px;padding:12px 20px;min-height:48px;cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  /* 기어 시프트 RSVP */
+  .gearbox{margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .gear-track{position:relative;width:min(300px,88%);height:58px;background:linear-gradient(180deg,#F6E7EA,#FDF4F5);border:2px solid #EFD8DC;border-radius:999px;box-shadow:inset 0 3px 8px rgba(120,60,70,.12)}
+  .gear-track .slot{position:absolute;top:50%;transform:translate(-50%,-50%);font-family:var(--disp);font-size:16px;color:#C7A9B0;user-select:none;-webkit-user-select:none;cursor:pointer;padding:12px;-webkit-tap-highlight-color:transparent}
+  .slot.r{left:12%} .slot.p{left:50%} .slot.d{left:88%;color:var(--cherry)}
+  .gear-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#FF8FA0,#D53A54);color:#fff;display:grid;place-items:center;font-size:17px;
+    box-shadow:0 6px 14px -4px rgba(213,58,84,.55), inset 0 0 0 2px rgba(255,255,255,.35);cursor:grab;touch-action:none;z-index:2;border:none}
+  .gear-knob:active{cursor:grabbing}
+  .gear-cap{font-size:11.5px;color:var(--sub)}
+  .gear-track.shake{animation:gearshake .4s ease}
+  @keyframes gearshake{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
   .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:10px;opacity:0;transform:translateY(6px);transition:.4s}
   .rsvp.done .yay{opacity:1;transform:none}
 
@@ -181,7 +193,7 @@
   .revealed .pin{animation:drop .6s cubic-bezier(.34,1.56,.64,1) both}
   .pinwrap{transform-box:fill-box;transform-origin:center bottom}
   .pinwrap.hop{animation:hop .5s ease both}
-  .go:focus-visible,.btn-yes:focus-visible,.mk:focus-visible,.env-wrap:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+  .go:focus-visible,.gear-knob:focus-visible,button.lg:focus-visible,.mk:focus-visible,.env-wrap:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -212,6 +224,7 @@
       <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이트 코스 이동 동선 지도"></svg>
       <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
       <div class="legend" id="legend"></div>
+      <p class="drivehint" id="driveHint" hidden>👆 버튼을 누르면 미니카가 출발해요!</p>
     </section>
 
     <div class="divider"><span>♡ 하루 일정 ♡</span></div>
@@ -219,9 +232,12 @@
 
     <section class="rsvp" id="rsvp">
       <div class="q">이 날 나랑 데이트할래요? 💗</div>
-      <div class="row">
-        <button class="btn-yes" id="yes">네, 좋아요 ♡</button>
-        <button class="btn-no" id="no">음...</button>
+      <div class="gearbox">
+        <div class="gear-track" id="gearTrack">
+          <span class="slot r">R</span><span class="slot p">P</span><span class="slot d">D ♥</span>
+          <button class="gear-knob" id="gearKnob" aria-label="기어 레버 — 오른쪽 D에 넣으면 데이트 수락" tabindex="0">🚗</button>
+        </div>
+        <div class="gear-cap">기어를 <b>D</b>에 넣으면 데이트 출발! (R은... 글쎄요 😏)</div>
       </div>
       <div class="yay" id="yay">야호! 그럼 그날 만나요 ♡</div>
     </section>
@@ -459,8 +475,20 @@ function buildMap(){
   const mapEl=document.getElementById('map');
   mapEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
   mapEl.innerHTML=svg;
-  document.getElementById('legend').innerHTML = C.places.map(p=>
-    `<span class="lg"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</span>`).join('');
+  const lg=document.getElementById('legend');
+  lg.innerHTML = C.places.map((p,i)=>
+    `<button type="button" class="lg" data-i="${i}"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</button>`).join('')
+    + (C.ret?`<button type="button" class="lg" data-i="ret"><span class="lgnum" style="background:var(--grape)">🏁</span>집으로</button>`:'');
+  lg.querySelectorAll('button.lg').forEach(btn=>btn.addEventListener('click',()=>{
+    const v=btn.dataset.i;
+    const target = v==='ret' ? 1 : (MAP.fracs[+v+1] ?? 0);
+    lg.querySelectorAll('button.lg').forEach(b=>b.classList.remove('driving'));
+    btn.classList.add('driving');
+    const msg = v==='ret' ? '🏁 무사 귀가! 오늘도 안전운전 ♡' : `${C.places[+v].emoji} ${C.places[+v].name} 도착!`;
+    driveTo(target, ()=>{ carBurstHere(); btn.classList.remove('driving'); toast(msg); });
+  }));
+  const dh=document.getElementById('driveHint');
+  if(dh && C.mover==='car') dh.removeAttribute('hidden');
 }
 
 /* ===== 타임라인 ===== */
@@ -557,49 +585,52 @@ function drawRoute(){
   r.style.transition='stroke-dashoffset 2.2s ease-out .2s'; r.style.strokeDashoffset='0';
   const rb=document.getElementById('routeBack'); if(rb){ rb.style.transition='opacity .6s ease 1.9s'; rb.style.opacity='0.6'; }
 }
-function reveal(){ document.body.classList.add('revealed'); drawRoute(); if(C.mover==='car') setTimeout(()=>driveCar(),600); }
+function reveal(){ document.body.classList.add('revealed'); drawRoute(); if(C.mover==='car') placeCar(0); }
 
-/* ===== 미니카 (왕복) ===== */
-let carRaf=null, lastDrive=0;
+/* ===== 미니카: 버튼 탭해서 드라이브 ===== */
+let carRaf=null, carFrac=0;
+const CAR_SPEED=0.08; /* px/ms — 이전 자동주행(≈0.2)의 40% */
 function carTrack(){ return document.getElementById('carpath')||document.getElementById('route'); }
 function placeCar(f){
   const route=carTrack(), car=document.getElementById('miniCar'); if(!route||!car) return;
   const len=route.getTotalLength();
   const P=route.getPointAtLength(f*len), P2=route.getPointAtLength(Math.min(f*len+2,len));
   let ang=Math.atan2(P2.y-P.y,P2.x-P.x)*180/Math.PI;
-  const flip=(ang>90||ang<-90);
-  const drawAng=flip?ang+180:ang;
+  const flip=(ang>90||ang<-90); /* 왼쪽 주행 시 세로 미러 — rotate는 진행각 그대로 (미러+회전 조합이 바퀴를 아래로 유지) */
   car.setAttribute('opacity','1');
-  car.setAttribute('transform',`translate(${P.x.toFixed(1)},${P.y.toFixed(1)}) rotate(${drawAng.toFixed(1)})${flip?' scale(1,-1)':''}`);
+  car.setAttribute('transform',`translate(${P.x.toFixed(1)},${P.y.toFixed(1)}) rotate(${ang.toFixed(1)})${flip?' scale(1,-1)':''}`);
 }
-function markArrivals(f){
-  (MAP.fracs||[]).slice(1).forEach((fr,i)=>{
-    const el=document.getElementById('pinw-'+i); if(!el) return;
-    if(f>=fr-0.004) el.classList.add('hop'); else el.classList.remove('hop');
+function retriggerHop(i){
+  const el=document.getElementById('pinw-'+i); if(!el) return;
+  el.classList.remove('hop'); el.getBoundingClientRect(); el.classList.add('hop');
+}
+function crossHops(a,b){
+  (MAP.fracs||[]).slice(1,1+C.places.length).forEach((fr,i)=>{
+    if((a<fr&&b>=fr)||(a>fr&&b<=fr)) retriggerHop(i);
   });
 }
-function driveCar(dur=3400){
-  if(C.mover!=='car') return;
-  const now=performance.now(); if(now-lastDrive<1200) return; lastDrive=now;
-  if(reduce){ placeCar(1); markArrivals(1); return; }
+function driveTo(target, done){
+  const route=carTrack(); if(!route||C.mover!=='car') return;
+  if(reduce){ crossHops(carFrac,target); carFrac=target; placeCar(target); if(done)done(); return; }
   if(carRaf) cancelAnimationFrame(carRaf);
-  markArrivals(-1);
-  const t0=performance.now();
+  const from=carFrac, len=route.getTotalLength();
+  const dur=Math.max(900, Math.abs(target-from)*len/CAR_SPEED);
+  const t0=performance.now(); let prev=from;
   const step=t=>{
-    const f=Math.min((t-t0)/dur,1);
-    const e=f<.5 ? 2*f*f : 1-Math.pow(-2*f+2,2)/2;
-    placeCar(e); markArrivals(e);
-    if(f<1) carRaf=requestAnimationFrame(step);
-    else { carRaf=null; const m=document.getElementById('map').getBoundingClientRect();
-           if(m.top<innerHeight&&m.bottom>0){ const s=MAP.proj(C.start.geo); burst(m.left+m.width*(s.x/W), m.top+m.height*(s.y/MAP.H), 16); } }
+    const x=Math.min((t-t0)/dur,1);
+    const e=x<.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2;
+    const f=from+(target-from)*e;
+    placeCar(f); crossHops(prev,f); prev=f; carFrac=f;
+    if(x<1) carRaf=requestAnimationFrame(step);
+    else { carRaf=null; if(done)done(); }
   };
   carRaf=requestAnimationFrame(step);
 }
-if('IntersectionObserver' in window){
-  const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{ if(e.isIntersecting && document.body.classList.contains('revealed')) driveCar(); });
-  },{threshold:0.45});
-  io.observe(document.getElementById('map'));
+function carBurstHere(n=12){
+  const route=carTrack(); if(!route) return;
+  const m=document.getElementById('map').getBoundingClientRect();
+  const P=route.getPointAtLength(carFrac*route.getTotalLength());
+  burst(m.left+m.width*(P.x/W), m.top+m.height*(P.y/MAP.H), n);
 }
 
 /* ===== 내비 멘트 ===== */
@@ -646,16 +677,50 @@ if(isInvite){
   document.getElementById('sendFab').removeAttribute('hidden');
 }
 
-/* ===== RSVP (도망 버튼: 터치 대응) ===== */
-document.getElementById('yes').addEventListener('click',e=>{
-  const r=e.currentTarget.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
-  document.getElementById('rsvp').classList.add('done'); toast('답장 완료! 두근두근 💗');
+/* ===== RSVP: 기어 시프트 (R=후진 미지원 개그) ===== */
+const gearTrack=document.getElementById('gearTrack'), gearKnob=document.getElementById('gearKnob');
+const GPOS={r:0.12,p:0.5,d:0.88};
+let gearLock=false, rTries=0, gDrag=false;
+function gearSet(f,anim=true){ gearKnob.style.transition=anim?'left .5s cubic-bezier(.3,1.4,.5,1)':'none'; gearKnob.style.left=(f*100)+'%'; }
+function gearAccept(msg){
+  if(gearLock) return; gearLock=true; gearSet(GPOS.d);
+  const r=gearKnob.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
+  document.getElementById('rsvp').classList.add('done'); toast(msg||'D 체결! 데이트 출발 💗');
+}
+function gearReject(){
+  rTries++;
+  gearTrack.classList.remove('shake'); gearTrack.getBoundingClientRect(); gearTrack.classList.add('shake');
+  if(rTries>=3){
+    gearSet(GPOS.r,false);
+    toast('자동 변속 발동! 목적지: 데이트 💗');
+    setTimeout(()=>gearAccept('어차피 목적지는 데이트였습니다 ♡'), 500);
+  }else{
+    toast(rTries===1?'삐빅— 이 차량은 후진을 지원하지 않습니다 🚫':'정말요...? 후진 기어는 장식이에요 😌');
+    gearSet(GPOS.r); setTimeout(()=>{ if(!gearLock) gearSet(GPOS.p); }, 550);
+  }
+}
+function gearRelease(f){
+  if(gearLock) return;
+  const near=[['r',Math.abs(f-GPOS.r)],['p',Math.abs(f-GPOS.p)],['d',Math.abs(f-GPOS.d)]].sort((a,b)=>a[1]-b[1])[0][0];
+  if(near==='d') gearAccept(); else if(near==='r') gearReject(); else gearSet(GPOS.p);
+}
+gearKnob.addEventListener('pointerdown',e=>{ if(gearLock) return; gDrag=true; gearKnob.setPointerCapture(e.pointerId); gearKnob.style.transition='none'; });
+gearKnob.addEventListener('pointermove',e=>{ if(!gDrag||gearLock) return;
+  const r=gearTrack.getBoundingClientRect();
+  const f=Math.min(.94,Math.max(.06,(e.clientX-r.left)/r.width));
+  gearKnob.style.left=(f*100)+'%'; });
+gearKnob.addEventListener('pointerup',e=>{ if(!gDrag) return; gDrag=false;
+  const r=gearTrack.getBoundingClientRect(); gearRelease((e.clientX-r.left)/r.width); });
+gearKnob.addEventListener('pointercancel',()=>{ gDrag=false; if(!gearLock) gearSet(GPOS.p); });
+gearTrack.querySelectorAll('.slot').forEach(s=>s.addEventListener('click',()=>{
+  if(gearLock) return;
+  if(s.classList.contains('d')) gearAccept(); else if(s.classList.contains('r')) gearReject();
+}));
+gearKnob.addEventListener('keydown',e=>{
+  if(gearLock) return;
+  if(e.key==='ArrowRight'||e.key==='Enter'){ e.preventDefault(); gearAccept(); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); gearReject(); }
 });
-const no=document.getElementById('no');
-function dodge(){ const dx=(Math.random()*2-1)*90, dy=(Math.random()*2-1)*30; no.style.transform=`translate(${dx}px,${dy}px)`; }
-no.addEventListener('mouseenter',dodge);
-no.addEventListener('touchstart',e=>{ e.preventDefault(); dodge(); },{passive:false});
-no.addEventListener('click',e=>{ e.preventDefault(); dodge(); });
 
 /* ===== 링크 생성기 ===== */
 const modal=document.getElementById('modal');
