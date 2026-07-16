@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부평 하루 데이트 초대장 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --milk:#FFF4EF; --paper:#FFFCFA; --ink:#463039; --sub:#A98B92; --line:#F3DDDF;
+    --cherry:#EF5069; --cherry-deep:#D53A54; --caramel:#C08552; --grape:#8E7CE0; --tangerine:#F29441; --matcha:#9CCB9A;
+    --road:#FBE7D7; --shadow:0 14px 30px -16px rgba(120,60,70,.4);
+    --disp:'Jua',system-ui,sans-serif; --hand:'Gamja Flower',cursive; --body:'Gowun Dodum',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:var(--body); color:var(--ink);
+    background:
+      radial-gradient(120% 55% at 12% 0%, #FFE4DC 0%, transparent 58%),
+      radial-gradient(130% 60% at 92% 12%, #ECE6FB 0%, transparent 55%),
+      var(--milk);
+    min-height:100vh; padding:26px 15px 46px; display:flex; justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== confetti canvas ===== */
+  #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+
+  /* ===== envelope opening scene ===== */
+  .env-scene{
+    position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    background:radial-gradient(130% 90% at 50% 30%,#FFE6EA 0%,#F5EDFB 60%,#EFE7F7 100%);
+    transition:opacity .7s ease;
+  }
+  .env-scene.gone{opacity:0;pointer-events:none}
+  .env-eyebrow{font-family:var(--hand);font-size:22px;color:var(--cherry);text-align:center;line-height:1.4}
+  .env-eyebrow b{color:var(--grape)}
+  .env-wrap{position:relative;width:300px;height:196px;cursor:pointer;filter:drop-shadow(0 18px 26px rgba(180,70,90,.32));transition:transform .3s}
+  .env-wrap:hover{transform:translateY(-4px) scale(1.02)}
+  .env-letter{
+    position:absolute;left:16px;right:16px;top:12px;height:158px;background:#fff;border-radius:12px;z-index:2;
+    box-shadow:0 6px 14px -8px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    padding:14px;text-align:center;transition:transform .8s cubic-bezier(.2,.8,.25,1) .25s;
+  }
+  .env-letter .lt-hi{font-family:var(--hand);font-size:26px;color:var(--cherry)}
+  .env-letter .lt-sub{font-size:12.5px;color:#7A626A;line-height:1.5}
+  .env-pocket{position:absolute;inset:0;top:38px;background:linear-gradient(180deg,#FF7488,#EF5069);border-radius:12px;z-index:3;
+    -webkit-clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%)}
+  .env-flap{position:absolute;top:0;left:0;width:100%;height:0;z-index:4;transform-origin:top center;
+    border-left:150px solid transparent;border-right:150px solid transparent;border-top:104px solid #E7415B;
+    transition:transform .6s ease, z-index 0s .3s;}
+  .seal{position:absolute;top:66px;left:50%;z-index:5;transition:opacity .35s, transform .45s}
+  .seal-c{width:46px;height:46px;margin-left:-23px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8FA0,#D53A54);
+    display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 4px 8px rgba(150,30,50,.4)}
+  .env-hint{font-family:var(--hand);font-size:20px;color:#8A6E76;animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .env-scene.opening .env-flap{transform:rotateX(180deg);z-index:1;transition:transform .6s ease}
+  .env-scene.opening .seal{opacity:0;transform:translate(-50%,-14px) scale(.5)}
+  .env-scene.opening .env-letter{transform:translateY(-176px) scale(1.04)}
+  .env-scene.opening .env-hint{opacity:0}
+
+  /* ===== card ===== */
+  .card{width:100%;max-width:460px;background:var(--paper);border-radius:30px;box-shadow:var(--shadow);border:1px solid #FBE7E7;overflow:hidden;align-self:flex-start}
+
+  /* invitation intro */
+  .invite{position:relative;padding:30px 26px 24px;text-align:center;
+    background:radial-gradient(95% 100% at 100% 0%,#FFDDE2 0%,transparent 72%),linear-gradient(180deg,#FFECEF,#FFFCFA);
+    border-bottom:2px dashed var(--line)}
+  .invite .to{font-family:var(--hand);font-size:24px;color:var(--cherry)}
+  .invite h1{font-family:var(--disp);font-weight:400;margin:8px 0 6px;font-size:29px;line-height:1.28;letter-spacing:-.01em;text-wrap:balance}
+  .invite h1 .gp{color:var(--grape)} .invite h1 .pk{color:var(--cherry)}
+  .invite .when{display:inline-flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
+  .invite .when span{font-size:13px;color:#7A626A;background:#fff;border:1.5px solid var(--line);padding:5px 12px;border-radius:999px}
+  .invite .from{font-family:var(--hand);font-size:19px;color:var(--sub);margin-top:14px}
+
+  /* map */
+  .mapwrap{padding:18px 16px 4px}
+  .maptitle{font-family:var(--hand);font-size:22px;color:var(--ink);text-align:center;margin:2px 0 8px}
+  .maptitle b{color:var(--grape)}
+  .map{display:block;width:100%;height:auto;border-radius:22px;border:2px solid #F6E1D6;background:linear-gradient(180deg,#FFF9F4,#FFF1E9)}
+  .mapcap{font-size:11.5px;color:var(--sub);text-align:center;margin:9px 6px 2px;line-height:1.5}
+  .legend{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 4px 4px}
+  .lg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 11px 4px 5px}
+  .lgnum{width:19px;height:19px;border-radius:50%;color:#fff;display:grid;place-items:center;font-family:var(--disp);font-size:12px}
+
+  .divider{display:flex;align-items:center;gap:10px;padding:0 26px;margin:20px 0 4px}
+  .divider::before,.divider::after{content:"";flex:1;border-top:2px dashed var(--line)}
+  .divider span{font-family:var(--hand);font-size:20px;color:var(--tangerine)}
+
+  /* timeline */
+  .stops{padding:6px 22px 4px}
+  .stop{position:relative;display:grid;grid-template-columns:54px 1fr;gap:13px;padding:16px 0}
+  .stop:not(:last-child)::before{content:"";position:absolute;left:26px;top:46px;bottom:-8px;border-left:2.5px dashed #ECD4D8}
+  .rail{display:flex;flex-direction:column;align-items:center;gap:8px;z-index:1}
+  .time{font-family:var(--disp);font-size:13px;color:var(--ink)}
+  .bead{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;font-size:18px;background:#fff;box-shadow:0 6px 14px -6px rgba(120,60,70,.55);border:2px solid #fff}
+  .body h2{font-family:var(--disp);font-weight:400;margin:2px 0 0;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .kind{font-family:var(--body);font-size:11px;font-weight:700;color:#fff;padding:3px 9px;border-radius:999px}
+  .desc{margin:7px 0 0;font-size:13.5px;line-height:1.62;color:#6E5860}
+  .desc b{color:var(--ink)}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .tag{font-size:11.5px;color:#83686F;background:#FBEEF0;border-radius:9px;padding:4px 9px}
+  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .go{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;text-decoration:none;color:#fff;padding:7px 14px;border-radius:999px;transition:transform .15s,filter .15s}
+  .go:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  .go.ghost{background:#fff;color:var(--ink);border:1.6px solid var(--line)}
+  .walk{grid-column:1 / -1;font-family:var(--hand);font-size:16px;color:var(--sub);margin:-2px 0 -6px;display:flex;align-items:center;gap:6px;padding-left:6px}
+  .start .bead{background:var(--cherry);color:#fff;border-color:#fff}
+  .start .body h2{color:var(--cherry)}
+
+  /* rsvp */
+  .rsvp{margin:16px 18px 6px;padding:20px;border-radius:20px;text-align:center;background:linear-gradient(120deg,#FFECF0,#F0EAFB);border:2px dashed var(--line);position:relative;overflow:hidden;min-height:120px}
+  .rsvp .q{font-family:var(--disp);font-size:19px;color:var(--ink)}
+  .rsvp .row{display:flex;gap:12px;justify-content:center;margin-top:14px;position:relative;height:52px;align-items:center}
+  .btn-yes{font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:999px;padding:12px 22px;cursor:pointer;box-shadow:0 8px 16px -8px var(--cherry);transition:transform .15s}
+  .btn-yes:hover{transform:scale(1.05)}
+  .btn-no{font-family:var(--body);font-size:14px;color:#9A8189;background:#fff;border:1.6px solid var(--line);border-radius:999px;padding:11px 18px;cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+  .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:8px;opacity:0;transform:translateY(6px);transition:.4s}
+  .rsvp.done .yay{opacity:1;transform:none}
+
+  footer{margin:10px 18px 20px;padding:18px 20px;border-radius:20px;background:linear-gradient(120deg,#FFEEF1,#F1ECFC);border:2px dashed var(--line)}
+  footer .ft{font-family:var(--hand);font-size:20px;color:var(--grape)}
+  footer p{margin:6px 0 0;font-size:13px;line-height:1.65;color:#6E5860}
+  .sign{font-family:var(--hand);margin-top:12px;font-size:19px;color:var(--cherry)}
+
+  /* send-invite FAB + modal (plain view only) */
+  .send-fab{position:fixed;right:18px;bottom:18px;z-index:40;font-family:var(--disp);font-size:15px;color:#fff;background:var(--grape);border:none;border-radius:999px;padding:13px 20px;cursor:pointer;box-shadow:0 12px 24px -10px var(--grape);transition:transform .15s}
+  .send-fab:hover{transform:translateY(-2px) scale(1.03)}
+  .modal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(70,48,57,.42);backdrop-filter:blur(3px)}
+  .modal[hidden]{display:none}
+  .sheet{width:100%;max-width:380px;background:var(--paper);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+  .sheet h3{font-family:var(--disp);font-weight:400;font-size:21px;margin:0 0 4px;color:var(--ink)}
+  .sheet p.hint{font-size:12.5px;color:var(--sub);margin:0 0 16px;line-height:1.5}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12.5px;font-weight:700;color:#7A626A;margin-bottom:5px}
+  .field input{width:100%;font-family:var(--body);font-size:14px;color:var(--ink);padding:11px 13px;border:1.6px solid var(--line);border-radius:12px;background:#fff}
+  .field input:focus{outline:2.5px solid var(--grape);outline-offset:1px;border-color:transparent}
+  .mk{width:100%;font-family:var(--disp);font-size:16px;color:#fff;background:var(--cherry);border:none;border-radius:14px;padding:14px;cursor:pointer;margin-top:6px;transition:filter .15s}
+  .mk:hover{filter:brightness(1.06)}
+  .linkout{display:flex;gap:8px;margin-top:12px}
+  .linkout input{flex:1;font-size:12px;color:#6E5860;padding:10px 12px;border:1.6px solid var(--line);border-radius:12px;background:#FBF3F4}
+  .linkout button{font-family:var(--disp);color:#fff;background:var(--grape);border:none;border-radius:12px;padding:0 16px;cursor:pointer;font-size:14px}
+  .x{position:absolute;top:14px;right:16px;font-size:22px;color:var(--sub);background:none;border:none;cursor:pointer}
+
+  .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);z-index:70;
+    background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;padding:12px 20px;border-radius:999px;opacity:0;transition:.35s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* motion */
+  @keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes drop{0%{opacity:0;transform:translateY(-24px)}60%{transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
+  .revealed .stop,.revealed .walk,.revealed .legend,.revealed .rsvp,.revealed footer{animation:pop .5s ease both}
+  .pin{transform-box:fill-box;transform-origin:center bottom}
+  .revealed .pin{animation:drop .6s cubic-bezier(.34,1.56,.64,1) both}
+  .go:focus-visible,.btn-yes:focus-visible,.mk:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <canvas id="fx"></canvas>
+
+  <!-- envelope opening scene (invite links only) -->
+  <div class="env-scene gone" id="env" hidden>
+    <div class="env-eyebrow" id="envHi">💌 도착한 <b>초대장</b></div>
+    <div class="env-wrap" id="envWrap" role="button" tabindex="0" aria-label="초대장 열기">
+      <div class="env-letter"><div class="lt-hi">♡</div><div class="lt-sub" id="envLetter">잠깐,<br>열어볼래요?</div></div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="seal"><div class="seal-c">♥</div></div>
+    </div>
+    <div class="env-hint">💌 눌러서 열어보기</div>
+  </div>
+
+  <main class="card" id="card">
+    <section class="invite">
+      <div class="to" id="uTo">To. 너에게</div>
+      <h1 id="uTitle">부평에서 보내는<br>하루 <span class="pk">데이트</span> <span class="gp">초대장</span></h1>
+      <div class="when" id="uWhen"></div>
+      <div class="from" id="uFrom">from. 나로부터 ♡</div>
+    </section>
+
+    <section class="mapwrap">
+      <div class="maptitle">오늘의 <b>이동 동선</b> 🧭</div>
+      <svg class="map" id="map" viewBox="0 0 460 510" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부평역에서 출발하는 데이트 코스 도보 동선 지도"></svg>
+      <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 방향은 나침반(N)·축척(100m)으로 잡고, <b>정확한 길찾기는 각 장소의 “🧭 길찾기”</b>(네이버 도보)를 눌러주세요!</p>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <div class="divider"><span>♡ 하루 일정 ♡</span></div>
+    <section class="stops" id="timeline"></section>
+
+    <section class="rsvp" id="rsvp">
+      <div class="q">이 날 나랑 데이트할래요? 💗</div>
+      <div class="row">
+        <button class="btn-yes" id="yes">네, 좋아요 ♡</button>
+        <button class="btn-no" id="no">음...</button>
+      </div>
+      <div class="yay">야호! 그럼 그날 부평에서 만나요 ♡</div>
+    </section>
+
+    <footer>
+      <div class="ft">✎ 코스 한 줄 요약</div>
+      <p>부평역에서 만나 → 이색 철판 일식 → 카페 달달 충전 → 네컷으로 오늘 박제 → 양꼬치로 마무리. 전부 부평역 도보권이라 이동 스트레스 없이 즐기기 좋아요!</p>
+      <div class="sign">Have a lovely day together ♡</div>
+    </footer>
+  </main>
+
+  <button class="send-fab" id="sendFab" hidden>💌 초대장으로 보내기</button>
+  <div class="modal" id="modal" hidden>
+    <div class="sheet" style="position:relative">
+      <button class="x" id="mx" aria-label="닫기">×</button>
+      <h3>💌 초대장 링크 만들기</h3>
+      <p class="hint">받는 사람 정보를 넣으면, 그 사람이 링크를 열 때 <b>봉투 개봉 연출</b>이 떠요!</p>
+      <div class="field"><label>받는 사람</label><input id="fTo" placeholder="예: 지수"></div>
+      <div class="field"><label>보내는 사람</label><input id="fFrom" placeholder="예: 민준"></div>
+      <div class="field"><label>날짜</label><input id="fDate" placeholder="예: 7월 19일 토요일"></div>
+      <div class="field"><label>만날 곳</label><input id="fSpot" placeholder="예: 부평역 3번 출구"></div>
+      <button class="mk" id="mk">링크 만들기 & 복사 🔗</button>
+      <div class="linkout" hidden id="linkout"><input id="linkField" readonly><button id="copyBtn">복사</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script>
+/* =======================================================================
+   장소 데이터 (single source of truth)
+   👉 나중에 위시리스트/다른 동네 코스로 확장할 때 이 배열만 갈아끼우면 됩니다.
+   각 장소: geo(lat,lng)만 정확하면 지도·타임라인·길찾기가 자동 생성됨.
+   ======================================================================= */
+const START = { name:'부평역', emoji:'🚇', geo:{lat:37.4896, lng:126.7234} };
+
+const PLACES = [
+  { n:1, name:'우와', emoji:'🍳', kind:'점심', color:'var(--cherry)', time:'12:30',
+    geo:{lat:37.4926, lng:126.7208},
+    desc:'밀가루 대신 <b>안동산 마</b>로 부치는 이색 오코노미야끼·야끼소바. 눈앞 철판에서 직접 볶아줘 보는 재미까지 두 배! 조도 낮아 분위기도 좋아요.',
+    tags:['🥢 철판 일식','💰 1.5~2만원','🕯 분위기 맛집'],
+    naver:'https://naver.me/5imJAeRK', label:{dx:0,dy:20} },
+  { n:2, name:'브라운캣', emoji:'☕', kind:'카페', color:'var(--caramel)', time:'13:30',
+    geo:{lat:37.4939, lng:126.7244},
+    desc:'밥 먹고 나른할 때 커피 한 잔과 달달한 디저트로 쉬어가는 코스. 마주 앉아 도란도란 이야기하기 좋은 두 번째 정거장이에요.',
+    tags:['☕ 커피 & 디저트','💬 수다 타임','🧭 부평문화의거리'],
+    naver:'https://naver.me/5yhtKeB0', label:{dx:0,dy:-34} },
+  { n:3, name:'포토이즘', emoji:'📸', kind:'인증샷', color:'var(--grape)', time:'18:00',
+    geo:{lat:37.4933, lng:126.7237},
+    desc:'부평역 근처 포토이즘 3곳 중 <b>무인 셀프 네컷 ‘박스 부평점’</b>을 골랐어요. 예약 없이 바로 들어가 커플 사진 남기기 딱! (스튜디오점은 예약제라 오늘 코스엔 X)',
+    tags:['📷 셀프 네컷','✅ 예약 불필요','🎞 오늘의 기념'],
+    naver:'https://map.naver.com/p/search/포토이즘박스 부평점', label:{dx:0,dy:20} },
+  { n:4, name:'용용선생', emoji:'🍢', kind:'저녁', color:'var(--tangerine)', time:'18:15',
+    geo:{lat:37.4922, lng:126.7253},
+    desc:'하루 마무리는 부평역점에서 양꼬치와 마라 요리로! 시원한 한 잔 곁들이며 오늘 찍은 네컷 사진 돌려보는 걸로 데이트 완성 🍻',
+    tags:['🍢 양꼬치 & 마라','🍻 한 잔 곁들이기','🧭 부평역 근처'],
+    naver:'https://naver.me/xcgLPLXs', label:{dx:0,dy:20} },
+];
+
+/* ===== geo → svg 좌표 투영 ===== */
+const REF = START.geo, ORIGIN = {x:212, y:446}, K = 0.72, MLAT = 111320, MLNG = 88320;
+const proj = g => ({ x: ORIGIN.x + (g.lng-REF.lng)*MLNG*K, y: ORIGIN.y - (g.lat-REF.lat)*MLAT*K });
+const metersDelta = (a,b) => ({ e:(b.lng-a.lng)*MLNG, n:(b.lat-a.lat)*MLAT });
+function dist(a,b){ const d=metersDelta(a,b); return Math.round(Math.hypot(d.e,d.n)); }
+function walkMin(m){ return Math.max(1, Math.round(m/70)); }
+const DIRS = ['북','북동','동','남동','남','남서','서','북서'];
+function dir8(a,b){ const d=metersDelta(a,b); let deg=Math.atan2(d.e,d.n)*180/Math.PI; if(deg<0)deg+=360; return DIRS[Math.round(deg/45)%8]; }
+function naverWalk(a,b){ const seg=p=>`${p.geo.lng},${p.geo.lat},${encodeURIComponent(p.name)},,`; return `https://map.naver.com/p/directions/${seg(a)}/${seg(b)}/-/walk`; }
+
+/* ===== 지도 SVG 생성 ===== */
+function buildMap(){
+  const s = proj(START.geo);
+  const P = PLACES.map(p => ({ ...p, ...proj(p.geo) }));
+  const chain = [{...START, x:s.x, y:s.y}, ...P];
+
+  // route (부평역 → 1 → 2 → 3 → 4)
+  const routeD = 'M' + chain.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L');
+
+  // segment distance chips
+  let chips='';
+  const chipOff=[{dx:-6,dy:-2},{dx:0,dy:-10},{dx:18,dy:-2},{dx:-40,dy:14}]; // hand-tuned per leg
+  for(let i=0;i<chain.length-1;i++){
+    const a=chain[i], b=chain[i+1];
+    const m=dist(a.geo||START.geo, b.geo);
+    const t=walkMin(m); const dr=dir8(a.geo||START.geo, b.geo);
+    const off=chipOff[i]||{dx:0,dy:0};
+    const mx=(a.x+b.x)/2+off.dx, my=(a.y+b.y)/2+off.dy;
+    const txt=`${dr} ${m}m·${t}분`; const w=txt.length*6.6+16;
+    chips+=`<g><rect x="${(mx-w/2).toFixed(1)}" y="${(my-10).toFixed(1)}" width="${w.toFixed(1)}" height="20" rx="10" fill="#fff" stroke="var(--line)" stroke-width="1"/>`
+         +`<text x="${mx.toFixed(1)}" y="${(my+4).toFixed(1)}" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#7A626A">${txt}</text></g>`;
+  }
+
+  // pins + labels
+  let pins='';
+  P.forEach((p,i)=>{
+    const dx=p.label.dx, dy=p.label.dy, lx=p.x+dx, ly=p.y+dy;
+    const w=p.name.length*17+22;
+    pins+=`<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})"><g class="pin" style="animation-delay:${(0.35+i*0.18).toFixed(2)}s">`
+        +`<path d="M0,0 C-16,-22 -16,-26 -16,-34 A16,16 0 1 1 16,-34 C16,-26 16,-22 0,0 Z" fill="${p.color}" stroke="#fff" stroke-width="3"/>`
+        +`<circle cx="0" cy="-35" r="11" fill="#fff"/>`
+        +`<text x="0" y="-30" text-anchor="middle" font-family="Jua,sans-serif" font-size="14" fill="${p.color}">${p.n}</text></g></g>`
+        +`<g><rect x="${(lx-w/2).toFixed(1)}" y="${(ly-12).toFixed(1)}" width="${w}" height="24" rx="12" fill="#fff" stroke="${p.color}" stroke-width="1.6"/>`
+        +`<text x="${lx.toFixed(1)}" y="${(ly+5).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="17" fill="#5C4750">${p.name}</text></g>`;
+  });
+
+  // 부평역 START 마커 (깃발)
+  const startG=`<g transform="translate(${s.x.toFixed(1)},${s.y.toFixed(1)})">
+      <circle cx="0" cy="0" r="6" fill="#5C4750"/>
+      <rect x="-1.5" y="-42" width="3" height="42" fill="#5C4750"/>
+      <path d="M1.5,-42 L34,-34 L1.5,-26 Z" fill="var(--cherry)"/>
+      <text x="17" y="-31" text-anchor="middle" font-family="Jua,sans-serif" font-size="9" fill="#fff">출발</text>
+    </g>
+    <g><rect x="${(s.x-58).toFixed(1)}" y="${(s.y+12).toFixed(1)}" width="116" height="26" rx="13" fill="#fff" stroke="#E7C9CE" stroke-width="2"/>
+    <text x="${s.x.toFixed(1)}" y="${(s.y+30).toFixed(1)}" text-anchor="middle" font-family="Jua,sans-serif" font-size="14" fill="#5C4750">🚇 부평역</text></g>`;
+
+  // 문화의거리 존
+  const bc=proj(PLACES[1].geo), pi=proj(PLACES[2].geo);
+  const zx=(bc.x+pi.x)/2, zy=(bc.y+pi.y)/2;
+  const zone=`<ellipse cx="${zx.toFixed(1)}" cy="${zy.toFixed(1)}" rx="62" ry="72" fill="#EDE6FB" opacity=".5"/>
+    <text x="${(zx+96).toFixed(1)}" y="${(zy-40).toFixed(1)}" text-anchor="middle" font-family="Gamja Flower,cursive" font-size="14" fill="#9784CE" transform="rotate(8 ${(zx+96).toFixed(1)} ${(zy-40).toFixed(1)})">부평 문화의거리</text>`;
+
+  const svg=`
+    <defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#F1DACF"/></pattern></defs>
+    <rect x="0" y="0" width="460" height="510" fill="url(#dots)"/>
+    ${zone}
+    <path id="route" d="${routeD}" fill="none" stroke="var(--cherry)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g>${chips}</g>
+    ${startG}
+    ${pins}
+    <g><circle cx="422" cy="50" r="19" fill="#fff" stroke="#E7C9CE" stroke-width="1.5"/>
+       <path d="M422,35 L428,52 L422,47 L416,52 Z" fill="var(--cherry)"/>
+       <text x="422" y="64" text-anchor="middle" font-family="Jua,sans-serif" font-size="10" fill="#5C4750">N</text></g>
+    <g stroke="#B79AA0" stroke-width="2"><line x1="34" y1="488" x2="${(34+100*K).toFixed(0)}" y2="488"/>
+       <line x1="34" y1="483" x2="34" y2="493"/><line x1="${(34+100*K).toFixed(0)}" y1="483" x2="${(34+100*K).toFixed(0)}" y2="493"/></g>
+    <text x="${(34+50*K).toFixed(0)}" y="479" text-anchor="middle" font-family="Gowun Dodum,sans-serif" font-size="10.5" fill="#8C737A">100m</text>`;
+  document.getElementById('map').innerHTML=svg;
+
+  // legend
+  document.getElementById('legend').innerHTML = PLACES.map(p=>
+    `<span class="lg"><span class="lgnum" style="background:${p.color}">${p.n}</span>${p.name}</span>`).join('');
+}
+
+/* ===== 타임라인 생성 ===== */
+function buildTimeline(){
+  let html = `
+    <div class="stop start">
+      <div class="rail"><div class="time">12:00</div><div class="bead">🚩</div></div>
+      <div class="body"><h2>부평역 <span class="kind" style="background:var(--cherry)">출발</span></h2>
+        <p class="desc">오늘의 시작! <b>${SPOT}</b>에서 만나요. 여기서부터 전부 도보로 이동해요 🚶‍♀️🚶</p>
+      </div>
+    </div>`;
+  const chain=[START,...PLACES];
+  PLACES.forEach((p,i)=>{
+    const prev=chain[i], m=dist(prev.geo,p.geo), t=walkMin(m), dr=dir8(prev.geo,p.geo);
+    const near = m<120 ? ' (바로 근처!)' : '';
+    html += `<div class="walk">🚶‍♀️ ${dr}쪽으로 ${m}m · 도보 ${t}분${near}</div>`;
+    html += `
+      <div class="stop">
+        <div class="rail"><div class="time">${p.time}</div><div class="bead">${p.emoji}</div></div>
+        <div class="body">
+          <h2>${p.name} <span class="kind" style="background:${p.color}">${p.kind}</span></h2>
+          <p class="desc">${p.desc}</p>
+          <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <div class="btns">
+            <a class="go" style="background:${p.color}" href="${p.naver}" target="_blank" rel="noopener">📍 네이버 지도</a>
+            <a class="go ghost" href="${naverWalk(prev,p)}" target="_blank" rel="noopener">🧭 여기까지 길찾기 ›</a>
+          </div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('timeline').innerHTML = html;
+}
+
+/* ===== 개인화 (URL 파라미터) ===== */
+const Q = new URLSearchParams(location.search);
+const TO   = Q.get('to')   || '너';
+const FROM = Q.get('from') || '나';
+const DATE = Q.get('date') || '이번 주말';
+const SPOT = Q.get('spot') || '부평역';
+const isInvite = Q.has('invite') || Q.has('to') || Q.has('from');
+
+function fillInvite(){
+  document.getElementById('uTo').textContent = `To. ${TO}에게`;
+  document.getElementById('uFrom').textContent = `from. ${FROM} ♡`;
+  document.getElementById('uWhen').innerHTML = `<span>📅 ${DATE}</span><span>📍 ${SPOT}</span><span>⏰ 낮 → 밤</span>`;
+  document.getElementById('envHi').innerHTML = `💌 <b>${TO}</b>에게 도착한 초대장`;
+  document.getElementById('envLetter').innerHTML = `${FROM}(이)가<br>보냈어요 ♡`;
+}
+
+/* ===== confetti (하트) ===== */
+const cv=document.getElementById('fx'), cx=cv.getContext('2d'); let parts=[], raf=null;
+function size(){ const d=window.devicePixelRatio||1; cv.width=innerWidth*d; cv.height=innerHeight*d; cx.setTransform(d,0,0,d,0,0); }
+size(); addEventListener('resize',size);
+const COLORS=['#EF5069','#8E7CE0','#F29441','#C08552','#FF8FA0'];
+function burst(x,y,n=44){
+  for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2, sp=3+Math.random()*6;
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-4,g:.18+Math.random()*.12,life:1,
+      s:8+Math.random()*10,rot:Math.random()*6,vr:(Math.random()-.5)*.3,c:COLORS[i%COLORS.length],heart:Math.random()<.6}); }
+  if(!raf) tick();
+}
+function heart(px,py,s,rot,c){ cx.save();cx.translate(px,py);cx.rotate(rot);cx.scale(s/16,s/16);cx.fillStyle=c;
+  cx.beginPath();cx.moveTo(0,4);cx.bezierCurveTo(-8,-6,-16,4,0,14);cx.bezierCurveTo(16,4,8,-6,0,4);cx.fill();cx.restore(); }
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height); let alive=false;
+  for(const p of parts){ if(p.life<=0)continue; alive=true; p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life-=.012;
+    cx.globalAlpha=Math.max(0,p.life);
+    if(p.heart) heart(p.x,p.y,p.s,p.rot,p.c);
+    else{ cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);cx.restore(); } }
+  cx.globalAlpha=1; parts=parts.filter(p=>p.life>0);
+  if(alive) raf=requestAnimationFrame(tick); else raf=null;
+}
+
+/* ===== reveal ===== */
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+function drawRoute(){
+  const r=document.getElementById('route'); if(!r||reduce) return;
+  const len=r.getTotalLength(); r.style.strokeDasharray=len; r.style.strokeDashoffset=len;
+  r.getBoundingClientRect(); // reflow
+  r.style.transition='stroke-dashoffset 2.2s ease-out .2s'; r.style.strokeDashoffset='0';
+}
+function reveal(){ document.body.classList.add('revealed'); drawRoute(); }
+
+/* ===== envelope ===== */
+function openEnvelope(){
+  const env=document.getElementById('env');
+  env.classList.add('opening');
+  const c=cv.getBoundingClientRect(); burst(innerWidth/2, innerHeight*0.42, 60);
+  setTimeout(()=>{ env.classList.add('gone'); setTimeout(()=>env.setAttribute('hidden',''),700); reveal();
+    burst(innerWidth/2, innerHeight*0.35, 40); }, reduce?0:1350);
+}
+
+/* ===== boot ===== */
+buildMap(); buildTimeline(); fillInvite();
+
+if(isInvite && !reduce){
+  const env=document.getElementById('env');
+  env.removeAttribute('hidden'); env.classList.remove('gone');
+  const w=document.getElementById('envWrap');
+  const go=()=>{ w.removeEventListener('click',go); openEnvelope(); };
+  w.addEventListener('click',go);
+  w.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} });
+}else{
+  reveal();
+  if(!isInvite){ document.getElementById('sendFab').removeAttribute('hidden'); }
+}
+
+/* ===== RSVP ===== */
+document.getElementById('yes').addEventListener('click',e=>{
+  const r=e.target.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
+  document.getElementById('rsvp').classList.add('done'); toast('답장 완료! 두근두근 💗');
+});
+const no=document.getElementById('no');
+function dodge(){ const dx=(Math.random()*2-1)*90, dy=(Math.random()*2-1)*30; no.style.transform=`translate(${dx}px,${dy}px)`; }
+no.addEventListener('mouseenter',dodge); no.addEventListener('click',e=>{e.preventDefault();dodge();});
+
+/* ===== 링크 생성기 ===== */
+const modal=document.getElementById('modal');
+document.getElementById('sendFab').addEventListener('click',()=>modal.removeAttribute('hidden'));
+document.getElementById('mx').addEventListener('click',()=>modal.setAttribute('hidden',''));
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.setAttribute('hidden',''); });
+document.getElementById('mk').addEventListener('click',()=>{
+  const to=val('fTo','지수'), from=val('fFrom','민준'), date=val('fDate','이번 주말'), spot=val('fSpot','부평역');
+  const q=new URLSearchParams({to,from,date,spot,invite:'1'});
+  const link=location.origin+location.pathname+'?'+q.toString();
+  const lo=document.getElementById('linkout'); lo.removeAttribute('hidden');
+  document.getElementById('linkField').value=link;
+  copy(link);
+});
+document.getElementById('copyBtn').addEventListener('click',()=>copy(document.getElementById('linkField').value));
+function val(id,def){ const v=document.getElementById(id).value.trim(); return v||def; }
+function copy(t){ if(navigator.clipboard){ navigator.clipboard.writeText(t).then(()=>toast('초대 링크 복사됨! 💌'),()=>toast('링크 생성됨! 아래에서 복사하세요')); } else toast('링크 생성됨! 아래에서 복사하세요'); }
+
+/* ===== toast ===== */
+let tT=null;
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2200); }
+</script>
+</body>
+</html>

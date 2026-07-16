@@ -137,6 +137,9 @@
   .invite .when{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
   .invite .when span{font-size:13px;color:#7A626A;background:#fff;border:1.5px solid var(--line);padding:6px 12px;border-radius:999px}
   .invite .from{font-family:var(--hand);font-size:19px;color:var(--sub);margin-top:14px}
+  .dday{margin:16px auto 0;display:flex;flex-direction:column;align-items:center;gap:1px}
+  .dday svg{width:196px;height:auto;display:block;filter:drop-shadow(0 6px 12px -8px rgba(20,90,130,.5))}
+  .dday-sub{font-family:var(--hand);font-size:17px;color:#2E7C99}
 
   /* ===== map ===== */
   .mapwrap{padding:18px 14px 4px;position:relative}
@@ -364,6 +367,7 @@
       <div class="to" id="uTo">To. 너에게</div>
       <h1 id="uTitle"></h1>
       <div class="when" id="uWhen"></div>
+      <div class="dday" id="dday" hidden></div>
       <div class="from" id="uFrom">from. 나 ♡</div>
     </section>
 
@@ -429,7 +433,7 @@
       <p class="hint">받는 사람 정보를 넣으면, 그 사람이 링크를 열 때 <b>봉투 개봉 연출</b>이 떠요!</p>
       <div class="field"><label>받는 사람</label><input id="fTo" placeholder="예: 지수"></div>
       <div class="field"><label>보내는 사람</label><input id="fFrom" placeholder="예: 민준"></div>
-      <div class="field"><label>날짜</label><input id="fDate" placeholder="예: 7월 19일 토요일"></div>
+      <div class="field"><label>날짜 <span style="color:#B09A9E;font-weight:400">(넣으면 D-day 계기판도 떠요)</span></label><input id="fDate" type="date"></div>
       <div class="field"><label>만날 곳</label><input id="fSpot" placeholder=""></div>
       <button class="mk" id="mk">링크 만들기 & 복사 🔗</button>
       <div class="linkout" hidden id="linkout"><input id="linkField" readonly><button id="copyBtn">복사</button></div>
@@ -878,8 +882,40 @@ function openEnvelope(){
     burst(innerWidth/2, innerHeight*0.35, 40); }, reduce?0:1350);
 }
 
+/* ===== D-day 계기판 (속도계) ===== */
+function buildDday(){
+  const raw=Q.get('dday'); if(!raw) return;
+  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(raw); if(!m) return;
+  const target=new Date(+m[1],+m[2]-1,+m[3]); if(isNaN(target)) return;
+  const nowD=new Date(), today=new Date(nowD.getFullYear(),nowD.getMonth(),nowD.getDate());
+  const days=Math.round((target-today)/86400000); if(days<0) return;   // 지난 날짜면 표시 안 함
+  const cx=100,cy=104,r=74;
+  const P=(a,rr)=>[cx+rr*Math.cos(a*Math.PI/180), cy-rr*Math.sin(a*Math.PI/180)];
+  const arc=(a1,a2,rr)=>{ const k=Math.max(2,Math.round(Math.abs(a1-a2)/5)); let s=''; for(let i=0;i<=k;i++){ const a=a1+(a2-a1)*i/k, [x,y]=P(a,rr); s+=(i?' L':'M')+x.toFixed(1)+','+y.toFixed(1);} return s; };
+  const D=Math.min(days,30), theta=(D/30)*180;   // 0°=D-DAY(오른쪽 레드), 180°=여유(왼쪽)
+  const [nx,ny]=P(theta,r-6);
+  let ticks=''; [180,135,90,45,0].forEach(a=>{ const [x1,y1]=P(a,r+2),[x2,y2]=P(a,r-9); ticks+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#B7CED8" stroke-width="2.4" stroke-linecap="round"/>`; });
+  const big = days===0?'D-DAY':'D-'+days;
+  const sub = days===0?'오늘 만나요! 💗':(days<=3?'설렘 MAX 🔥':(days<=7?'두근두근 임박!':'설레는 중…'));
+  const el=document.getElementById('dday');
+  el.innerHTML =
+    `<svg viewBox="0 0 200 124" role="img" aria-label="데이트까지 ${big}">
+       <path d="${arc(180,0,r)}" fill="none" stroke="#E1EDF2" stroke-width="11" stroke-linecap="round"/>
+       <path d="${arc(180,theta,r)}" fill="none" stroke="#41B4DC" stroke-width="11" stroke-linecap="round"/>
+       <path d="${arc(48,0,r)}" fill="none" stroke="#F0654F" stroke-width="11" stroke-linecap="round" opacity=".92"/>
+       ${ticks}
+       <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="#2E7C99" stroke-width="3.6" stroke-linecap="round"/>
+       <circle cx="${cx}" cy="${cy}" r="6.5" fill="#2E7C99"/><circle cx="${cx}" cy="${cy}" r="2.5" fill="#fff"/>
+       <text x="${cx}" y="${cy-16}" text-anchor="middle" font-family="Jua,sans-serif" font-size="27" fill="#F0654F">${big}</text>
+       <text x="26" y="120" font-family="Gowun Dodum,sans-serif" font-size="9" fill="#9DB6C2">느긋</text>
+       <text x="174" y="120" text-anchor="end" font-family="Gowun Dodum,sans-serif" font-size="9" fill="#E0715B">설렘 MAX</text>
+     </svg>
+     <div class="dday-sub">${sub}</div>`;
+  el.removeAttribute('hidden');
+}
+
 /* ===== boot ===== */
-buildMap(); buildTimeline(); fillInvite(); watchNavi();
+buildMap(); buildTimeline(); fillInvite(); buildDday(); watchNavi();
 const mm=document.getElementById('makeMine');
 function showMakeMine(){ mm.href=location.pathname+(COURSE_KEY!==DEFAULT?('?course='+COURSE_KEY):''); mm.removeAttribute('hidden'); }
 
@@ -997,8 +1033,12 @@ document.getElementById('sendFab').addEventListener('click',()=>modal.removeAttr
 document.getElementById('mx').addEventListener('click',()=>modal.setAttribute('hidden',''));
 modal.addEventListener('click',e=>{ if(e.target===modal) modal.setAttribute('hidden',''); });
 document.getElementById('mk').addEventListener('click',()=>{
-  const to=val('fTo','지수'), from=val('fFrom','민준'), date=val('fDate','이번 주말'), spot=val('fSpot',C.defaultSpot);
+  const to=val('fTo','지수'), from=val('fFrom','민준'), spot=val('fSpot',C.defaultSpot);
+  const dRaw=document.getElementById('fDate').value;
+  let date='이번 주말', dday='';
+  if(dRaw){ const dt=new Date(dRaw+'T00:00'); if(!isNaN(dt)){ const wd=['일','월','화','수','목','금','토'][dt.getDay()]; date=`${dt.getMonth()+1}월 ${dt.getDate()}일 (${wd})`; dday=dRaw; } }
   const q=new URLSearchParams({to,from,date,spot,invite:'1'});
+  if(dday) q.set('dday',dday);
   if(COURSE_KEY!==DEFAULT) q.set('course',COURSE_KEY);
   const link=location.origin+location.pathname+'?'+q.toString();
   const lo=document.getElementById('linkout'); lo.removeAttribute('hidden');
