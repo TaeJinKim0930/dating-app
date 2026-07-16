@@ -41,39 +41,74 @@
   /* ===== confetti ===== */
   #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
 
-  /* ===== envelope ===== */
+  /* ===== envelope scene v2: 노을 지는 서해 위 초대장 ===== */
   .env-scene{
-    position:fixed;inset:0;height:100dvh;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
-    padding:24px;
-    background:radial-gradient(130% 90% at 50% 30%,#FFE6EA 0%,#F5EDFB 60%,#EFE7F7 100%);
-    transition:opacity .7s ease;
+    position:fixed;inset:0;height:100dvh;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+    padding:24px;overflow:hidden;
+    background:linear-gradient(180deg,#FFE7C7 0%,#FFC9CB 36%,#F2A9C0 58%,#B79ED9 82%,#8E7CC9 100%);
+    transition:opacity .8s ease, transform .8s ease;
   }
-  .env-scene.gone{opacity:0;pointer-events:none}
-  .env-eyebrow{font-family:var(--hand);font-size:22px;color:var(--cherry);text-align:center;line-height:1.4}
-  .env-eyebrow b{color:var(--grape)}
-  .env-wrap{position:relative;width:min(300px,82vw);height:calc(min(300px,82vw)*0.653);cursor:pointer;filter:drop-shadow(0 18px 26px rgba(180,70,90,.32));transition:transform .3s;-webkit-tap-highlight-color:transparent}
-  .env-wrap:active{transform:scale(.98)}
+  .env-scene.gone{opacity:0;transform:scale(1.05);pointer-events:none}
+  .env-sun{position:absolute;left:50%;top:31%;width:170px;height:170px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,#FFF6DC 0%,#FFD9A0 42%,rgba(255,217,160,0) 72%);animation:sunpulse 5s ease-in-out infinite}
+  @keyframes sunpulse{0%,100%{opacity:.85}50%{opacity:1}}
+  .env-sea{position:absolute;left:0;right:0;bottom:0;height:26%;pointer-events:none;background:linear-gradient(180deg,rgba(142,124,201,0),rgba(96,82,168,.45))}
+  .wave{position:absolute;left:50%;bottom:-216vw;width:230vw;height:230vw;margin-left:-115vw;border-radius:42%;pointer-events:none;
+    background:rgba(255,255,255,.14);animation:waveroll 12s linear infinite}
+  .wave.w2{bottom:-219vw;border-radius:45%;background:rgba(255,255,255,.09);animation-duration:19s;animation-direction:reverse}
+  @keyframes waveroll{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .tw{position:absolute;color:#fff;font-size:13px;text-shadow:0 0 8px #fff;animation:twk 2.8s ease-in-out infinite;pointer-events:none}
+  @keyframes twk{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.95;transform:scale(1.2)}}
+  .fh{position:absolute;bottom:-34px;font-size:17px;opacity:0;animation:floatup 8s linear infinite;pointer-events:none}
+  @keyframes floatup{0%{opacity:0;transform:translateY(0) rotate(-8deg)}10%{opacity:.9}80%{opacity:.45}100%{opacity:0;transform:translateY(-80vh) rotate(12deg)}}
+  .env-eyebrow{position:relative;font-family:var(--hand);font-size:23px;color:#fff;text-align:center;line-height:1.4;text-shadow:0 2px 12px rgba(150,60,90,.5)}
+  .env-eyebrow b{color:#FFE9A8}
+  .env-wrap{position:relative;width:min(310px,84vw);height:calc(min(310px,84vw)*0.66);cursor:pointer;-webkit-tap-highlight-color:transparent;
+    filter:drop-shadow(0 22px 30px rgba(110,40,80,.4));animation:envfloat 3.6s ease-in-out infinite}
+  @keyframes envfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .env-wrap::after{content:"";position:absolute;inset:0;border-radius:14px;z-index:6;pointer-events:none;
+    background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.14) 53%,transparent 64%) no-repeat;
+    background-size:240% 100%;background-position:130% 0;animation:shine 3.4s ease-in-out infinite}
+  @keyframes shine{0%,50%{background-position:130% 0}88%,100%{background-position:-60% 0}}
   .env-letter{
-    position:absolute;left:5.3%;right:5.3%;top:6%;height:80%;background:#fff;border-radius:12px;z-index:2;
-    box-shadow:0 6px 14px -8px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    position:absolute;left:5%;right:5%;top:5%;height:82%;border-radius:12px;z-index:2;
+    background:radial-gradient(circle at 10px 10px,#FFE4E9 1.5px,transparent 1.6px) 0 0/24px 24px,#FFFDF8;
+    border-top:3px solid #F0C489;
+    box-shadow:0 6px 14px -8px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     padding:14px;text-align:center;transition:transform .8s cubic-bezier(.2,.8,.25,1) .25s;
   }
-  .env-letter .lt-hi{font-family:var(--hand);font-size:26px;color:var(--cherry)}
-  .env-letter .lt-sub{font-size:12.5px;color:#7A626A;line-height:1.5}
-  .env-pocket{position:absolute;inset:0;top:19%;background:linear-gradient(180deg,#FF7488,#EF5069);border-radius:12px;z-index:3;
-    -webkit-clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%)}
+  .lt-to{font-family:var(--hand);font-size:25px;color:var(--cherry)}
+  .lt-line{width:56px;border-top:2px solid #F0C489}
+  .lt-title{font-family:var(--disp);font-size:14px;color:#6E5860}
+  .lt-from{font-family:var(--hand);font-size:17px;color:var(--sub)}
+  .env-pocket{position:absolute;inset:0;top:19%;border-radius:14px;z-index:3;
+    background:linear-gradient(160deg,#FF8DA0 0%,#EF5069 55%,#E04560 100%);
+    -webkit-clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);
+    box-shadow:inset 0 -4px 10px rgba(150,30,50,.25)}
   .env-flap{position:absolute;top:0;left:0;width:100%;height:53%;z-index:4;transform-origin:top center;
-    -webkit-clip-path:polygon(0 0,100% 0,50% 100%);clip-path:polygon(0 0,100% 0,50% 100%);background:#E7415B;
+    -webkit-clip-path:polygon(0 0,100% 0,50% 100%);clip-path:polygon(0 0,100% 0,50% 100%);
+    background:linear-gradient(180deg,#F26079,#DE3B57);
     transition:transform .6s ease, z-index 0s .3s;}
   .seal{position:absolute;top:34%;left:50%;z-index:5;transition:opacity .35s, transform .45s}
-  .seal-c{width:46px;height:46px;margin-left:-23px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8FA0,#D53A54);
-    display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 4px 8px rgba(150,30,50,.4)}
-  .env-hint{font-family:var(--hand);font-size:20px;color:#8A6E76;animation:bob 1.6s ease-in-out infinite}
+  .seal-c{width:48px;height:48px;margin-left:-24px;border-radius:50%;position:relative;
+    background:radial-gradient(circle at 35% 30%,#FF9FAE,#C93A52);
+    display:grid;place-items:center;color:#fff;font-size:20px;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.4),inset 0 -4px 6px rgba(140,20,45,.5),0 5px 10px rgba(140,25,50,.45)}
+  .seal-c::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.55);animation:sealring 2.2s ease-out infinite}
+  @keyframes sealring{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+  .env-hint{position:relative;font-family:var(--hand);font-size:21px;color:#fff;text-shadow:0 2px 10px rgba(150,60,90,.5);animation:bob 1.6s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .env-road{position:absolute;left:0;right:0;bottom:calc(26px + var(--safe-b));border-top:3px dashed rgba(255,255,255,.55);pointer-events:none}
+  .env-car{position:absolute;bottom:calc(32px + var(--safe-b));left:12%;font-size:26px;pointer-events:none;
+    animation:caridle .55s ease-in-out infinite;transition:left 1.1s cubic-bezier(.55,0,.9,.4)}
+  @keyframes caridle{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-2.5px)}}
   .env-scene.opening .env-flap{transform:rotateX(180deg);z-index:1;transition:transform .6s ease}
-  .env-scene.opening .seal{opacity:0;transform:translate(-50%,-14px) scale(.5)}
-  .env-scene.opening .env-letter{transform:translateY(-92%) scale(1.04)}
+  .env-scene.opening .seal{opacity:0;transform:translate(-50%,-16px) scale(.4)}
+  .env-scene.opening .env-letter{transform:translateY(-96%) scale(1.05)}
   .env-scene.opening .env-hint{opacity:0}
+  .env-scene.opening .env-wrap{animation:none}
+  .env-scene.opening .env-wrap::after{animation:none;opacity:0}
+  .env-scene.opening .env-car{left:112%}
 
   /* ===== invite intro ===== */
   .invite{position:relative;padding:calc(30px + var(--safe-t)) 24px 24px;text-align:center;
@@ -149,6 +184,17 @@
   .gear-cap{font-size:11.5px;color:var(--sub)}
   .gear-track.shake{animation:gearshake .4s ease}
   @keyframes gearshake{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+  .gear-alert{display:none;margin:12px auto 0;font-size:13px;line-height:1.55;color:#7A3B4E;background:#fff;border:2px solid #F6CBD4;border-radius:4px 16px 16px 16px;padding:10px 14px;max-width:330px}
+  .gear-alert.show{display:block;animation:alertIn .45s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes alertIn{0%{opacity:0;transform:translateY(8px) scale(.9)}100%{opacity:1;transform:none}}
+  .gear-knob.nono{animation:nono .4s ease}
+  @keyframes nono{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(-50%,-50%) rotate(-16deg)}75%{transform:translate(-50%,-50%) rotate(16deg)}}
+  .cert{text-align:center}
+  .cert-badge{font-size:44px;margin-bottom:2px}
+  .cert h3{margin:4px 0 2px;letter-spacing:.5em;text-indent:.5em;text-align:center}
+  .cert-name{font-family:var(--hand);font-size:23px;color:var(--tangerine);margin:2px 0 10px}
+  .cert-body{font-size:13px;color:#6E5860;line-height:1.75;margin:0 0 10px}
+  .cert-sign{font-size:12px;color:var(--sub);margin:0 0 14px}
   .rsvp .yay{font-family:var(--hand);font-size:22px;color:var(--cherry);margin-top:10px;opacity:0;transform:translateY(6px);transition:.4s}
   .rsvp.done .yay{opacity:1;transform:none}
 
@@ -201,14 +247,27 @@
   <canvas id="fx"></canvas>
 
   <div class="env-scene gone" id="env" hidden>
+    <div class="env-sun"></div>
+    <div class="env-sea"></div>
+    <div class="wave"></div><div class="wave w2"></div>
+    <span class="tw" style="left:14%;top:12%">✦</span>
+    <span class="tw" style="left:80%;top:9%;animation-delay:.9s">✧</span>
+    <span class="tw" style="left:66%;top:21%;animation-delay:1.7s">✦</span>
+    <span class="tw" style="left:26%;top:24%;animation-delay:.5s">✧</span>
+    <span class="fh" style="left:10%">💗</span>
+    <span class="fh" style="left:32%;animation-delay:2.6s">🌸</span>
+    <span class="fh" style="left:68%;animation-delay:1.2s">💕</span>
+    <span class="fh" style="left:86%;animation-delay:4s">🫧</span>
     <div class="env-eyebrow" id="envHi">💌 도착한 <b>초대장</b></div>
     <div class="env-wrap" id="envWrap" role="button" tabindex="0" aria-label="초대장 열기">
-      <div class="env-letter"><div class="lt-hi">♡</div><div class="lt-sub" id="envLetter">잠깐,<br>열어볼래요?</div></div>
+      <div class="env-letter" id="envLetter"></div>
       <div class="env-pocket"></div>
       <div class="env-flap"></div>
       <div class="seal"><div class="seal-c">♥</div></div>
     </div>
     <div class="env-hint">💌 눌러서 열어보기</div>
+    <div class="env-road"></div>
+    <div class="env-car" aria-hidden="true">🚗</div>
   </div>
 
   <main class="card" id="card">
@@ -239,6 +298,7 @@
         </div>
         <div class="gear-cap">기어를 <b>D</b>에 넣으면 데이트 출발! (R은... 글쎄요 😏)</div>
       </div>
+      <div class="gear-alert" id="gearAlert" role="status"></div>
       <div class="yay" id="yay">야호! 그럼 그날 만나요 ♡</div>
     </section>
 
@@ -264,6 +324,16 @@
       <div class="linkout" hidden id="linkout"><input id="linkField" readonly><button id="copyBtn">복사</button></div>
     </div>
   </div>
+  <div class="modal" id="certModal" hidden>
+    <div class="sheet cert">
+      <div class="cert-badge">🏆</div>
+      <h3>상 장</h3>
+      <p class="cert-name">— 귀여운 고집상 —</p>
+      <p class="cert-body">위 사람은 후진(R) 시도 10회를 달성하였으나<br>기어는 끝내 <b>D</b>에서 움직이지 않았으므로<br>이에 <b>데이트 1회</b>를 부상으로 수여함.</p>
+      <p class="cert-sign">— 드라이브 초대장 위원회 —</p>
+      <button class="mk" id="certOk">상 받으러 가기 💗</button>
+    </div>
+  </div>
   <div class="toast" id="toast"></div>
 
 <script>
@@ -277,6 +347,7 @@ const DEFAULT = 'eulwangri';
 const COURSES = {
   eulwangri: {
     docTitle: '을왕리 드라이브 데이트 초대장 💌',
+    envTitle: '바다 보러 가는 드라이브 초대장 🌊',
     titleHtml: '바다 보러 가는<br><span class="pk">드라이브</span> 데이트 <span class="gp">초대장</span>',
     metaChip: '🚗 드라이브 코스', defaultSpot: '신연수역', meetShort: '신연수역',
     mover: 'car',
@@ -547,7 +618,10 @@ function fillInvite(){
   document.getElementById('uFrom').textContent = `from. ${FROM} ♡`;      // textContent = 안전
   document.getElementById('uWhen').innerHTML = `<span>📅 ${esc(DATE)}</span><span>📍 ${esc(SPOT)}</span><span>${C.metaChip}</span>`;
   document.getElementById('envHi').innerHTML = `💌 <b>${esc(TO)}</b>에게 도착한 초대장`;
-  document.getElementById('envLetter').innerHTML = `${esc(FROM)}(이)가<br>보냈어요 ♡`;
+  document.getElementById('envLetter').innerHTML =
+    `<div class="lt-to">To. ${esc(TO)}</div><div class="lt-line"></div>`+
+    `<div class="lt-title">${C.envTitle||C.docTitle}</div>`+
+    `<div class="lt-from">from. ${esc(FROM)} ♡</div>`;
   document.getElementById('uSummary').textContent = C.summary;
   document.getElementById('yay').textContent = `야호! 그럼 그날 ${C.meetShort}에서 만나요 ♡`;
   document.getElementById('fSpot').placeholder = `예: ${C.defaultSpot} 2번 출구`;
@@ -680,10 +754,45 @@ if(isInvite){
 /* ===== RSVP: 기어 시프트 (R=후진 미지원 개그) ===== */
 const gearTrack=document.getElementById('gearTrack'), gearKnob=document.getElementById('gearKnob');
 const GPOS={r:0.12,p:0.5,d:0.88};
-let gearLock=false, rTries=0, gDrag=false;
+let gearLock=false, rTries=0, gDrag=false, rLockCount=0;
+function showGearAlert(msg){
+  const al=document.getElementById('gearAlert');
+  al.textContent=msg;
+  al.classList.remove('show'); al.getBoundingClientRect(); al.classList.add('show');
+}
+/* D 체결 후에도 R을 고집하는 분께 드리는 멘트 10단 */
+const RMSGS=[
+  '이미 D에 체결되었습니다. 변경은 불가합니다 😌',
+  '후진 시도가 감지되었습니다. 기록해두겠습니다 📝',
+  '방금 R 버튼을 하트 발사 버튼으로 교체했습니다 💗',
+  '계속 누르시면 데이트가 1시간 연장됩니다 ⏰',
+  '🚨 경고: 과도한 귀여움이 감지되었습니다',
+  '이 차량의 보험에 “변심”은 포함되어 있지 않습니다 🛡️',
+  '경로를 재탐색합니다... 재탐색 결과: 그래도 데이트 🧭',
+  '사실 R은 Romance의 약자입니다. 몰랐죠? 😏',
+  '한 번만 더 누르면 무슨 일이 일어날지도...? 🎁',
+  '끈기 인정! 상장을 수여합니다 🏆'
+];
+function lockedR(){
+  rLockCount++;
+  const knobShake=()=>{ gearKnob.classList.remove('nono'); gearKnob.getBoundingClientRect(); gearKnob.classList.add('nono'); };
+  knobShake();
+  if(rLockCount<=RMSGS.length){
+    showGearAlert(RMSGS[rLockCount-1]);
+    if(rLockCount===3||rLockCount===7){ const r=gearTrack.getBoundingClientRect(); burst(r.left+r.width*0.12, r.top+r.height/2, 18); }
+    if(rLockCount===RMSGS.length){
+      burst(innerWidth/2, innerHeight*0.4, 60);
+      setTimeout(()=>document.getElementById('certModal').removeAttribute('hidden'), 450);
+    }
+  }else{
+    showGearAlert('상장은 이미 수여되었습니다. 데이트에서 만나요 ♡');
+    const r=gearTrack.getBoundingClientRect(); burst(r.left+r.width*0.12, r.top+r.height/2, 8);
+  }
+}
 function gearSet(f,anim=true){ gearKnob.style.transition=anim?'left .5s cubic-bezier(.3,1.4,.5,1)':'none'; gearKnob.style.left=(f*100)+'%'; }
 function gearAccept(msg){
   if(gearLock) return; gearLock=true; gearSet(GPOS.d);
+  document.getElementById('gearAlert').classList.remove('show');
   const r=gearKnob.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
   document.getElementById('rsvp').classList.add('done'); toast(msg||'D 체결! 데이트 출발 💗');
 }
@@ -692,10 +801,10 @@ function gearReject(){
   gearTrack.classList.remove('shake'); gearTrack.getBoundingClientRect(); gearTrack.classList.add('shake');
   if(rTries>=3){
     gearSet(GPOS.r,false);
-    toast('자동 변속 발동! 목적지: 데이트 💗');
+    showGearAlert('자동 변속 발동! 목적지: 데이트 💗');
     setTimeout(()=>gearAccept('어차피 목적지는 데이트였습니다 ♡'), 500);
   }else{
-    toast(rTries===1?'삐빅— 이 차량은 후진을 지원하지 않습니다 🚫':'정말요...? 후진 기어는 장식이에요 😌');
+    showGearAlert(rTries===1?'삐빅— 이 차량은 후진을 지원하지 않습니다 🚫':'정말요...? 후진 기어는 장식이에요 😌');
     gearSet(GPOS.r); setTimeout(()=>{ if(!gearLock) gearSet(GPOS.p); }, 550);
   }
 }
@@ -704,7 +813,7 @@ function gearRelease(f){
   const near=[['r',Math.abs(f-GPOS.r)],['p',Math.abs(f-GPOS.p)],['d',Math.abs(f-GPOS.d)]].sort((a,b)=>a[1]-b[1])[0][0];
   if(near==='d') gearAccept(); else if(near==='r') gearReject(); else gearSet(GPOS.p);
 }
-gearKnob.addEventListener('pointerdown',e=>{ if(gearLock) return; gDrag=true; gearKnob.setPointerCapture(e.pointerId); gearKnob.style.transition='none'; });
+gearKnob.addEventListener('pointerdown',e=>{ if(gearLock){ lockedR(); return; } gDrag=true; gearKnob.setPointerCapture(e.pointerId); gearKnob.style.transition='none'; });
 gearKnob.addEventListener('pointermove',e=>{ if(!gDrag||gearLock) return;
   const r=gearTrack.getBoundingClientRect();
   const f=Math.min(.94,Math.max(.06,(e.clientX-r.left)/r.width));
@@ -713,14 +822,17 @@ gearKnob.addEventListener('pointerup',e=>{ if(!gDrag) return; gDrag=false;
   const r=gearTrack.getBoundingClientRect(); gearRelease((e.clientX-r.left)/r.width); });
 gearKnob.addEventListener('pointercancel',()=>{ gDrag=false; if(!gearLock) gearSet(GPOS.p); });
 gearTrack.querySelectorAll('.slot').forEach(s=>s.addEventListener('click',()=>{
-  if(gearLock) return;
+  if(gearLock){ if(s.classList.contains('r')) lockedR(); return; }
   if(s.classList.contains('d')) gearAccept(); else if(s.classList.contains('r')) gearReject();
 }));
 gearKnob.addEventListener('keydown',e=>{
-  if(gearLock) return;
+  if(gearLock){ if(e.key==='ArrowLeft'){ e.preventDefault(); lockedR(); } return; }
   if(e.key==='ArrowRight'||e.key==='Enter'){ e.preventDefault(); gearAccept(); }
   else if(e.key==='ArrowLeft'){ e.preventDefault(); gearReject(); }
 });
+const certModal=document.getElementById('certModal');
+document.getElementById('certOk').addEventListener('click',()=>{ certModal.setAttribute('hidden',''); toast('그럼 데이트에서 만나요 ♡'); });
+certModal.addEventListener('click',e=>{ if(e.target===certModal) certModal.setAttribute('hidden',''); });
 
 /* ===== 링크 생성기 ===== */
 const modal=document.getElementById('modal');
