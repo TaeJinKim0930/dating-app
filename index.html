@@ -3,8 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#EF5069">
+<meta name="theme-color" content="#41B4DC">
 <title>데이트 초대장 💌</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://taejinkim0930.github.io/dating-app/">
+<meta property="og:title" content="💌 데이트 초대장이 도착했어요">
+<meta property="og:description" content="바다 보러 가는 하루 드라이브 데이트 — 눌러서 열어보기 🚗🌊">
+<meta property="og:image" content="https://taejinkim0930.github.io/dating-app/og.png?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="💌 데이트 초대장이 도착했어요">
+<meta name="twitter:description" content="바다 보러 가는 하루 드라이브 데이트 — 눌러서 열어보기 🚗🌊">
+<meta name="twitter:image" content="https://taejinkim0930.github.io/dating-app/og.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -128,7 +139,27 @@
   .invite .from{font-family:var(--hand);font-size:19px;color:var(--sub);margin-top:14px}
 
   /* ===== map ===== */
-  .mapwrap{padding:18px 14px 4px}
+  .mapwrap{padding:18px 14px 4px;position:relative}
+  /* 경적 (스티어링 휠) */
+  .honk-wheel{position:absolute;top:20px;right:18px;z-index:4;width:44px;height:44px;padding:0;border:none;background:#fff;border-radius:50%;
+    box-shadow:0 4px 10px -4px rgba(20,90,130,.4);display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s}
+  .honk-wheel:active{transform:scale(.86) rotate(-16deg)}
+  .card.honk{animation:screenShake .42s ease}
+  @keyframes screenShake{0%,100%{transform:translate(0,0)}16%{transform:translate(-5px,2px) rotate(-.4deg)}38%{transform:translate(6px,-2px) rotate(.5deg)}58%{transform:translate(-5px,2px) rotate(-.3deg)}80%{transform:translate(4px,-1px)}}
+  .gull{position:fixed;z-index:62;font-size:24px;pointer-events:none;will-change:transform,opacity}
+  /* 데이트 견적 영수증 */
+  .receipt{position:relative;margin:14px auto 2px;max-width:272px;background:#fff;color:#3B3B3B;text-align:left;padding:16px 18px 22px;
+    box-shadow:0 8px 18px -10px rgba(120,60,70,.4);max-height:0;opacity:0;overflow:hidden;transform-origin:top;
+    clip-path:polygon(0 0,100% 0,100% calc(100% - 7px),91% 100%,83% calc(100% - 7px),75% 100%,67% calc(100% - 7px),59% 100%,50% calc(100% - 7px),42% 100%,34% calc(100% - 7px),26% 100%,17% calc(100% - 7px),9% 100%,0 calc(100% - 7px))}
+  .receipt.show{max-height:560px;opacity:1;transition:max-height 1s cubic-bezier(.2,.8,.25,1),opacity .45s ease}
+  .r-head{font-family:var(--disp);font-size:16px;text-align:center;color:#F0654F}
+  .r-sub{font-size:9.5px;letter-spacing:.12em;text-align:center;color:#B09A9E;margin:2px 0 8px}
+  .r-line{border-top:1.5px dashed #DDCCC7;margin:7px 0}
+  .r-row{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;line-height:1.95}
+  .r-row span:last-child{color:#2E7C99;font-weight:700;white-space:nowrap}
+  .r-row.total{font-family:var(--disp);font-size:14.5px}
+  .r-row.total span:last-child{color:#F0654F}
+  .r-foot{font-size:10px;text-align:center;color:#B09A9E;margin-top:11px;line-height:1.75}
   .maptitle{font-family:var(--hand);font-size:22px;color:var(--ink);text-align:center;margin:2px 0 8px}
   .maptitle b{color:var(--grape)}
   .map{display:block;width:100%;height:auto;border-radius:22px;border:2px solid #F6E1D6;background:linear-gradient(180deg,#FFF9F4,#FFF1E9)}
@@ -244,7 +275,7 @@
   .revealed .pin{animation:drop .6s cubic-bezier(.34,1.56,.64,1) both}
   .pinwrap{transform-box:fill-box;transform-origin:center bottom}
   .pinwrap.hop{animation:hop .5s ease both}
-  .go:focus-visible,.gear-knob:focus-visible,button.lg:focus-visible,.mk:focus-visible,.env-wrap:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+  .go:focus-visible,.gear-knob:focus-visible,button.lg:focus-visible,.mk:focus-visible,.env-wrap:focus-visible,.honk-wheel:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -287,6 +318,15 @@
     </section>
 
     <section class="mapwrap">
+      <button class="honk-wheel" id="honkWheel" aria-label="경적 울리기" title="빵!">
+        <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true">
+          <circle cx="20" cy="20" r="16.5" fill="none" stroke="#2E7C99" stroke-width="3.2"/>
+          <circle cx="20" cy="20" r="4.6" fill="#F0654F"/>
+          <line x1="20" y1="20" x2="20" y2="5" stroke="#2E7C99" stroke-width="3.2"/>
+          <line x1="20" y1="20" x2="7.2" y2="27" stroke="#2E7C99" stroke-width="3.2"/>
+          <line x1="20" y1="20" x2="32.8" y2="27" stroke="#2E7C99" stroke-width="3.2"/>
+        </svg>
+      </button>
       <div class="maptitle">오늘의 <b>이동 동선</b> 🧭</div>
       <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이트 코스 이동 동선 지도"></svg>
       <p class="mapcap">＊실제 좌표로 <b>방향·거리</b>를 그린 지도예요(직선 근사). 정확한 길찾기는 각 장소의 <b>“🧭 길찾기”</b> 버튼을 눌러주세요!</p>
@@ -308,6 +348,18 @@
       </div>
       <div class="gear-alert" id="gearAlert" role="status"></div>
       <div class="yay" id="yay">야호! 그럼 그날 만나요 ♡</div>
+      <div class="receipt" id="receipt" aria-hidden="true">
+        <div class="r-head">🧾 오늘의 데이트 견적서</div>
+        <div class="r-sub">DRIVE DATE ESTIMATE · No.2026-0719</div>
+        <div class="r-line"></div>
+        <div class="r-row"><span>브런치 · 송도 8층</span><span>행복 2시간</span></div>
+        <div class="r-row"><span>바다뷰 카페 &amp; 산책</span><span>인생샷 ∞장</span></div>
+        <div class="r-row"><span>을왕리 장어구이</span><span>배부름 100%</span></div>
+        <div class="r-row"><span>서해 노을</span><span>무료(한정)</span></div>
+        <div class="r-line"></div>
+        <div class="r-row total"><span>합계</span><span>당신의 하루 ♡</span></div>
+        <div class="r-foot">※ 환불 불가 · 무제한 리필 가능<br>♡ THANK YOU ♡ 2026.07 을왕리</div>
+      </div>
     </section>
 
     <footer>
@@ -803,6 +855,8 @@ function gearAccept(msg){
   document.getElementById('gearAlert').classList.remove('show');
   const r=gearKnob.getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2, 50);
   document.getElementById('rsvp').classList.add('done'); toast(msg||'D 체결! 데이트 출발 💗');
+  setTimeout(()=>{ const rc=document.getElementById('receipt'); if(rc){ rc.classList.add('show');
+    rc.addEventListener('transitionend',()=>rc.scrollIntoView({block:'nearest',behavior:'smooth'}),{once:true}); } }, 650);
 }
 function gearReject(){
   rTries++;
@@ -859,6 +913,46 @@ document.getElementById('mk').addEventListener('click',()=>{
 document.getElementById('copyBtn').addEventListener('click',()=>copy(document.getElementById('linkField').value));
 function val(id,def){ const v=document.getElementById(id).value.trim(); return v||def; }
 function copy(t){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(()=>toast('초대 링크 복사됨! 💌'),()=>toast('링크 생성됨! 아래에서 복사하세요')); } else toast('링크 생성됨! 아래에서 복사하세요'); }
+
+/* ===== 경적 이스터에그 ===== */
+let honkCount=0, actx=null;
+function playHonk(){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==='suspended') actx.resume();
+    const t=actx.currentTime;
+    [[440,0],[554,0.11]].forEach(([f,delay])=>{
+      const o=actx.createOscillator(), g=actx.createGain();
+      o.type='sawtooth'; o.frequency.value=f; o.connect(g); g.connect(actx.destination);
+      g.gain.setValueAtTime(0.0001,t+delay);
+      g.gain.exponentialRampToValueAtTime(0.05,t+delay+0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+delay+0.16);
+      o.start(t+delay); o.stop(t+delay+0.17);
+    });
+  }catch(e){}
+}
+function flyGulls(x,y){
+  for(let i=0;i<3;i++){
+    const g=document.createElement('div'); g.className='gull'; g.textContent='🕊️';
+    g.style.left=x+'px'; g.style.top=y+'px';
+    document.body.appendChild(g);
+    const dx=(Math.random()*2-1)*170, dy=-110-Math.random()*130, rot=dx>0?18:-18;
+    requestAnimationFrame(()=>{ g.style.transition='transform 1.15s ease-out, opacity 1.15s ease-out';
+      g.style.transform=`translate(${dx}px,${dy}px) rotate(${rot}deg)`; g.style.opacity='0'; });
+    setTimeout(()=>g.remove(),1250);
+  }
+}
+const honkWheel=document.getElementById('honkWheel');
+honkWheel.addEventListener('click',e=>{
+  honkCount++;
+  const card=document.getElementById('card');
+  card.classList.remove('honk'); card.getBoundingClientRect(); card.classList.add('honk');
+  const r=e.currentTarget.getBoundingClientRect();
+  flyGulls(r.left+r.width/2, r.top+2);
+  if(!reduce) playHonk();
+  if(honkCount===1) toast('빵— 🚗 (경적)');
+  else if(honkCount%5===0) toast('경적을 아껴주세요 🕊️ 을왕리 갈매기 보호구역입니다');
+});
 
 /* ===== toast ===== */
 let tT=null;

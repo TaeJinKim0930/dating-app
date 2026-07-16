@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gamja+Flower&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  .og{width:1200px;height:630px;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,#E5F8FF 0%,#BFECFB 26%,#93DDF6 46%,#57C2E6 60%,#2E9EC9 100%);
+    font-family:'Gowun Dodum',sans-serif;display:flex;align-items:center}
+  .sun{position:absolute;left:82%;top:-6%;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle,#FFFBE2 0%,#FFEC9E 40%,rgba(255,236,158,0) 70%)}
+  .cl{position:absolute;font-size:58px;opacity:.92}
+  .wave{position:absolute;left:50%;bottom:-2100px;width:2600px;height:2600px;margin-left:-1300px;border-radius:42%;background:rgba(255,255,255,.25)}
+  .wave2{bottom:-2060px;border-radius:45%;background:rgba(255,255,255,.16)}
+  .sand{position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg,#FCEFCB,#F5DFA6);border-radius:48% 52% 0 0/26px 22px 0 0}
+  .road{position:absolute;left:0;right:0;bottom:30px;border-top:5px dashed rgba(255,255,255,.85)}
+  .car{position:absolute;left:120px;bottom:40px;font-size:48px;transform:scaleX(-1)}
+  .boat{position:absolute;left:78%;bottom:150px;font-size:44px}
+  /* envelope */
+  .env{position:absolute;left:96px;top:50%;transform:translateY(-50%);width:420px;height:278px;filter:drop-shadow(0 24px 30px rgba(15,90,125,.4))}
+  .letter{position:absolute;left:5%;right:5%;top:5%;height:82%;border-radius:16px;
+    background:radial-gradient(circle at 14px 14px,#D5F0F8 2px,transparent 2.1px) 0 0/30px 30px,#FDFFFE;border-top:5px solid #FFB39F}
+  .pocket{position:absolute;inset:0;top:19%;border-radius:16px;background:linear-gradient(160deg,#7EDCEF,#2E9EC9);
+    clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%)}
+  .flap{position:absolute;top:0;left:0;width:100%;height:53%;background:linear-gradient(180deg,#5BC9E5,#2E9EC9);
+    clip-path:polygon(0 0,100% 0,50% 100%)}
+  .seal{position:absolute;top:34%;left:50%;width:66px;height:66px;margin-left:-33px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#FFB2A0,#F0654F);display:grid;place-items:center;color:#fff;font-size:28px;
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,.45),0 6px 12px rgba(180,60,40,.4)}
+  .tw{position:absolute;color:#fff;font-size:26px;text-shadow:0 0 12px #fff}
+  /* text */
+  .txt{position:absolute;left:580px;right:56px;top:50%;transform:translateY(-50%)}
+  .eyebrow{font-family:'Gamja Flower',cursive;font-size:40px;color:#0B6B8F}
+  .eyebrow b{color:#F0654F}
+  h1{font-family:'Jua',sans-serif;font-weight:400;font-size:70px;line-height:1.22;color:#12586F;margin:8px 0 14px;text-shadow:0 2px 14px rgba(255,255,255,.6)}
+  h1 .c{color:#F0654F} h1 .a{color:#fff;-webkit-text-stroke:1px #2E9EC9}
+  .cta{display:inline-block;font-family:'Jua',sans-serif;font-size:32px;color:#fff;background:#F0654F;padding:14px 30px;border-radius:999px;box-shadow:0 10px 22px -8px rgba(200,60,40,.6)}
+</style>
+</head>
+<body>
+  <div class="og">
+    <div class="sun"></div>
+    <div class="cl" style="left:40px;top:36px">☁️</div>
+    <div class="cl" style="left:420px;top:20px;font-size:42px">☁️</div>
+    <div class="wave"></div><div class="wave wave2"></div>
+    <div class="sand"></div>
+    <div class="boat">⛵</div>
+    <div class="road"></div>
+    <div class="car">🚗</div>
+    <span class="tw" style="left:52%;top:24%">✦</span>
+    <span class="tw" style="left:70%;top:40%;font-size:20px">✧</span>
+
+    <div class="env">
+      <div class="letter"></div>
+      <div class="pocket"></div>
+      <div class="flap"></div>
+      <div class="seal">♥</div>
+    </div>
+
+    <div class="txt">
+      <div class="eyebrow">💌 도착한 <b>초대장</b></div>
+      <h1>바다 보러 가는<br><span class="c">드라이브</span> <span class="a">데이트</span></h1>
+      <span class="cta">눌러서 열어보기 🚗🌊</span>
+    </div>
+  </div>
+</body>
+</html>
